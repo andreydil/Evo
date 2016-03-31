@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evo.Core", "Evo.Core\Evo.Core.csproj", "{84F61FC5-160E-4FCF-9683-F642E0B98A3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evo.Core.Tests", "Evo.Core.Tests\Evo.Core.Tests.csproj", "{D7CB5F5E-A601-468C-9106-C21678A1BD2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evo.GUI.Winforms", "Evo.GUI.Winforms\Evo.GUI.Winforms.csproj", "{0C1AD963-28B5-47D1-864A-E88E4115FC86}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84F61FC5-160E-4FCF-9683-F642E0B98A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84F61FC5-160E-4FCF-9683-F642E0B98A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84F61FC5-160E-4FCF-9683-F642E0B98A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84F61FC5-160E-4FCF-9683-F642E0B98A3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7CB5F5E-A601-468C-9106-C21678A1BD2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7CB5F5E-A601-468C-9106-C21678A1BD2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7CB5F5E-A601-468C-9106-C21678A1BD2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7CB5F5E-A601-468C-9106-C21678A1BD2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C1AD963-28B5-47D1-864A-E88E4115FC86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C1AD963-28B5-47D1-864A-E88E4115FC86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C1AD963-28B5-47D1-864A-E88E4115FC86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C1AD963-28B5-47D1-864A-E88E4115FC86}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
