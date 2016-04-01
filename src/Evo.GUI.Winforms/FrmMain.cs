@@ -17,6 +17,8 @@ namespace Evo.GUI.Winforms
     public partial class FrmMain : Form
     {
         private const int MapMultiplier = 5;
+        private const int StatsRefreshTime = 600;
+        private DateTime lastStatsRefresh = DateTime.Now;
         private World _world;
         private Color bgColor = Color.Black;
 
@@ -90,12 +92,16 @@ namespace Evo.GUI.Winforms
             Map.Invalidate();
             this.Text = "Evo. Population = " + _world.Population.Count;
 
-            var sb = new StringBuilder();
-            foreach (var stat in _world.IncStats.GetStats())
+            if ((DateTime.Now - lastStatsRefresh).TotalMilliseconds >= StatsRefreshTime)
             {
-                sb.AppendLine($"{stat.Key}\t {stat.Value}");
+                var sb = new StringBuilder();
+                foreach (var stat in _world.IncStats.GetStats().OrderBy(s => s.Key))
+                {
+                    sb.AppendLine($"{stat.Key}\t {stat.Value}");
+                }
+                this.txtStats.Text = sb.ToString();
+                lastStatsRefresh = DateTime.Now;
             }
-            this.txtStats.Text = sb.ToString();
         }
 
         private void Map_MouseClick(object sender, MouseEventArgs e)

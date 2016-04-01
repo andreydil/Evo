@@ -210,9 +210,9 @@ namespace Evo.Core.Units
                         {
                             var child = _world.Mutator.GenerateChild(this, partner);
                             child.Point = _world.Navigator.PlaceChild(Point, partner.Point);
-                            Energy.Value -= Energy / 4;
-                            partner.Energy.Value -= partner.Energy / 4;
-                            child.Energy.Value = Energy / 4 + partner.Energy / 4;
+                            Energy.Value -= Energy / 3;
+                            partner.Energy.Value -= partner.Energy / 3;
+                            child.Energy.Value = Energy / 3 + partner.Energy / 3;
                             if (child.Point != null)
                             {
                                 _world.AddIndividual(child);
