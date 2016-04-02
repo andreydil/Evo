@@ -8,6 +8,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using Evo.Core.Basic;
 using Evo.Core.Units;
 using Evo.Core.Universe;
@@ -17,7 +18,7 @@ namespace Evo.GUI.Winforms
     public partial class FrmMain : Form
     {
         private const int MapMultiplier = 5;
-        private const int StatsRefreshTime = 600;
+        private const int StatsRefreshTime = 100;
         private DateTime lastStatsRefresh = DateTime.Now;
         private World _world;
         private Color bgColor = Color.Black;
@@ -40,8 +41,8 @@ namespace Evo.GUI.Winforms
                 _world.MutationProbability.Value = 100;
                 _world.MutationMaxDelta.Value = 40;
                 _world.EnergyDrainModificator.Value = 1;
-                _world.MaxFoodItemsPerTick.Value = 40;
-                _world.MaxEneryPerFoodItem.Value = 80;
+                _world.MaxFoodItemsPerTick.Value = 30;
+                _world.MaxEneryPerFoodItem.Value = 100;
                 _world.MaxFoodItems.Value = 300;
 
                 var initPopulation = new List<Individual>(100);
@@ -50,14 +51,28 @@ namespace Evo.GUI.Winforms
                     var individual = _world.Mutator.GenerateRandom();
                     initPopulation.Add(individual);
                 }
-                _world.SpreadIndividuals(initPopulation, new Coord(0, 0),
-                    new Coord(Map.Size.Width / MapMultiplier, Map.Size.Height / MapMultiplier));
+                _world.SpreadIndividuals(initPopulation, new Coord(0, 0), new Coord(Map.Size.Width / MapMultiplier, Map.Size.Height / MapMultiplier));
                 _world.SpreadFood();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }
+
+            chtPopulation.Series.Clear();
+            var populationSeries = new Series
+            {
+                Name = "Population",
+                Color = Color.DodgerBlue,
+            };
+            chtPopulation.Series.Add(populationSeries);
+
+            var foodSeries = new Series
+            {
+                Name = "Food",
+                Color = Color.ForestGreen,
+            };
+            chtPopulation.Series.Add(foodSeries);
         }
 
         private void btn1Step_Click(object sender, EventArgs e)
@@ -94,16 +109,67 @@ namespace Evo.GUI.Winforms
 
             if ((DateTime.Now - lastStatsRefresh).TotalMilliseconds >= StatsRefreshTime)
             {
-                var sb = new StringBuilder();
-                foreach (var stat in _world.IncStats.GetStats().OrderBy(s => s.Key))
-                {
-                    sb.AppendLine($"{stat.Key}\t {stat.Value}");
-                }
-                this.txtStats.Text = sb.ToString();
-                lastStatsRefresh = DateTime.Now;
+                showTextStats();
+                showChart();
             }
         }
 
+        private void showTextStats()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(formatStatLine("Tick", _world.Tick.ToString()));
+            foreach (var stat in _world.MainStats.GetStats().OrderBy(s => s.Key))
+            {
+                sb.AppendLine(formatStatLine(stat.Key, stat.Value.ToString()));
+            }
+            txtStats.Text = sb.ToString();
+            lastStatsRefresh = DateTime.Now;
+        }
+
+        private string formatStatLine(string label, string value)
+        {
+            const int lineLength = 30;
+            return $"{label}{new string(' ', lineLength - label.Length - value.Length)}{value}";
+        }
+
+        private void showChart()
+        {
+            chtPopulation.Series.Clear();
+            var populationSeries = new Series
+            {
+                Name = "Population",
+                Color = Color.DodgerBlue,
+                IsVisibleInLegend = false,
+                IsXValueIndexed = true,
+                ChartType = SeriesChartType.Line,
+                BorderWidth = 1,
+                BorderDashStyle = ChartDashStyle.Solid,
+            };
+            foreach (var stat in _world.PopulationSize)
+            {
+                populationSeries.Points.AddXY(stat.Tick, stat.Value);
+            }
+            chtPopulation.Series.Add(populationSeries);
+
+            var foodSeries = new Series
+            {
+                Name = "Food",
+                Color = Color.ForestGreen,
+                IsVisibleInLegend = false,
+                IsXValueIndexed = false,
+                ChartType = SeriesChartType.Line,
+                BorderWidth = 1,
+                BorderDashStyle = ChartDashStyle.Solid,
+            };
+            foreach (var stat in _world.FoodAmount)
+            {
+                foodSeries.Points.AddXY(stat.Tick, stat.Value);
+            }
+            chtPopulation.Series.Add(foodSeries);
+
+            chtPopulation.Invalidate();
+        }
+        
         private void Map_MouseClick(object sender, MouseEventArgs e)
         {
             var worldCoord = new Coord(e.X / MapMultiplier, e.Y / MapMultiplier);

@@ -51,6 +51,7 @@
     <Compile Include="NavigatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomTests.cs" />
+    <Compile Include="TimeSpanStatsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Evo.Core\Evo.Core.csproj">

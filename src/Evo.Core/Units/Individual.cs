@@ -115,16 +115,16 @@ namespace Evo.Core.Units
                 switch (Target.TargetType)
                 {
                     case TargetType.Eat:
-                        _world.IncStats.AddStat("Decisions to Eat");
+                        _world.AdditionalStats.AddStat("Decisions to Eat");
                         break;
                     case TargetType.Walk:
-                        _world.IncStats.AddStat("Decisions to Walk");
+                        _world.AdditionalStats.AddStat("Decisions to Walk");
                         break;
                     case TargetType.Sex:
-                        _world.IncStats.AddStat("Decisions to have Sex");
+                        _world.AdditionalStats.AddStat("Decisions to have Sex");
                         break;
                     case TargetType.Kill:
-                        _world.IncStats.AddStat("Decisions to Kill");
+                        _world.AdditionalStats.AddStat("Decisions to Kill");
                         break;
                 }
             }
@@ -216,7 +216,7 @@ namespace Evo.Core.Units
                             if (child.Point != null)
                             {
                                 _world.AddIndividual(child);
-                                _world.IncStats.AddStat("Births");
+                                _world.MainStats.AddStat("Births");
                             }
                         }
                         Desire.Value = 0;
@@ -262,7 +262,7 @@ namespace Evo.Core.Units
             killer.Target.TargetType = TargetType.Eat;
             killer.Target.Id = foodItem.Id;
 
-            _world.IncStats.AddStat("Kills");
+            _world.MainStats.AddStat("Kills");
         }
     }
 }

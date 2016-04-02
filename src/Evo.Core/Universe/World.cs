@@ -36,8 +36,11 @@ namespace Evo.Core.Universe
         public readonly List<Individual> Population = new List<Individual>();
         public readonly List<FoodItem> Food = new List<FoodItem>();
 
-        public readonly IncStats IncStats = new IncStats();
-        
+        public readonly IncStats MainStats = new IncStats();
+        public readonly IncStats AdditionalStats = new IncStats();
+        public readonly TimeSpanStats<int> PopulationSize = new TimeSpanStats<int>(1000);
+        public readonly TimeSpanStats<int> FoodAmount = new TimeSpanStats<int>(1000);
+
         public ulong GenerateId()
         {
             return _idGenerator++;
@@ -53,19 +56,21 @@ namespace Evo.Core.Universe
                     Population.Remove(individual);
                     if (individual.Energy <= individual.Energy.Min)
                     {
-                        IncStats.AddStat("Deaths from hunger");
+                        MainStats.AddStat("Deaths from hunger");
                     }
                     else if (individual.Age >= individual.Age.Max)
                     {
-                        IncStats.AddStat("Deaths from age");
+                        MainStats.AddStat("Deaths from age");
                     }
                     else
                     {
-                        IncStats.AddStat("Other deaths");
+                        MainStats.AddStat("Other deaths");
                     }
                 }
                 individual.LiveOneTick();
             }
+            PopulationSize.Add(Tick, Population.Count);
+            FoodAmount.Add(Tick, Food.Count);
             ++Tick;
         }
 
@@ -118,7 +123,8 @@ namespace Evo.Core.Universe
             }
 
             const int tryCount = 100;
-            var foodCount = Random.Next(MaxFoodItemsPerTick);
+            var foodCount = Random.Next(Math.Min(MaxFoodItemsPerTick, MaxFoodItems - Food.Count));
+
             for (int i = 0; i < foodCount; i++)
             {
                 var newFoodItem = new FoodItem(GenerateId())

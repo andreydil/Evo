@@ -30,6 +30,9 @@ namespace Evo.GUI.Winforms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -38,6 +41,7 @@ namespace Evo.GUI.Winforms
             this.btn1Step = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.chtPopulation = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.txtStats = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.txtUnit = new System.Windows.Forms.TextBox();
@@ -66,6 +70,7 @@ namespace Evo.GUI.Winforms
             ((System.ComponentModel.ISupportInitialize)(this.numSpeed)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chtPopulation)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -87,18 +92,20 @@ namespace Evo.GUI.Winforms
             // 
             this.splitContainer1.Panel2.Controls.Add(this.Map);
             this.splitContainer1.Size = new System.Drawing.Size(1509, 802);
-            this.splitContainer1.SplitterDistance = 304;
+            this.splitContainer1.SplitterDistance = 365;
             this.splitContainer1.TabIndex = 0;
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.numSpeed);
             this.groupBox2.Controls.Add(this.btnToggleTimer);
             this.groupBox2.Controls.Add(this.btn1Step);
             this.groupBox2.Location = new System.Drawing.Point(7, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(290, 80);
+            this.groupBox2.Size = new System.Drawing.Size(351, 80);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Control";
@@ -115,30 +122,24 @@ namespace Evo.GUI.Winforms
             // numSpeed
             // 
             this.numSpeed.Location = new System.Drawing.Point(131, 51);
-            this.numSpeed.Maximum = new decimal(new int[]
-            {
-                9,
-                0,
-                0,
-                0
-            });
-            this.numSpeed.Minimum = new decimal(new int[]
-            {
-                1,
-                0,
-                0,
-                0
-            });
+            this.numSpeed.Maximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.numSpeed.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.numSpeed.Name = "numSpeed";
             this.numSpeed.Size = new System.Drawing.Size(36, 20);
             this.numSpeed.TabIndex = 2;
-            this.numSpeed.Value = new decimal(new int[]
-            {
-                9,
-                0,
-                0,
-                0
-            });
+            this.numSpeed.Value = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
             this.numSpeed.ValueChanged += new System.EventHandler(this.numSpeed_ValueChanged);
             // 
             // btnToggleTimer
@@ -163,37 +164,57 @@ namespace Evo.GUI.Winforms
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                                                                             | System.Windows.Forms.AnchorStyles.Left)
-                                                                            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Location = new System.Drawing.Point(0, 89);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(304, 713);
+            this.tabControl1.Size = new System.Drawing.Size(358, 713);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.chtPopulation);
             this.tabPage2.Controls.Add(this.txtStats);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(296, 687);
+            this.tabPage2.Size = new System.Drawing.Size(350, 687);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Stats";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // chtPopulation
+            // 
+            chartArea3.Name = "ChartArea1";
+            this.chtPopulation.ChartAreas.Add(chartArea3);
+            this.chtPopulation.Dock = System.Windows.Forms.DockStyle.Top;
+            legend3.Name = "Legend1";
+            this.chtPopulation.Legends.Add(legend3);
+            this.chtPopulation.Location = new System.Drawing.Point(3, 3);
+            this.chtPopulation.Name = "chtPopulation";
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chtPopulation.Series.Add(series3);
+            this.chtPopulation.Size = new System.Drawing.Size(344, 298);
+            this.chtPopulation.TabIndex = 1;
+            this.chtPopulation.TabStop = false;
+            this.chtPopulation.Text = "Population";
+            // 
             // txtStats
             // 
-            this.txtStats.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtStats.Location = new System.Drawing.Point(3, 3);
+            this.txtStats.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.txtStats.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.txtStats.Location = new System.Drawing.Point(3, 307);
             this.txtStats.Multiline = true;
             this.txtStats.Name = "txtStats";
             this.txtStats.ReadOnly = true;
-            this.txtStats.Size = new System.Drawing.Size(290, 681);
+            this.txtStats.Size = new System.Drawing.Size(344, 377);
             this.txtStats.TabIndex = 0;
             // 
             // tabPage3
@@ -202,7 +223,7 @@ namespace Evo.GUI.Winforms
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(296, 687);
+            this.tabPage3.Size = new System.Drawing.Size(367, 687);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Unit";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -214,7 +235,7 @@ namespace Evo.GUI.Winforms
             this.txtUnit.Multiline = true;
             this.txtUnit.Name = "txtUnit";
             this.txtUnit.ReadOnly = true;
-            this.txtUnit.Size = new System.Drawing.Size(290, 681);
+            this.txtUnit.Size = new System.Drawing.Size(361, 681);
             this.txtUnit.TabIndex = 0;
             this.txtUnit.TabStop = false;
             this.txtUnit.Text = "<Click on a unit to get its info>";
@@ -226,7 +247,7 @@ namespace Evo.GUI.Winforms
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(296, 687);
+            this.tabPage4.Size = new System.Drawing.Size(367, 687);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "View";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -389,7 +410,7 @@ namespace Evo.GUI.Winforms
             this.Map.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Map.Location = new System.Drawing.Point(0, 0);
             this.Map.Name = "Map";
-            this.Map.Size = new System.Drawing.Size(1201, 802);
+            this.Map.Size = new System.Drawing.Size(1140, 802);
             this.Map.TabIndex = 0;
             this.Map.TabStop = false;
             this.Map.Paint += new System.Windows.Forms.PaintEventHandler(this.Map_Paint_1);
@@ -419,6 +440,7 @@ namespace Evo.GUI.Winforms
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chtPopulation)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
@@ -459,6 +481,7 @@ namespace Evo.GUI.Winforms
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numSpeed;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chtPopulation;
     }
 }
 

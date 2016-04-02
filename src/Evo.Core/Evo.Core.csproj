@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Stats\IncStats.cs" />
+    <Compile Include="Stats\TimeSpanStats.cs" />
     <Compile Include="Universe\Constants.cs" />
     <Compile Include="Basic\Coord.cs" />
     <Compile Include="Units\FoodItem.cs" />
