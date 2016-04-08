@@ -15,6 +15,7 @@ namespace Evo.Core.Universe
         public readonly Navigator Navigator;
         public readonly DecisionMaker DecisionMaker;
         public readonly Coord Size;
+        private readonly StatCounter _statCounter;
 
         public World(Random random, Coord size)
         {
@@ -23,6 +24,7 @@ namespace Evo.Core.Universe
             Mutator = new Mutator(this);
             Navigator = new Navigator(this);
             DecisionMaker = new DecisionMaker(this);
+            _statCounter = new StatCounter();
         }
 
         public LimitedInt MutationProbability { get; set; } = new LimitedInt(1, Constants.Probability100Percent);
@@ -99,7 +101,7 @@ namespace Evo.Core.Universe
         {
             if (Navigator.FindUnit(foodItem.Point) != null)
             {
-                return; //TODO: check why
+                return; //TODO: investigate why
                 //throw new ArgumentOutOfRangeException($"There is already a unit in coordinates {foodItem.Point}");
             }
             Food.Add(foodItem);
@@ -177,5 +179,7 @@ namespace Evo.Core.Universe
                 }
             }
         }
+
+        public Individual AverageIndividual => _statCounter.GetAverage(Population);
     }
 }

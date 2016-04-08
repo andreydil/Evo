@@ -123,6 +123,9 @@ namespace Evo.GUI.Winforms
                 sb.AppendLine(formatStatLine(stat.Key, stat.Value.ToString()));
             }
             txtStats.Text = sb.ToString();
+
+            txtAverageUnit.Text = "Average Individual:\r\n" + GetIndividualInfo(_world.AverageIndividual, true);
+
             lastStatsRefresh = DateTime.Now;
         }
 
@@ -179,23 +182,7 @@ namespace Evo.GUI.Winforms
                 var individual = unit as Individual;
                 if (individual != null)
                 {
-                    var sb = new StringBuilder();
-                    sb.AppendLine($"Individual");
-                    sb.AppendLine($"Id: {individual.Id}");
-                    sb.AppendLine($"Status:");
-                    sb.AppendLine($"Age: {individual.Age}");
-                    sb.AppendLine($"Energy: {individual.Energy}");
-                    sb.AppendLine($"Desire: {individual.Desire}");
-                    sb.AppendLine($"Target: {individual.Target}");
-                    sb.AppendLine("Genome:");
-                    sb.AppendLine($"Lifetime: {individual.LifeTime}");
-                    sb.AppendLine($"Aggression: {individual.Aggression}");
-                    sb.AppendLine($"Strength: {individual.Strength}");
-                    sb.AppendLine($"Fertility: {individual.Fertility}");
-                    sb.AppendLine($"Purpose: {individual.Purpose}");
-                    sb.AppendLine($"Sight Range: {individual.SightRange}");
-                    sb.AppendLine($"Min Energy Acceptable: {individual.MinEnergyAcceptable}");
-                    txtUnit.Text = sb.ToString();
+                    txtUnit.Text = "Selected unit:\r\n" + GetIndividualInfo(individual);
                 }
                 var food = unit as FoodItem;
                 if (food != null)
@@ -208,6 +195,32 @@ namespace Evo.GUI.Winforms
             {
                 Debug.WriteLine("Unit not found at " + worldCoord);
             }
+        }
+
+        private string GetIndividualInfo(Individual individual, bool telemetryOnly = false)
+        {
+            var sb = new StringBuilder();
+            if (!telemetryOnly)
+            {
+                sb.AppendLine($"Id: {individual.Id}");
+            }
+            sb.AppendLine($"Status:");
+            sb.AppendLine($"Age: {individual.Age}");
+            sb.AppendLine($"Energy: {individual.Energy}");
+            sb.AppendLine($"Desire: {individual.Desire}");
+            if (!telemetryOnly)
+            {
+                sb.AppendLine($"Target: {individual.Target}");
+            }
+            sb.AppendLine("Genome:");
+            sb.AppendLine($"Lifetime: {individual.LifeTime}");
+            sb.AppendLine($"Aggression: {individual.Aggression}");
+            sb.AppendLine($"Strength: {individual.Strength}");
+            sb.AppendLine($"Fertility: {individual.Fertility}");
+            sb.AppendLine($"Purpose: {individual.Purpose}");
+            sb.AppendLine($"Sight Range: {individual.SightRange}");
+            sb.AppendLine($"Min Energy Acceptable: {individual.MinEnergyAcceptable}");
+            return sb.ToString();
         }
 
         private void button1_Click(object sender, EventArgs e)

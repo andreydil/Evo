@@ -30,9 +30,9 @@ namespace Evo.GUI.Winforms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -62,6 +62,9 @@ namespace Evo.GUI.Winforms
             this.Map = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.bgColorDialog = new System.Windows.Forms.ColorDialog();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.txtAverageUnit = new System.Windows.Forms.TextBox();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -75,6 +78,14 @@ namespace Evo.GUI.Winforms
             this.tabPage4.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.Panel2.SuspendLayout();
+            this.splitContainer3.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -178,8 +189,7 @@ namespace Evo.GUI.Winforms
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.chtPopulation);
-            this.tabPage2.Controls.Add(this.txtStats);
+            this.tabPage2.Controls.Add(this.splitContainer3);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -190,40 +200,40 @@ namespace Evo.GUI.Winforms
             // 
             // chtPopulation
             // 
-            chartArea3.Name = "ChartArea1";
-            this.chtPopulation.ChartAreas.Add(chartArea3);
-            this.chtPopulation.Dock = System.Windows.Forms.DockStyle.Top;
-            legend3.Name = "Legend1";
-            this.chtPopulation.Legends.Add(legend3);
-            this.chtPopulation.Location = new System.Drawing.Point(3, 3);
+            chartArea1.Name = "ChartArea1";
+            this.chtPopulation.ChartAreas.Add(chartArea1);
+            this.chtPopulation.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend1.Name = "Legend1";
+            this.chtPopulation.Legends.Add(legend1);
+            this.chtPopulation.Location = new System.Drawing.Point(0, 0);
             this.chtPopulation.Name = "chtPopulation";
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            this.chtPopulation.Series.Add(series3);
-            this.chtPopulation.Size = new System.Drawing.Size(344, 298);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chtPopulation.Series.Add(series1);
+            this.chtPopulation.Size = new System.Drawing.Size(344, 340);
             this.chtPopulation.TabIndex = 1;
             this.chtPopulation.TabStop = false;
             this.chtPopulation.Text = "Population";
             // 
             // txtStats
             // 
-            this.txtStats.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.txtStats.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtStats.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.txtStats.Location = new System.Drawing.Point(3, 307);
+            this.txtStats.Location = new System.Drawing.Point(0, 0);
             this.txtStats.Multiline = true;
             this.txtStats.Name = "txtStats";
             this.txtStats.ReadOnly = true;
-            this.txtStats.Size = new System.Drawing.Size(344, 377);
+            this.txtStats.Size = new System.Drawing.Size(344, 337);
             this.txtStats.TabIndex = 0;
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.txtUnit);
+            this.tabPage3.Controls.Add(this.splitContainer2);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(367, 687);
+            this.tabPage3.Size = new System.Drawing.Size(350, 687);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Unit";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -231,11 +241,11 @@ namespace Evo.GUI.Winforms
             // txtUnit
             // 
             this.txtUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtUnit.Location = new System.Drawing.Point(3, 3);
+            this.txtUnit.Location = new System.Drawing.Point(0, 0);
             this.txtUnit.Multiline = true;
             this.txtUnit.Name = "txtUnit";
             this.txtUnit.ReadOnly = true;
-            this.txtUnit.Size = new System.Drawing.Size(361, 681);
+            this.txtUnit.Size = new System.Drawing.Size(344, 307);
             this.txtUnit.TabIndex = 0;
             this.txtUnit.TabStop = false;
             this.txtUnit.Text = "<Click on a unit to get its info>";
@@ -247,7 +257,7 @@ namespace Evo.GUI.Winforms
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(367, 687);
+            this.tabPage4.Size = new System.Drawing.Size(350, 687);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "View";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -420,6 +430,53 @@ namespace Evo.GUI.Winforms
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.txtUnit);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.txtAverageUnit);
+            this.splitContainer2.Size = new System.Drawing.Size(344, 681);
+            this.splitContainer2.SplitterDistance = 307;
+            this.splitContainer2.TabIndex = 1;
+            // 
+            // txtAverageUnit
+            // 
+            this.txtAverageUnit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtAverageUnit.Location = new System.Drawing.Point(0, 0);
+            this.txtAverageUnit.Multiline = true;
+            this.txtAverageUnit.Name = "txtAverageUnit";
+            this.txtAverageUnit.ReadOnly = true;
+            this.txtAverageUnit.Size = new System.Drawing.Size(344, 370);
+            this.txtAverageUnit.TabIndex = 1;
+            this.txtAverageUnit.TabStop = false;
+            // 
+            // splitContainer3
+            // 
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer3.Name = "splitContainer3";
+            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.chtPopulation);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.txtStats);
+            this.splitContainer3.Size = new System.Drawing.Size(344, 681);
+            this.splitContainer3.SplitterDistance = 340;
+            this.splitContainer3.TabIndex = 2;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -439,14 +496,23 @@ namespace Evo.GUI.Winforms
             ((System.ComponentModel.ISupportInitialize)(this.numSpeed)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chtPopulation)).EndInit();
             this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).EndInit();
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel1.PerformLayout();
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            this.splitContainer2.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            this.splitContainer3.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -482,6 +548,9 @@ namespace Evo.GUI.Winforms
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numSpeed;
         private System.Windows.Forms.DataVisualization.Charting.Chart chtPopulation;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.TextBox txtAverageUnit;
+        private System.Windows.Forms.SplitContainer splitContainer3;
     }
 }
 
