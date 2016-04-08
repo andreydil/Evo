@@ -22,7 +22,7 @@ namespace Evo.Core.Units
 
         #region Genome
 
-        public Gene Color { get; set; } = new Gene(0x000000, 0xffffff);
+        public ColorGene Color { get; set; } = new ColorGene();
         public Gene Aggression { get; set; } = new Gene(1, 1000);
         public Gene Strength { get; set; } = new Gene(1, 1000);
         public Gene Fertility { get; set; } = new Gene(1, 1000);
@@ -58,14 +58,14 @@ namespace Evo.Core.Units
 
         private double GetDifference(Individual other)
         {
-            return Math.Sqrt((Color - (double)other.Color) * (Color - other.Color));
+            return Color.GetDifferenceFrom(other.Color);
         }
 
         private double GetMaxDifference()
         {
-            var minColor = new Gene(0, 0xffffff) { Value = 0 };
-            var maxColor = new Gene(0, 0xffffff) { Value = 0xffffff };
-            return Math.Sqrt((minColor - (double)maxColor) * (minColor - maxColor));
+            var minColor = new ColorGene { Value = 0 };
+            var maxColor = new ColorGene { Value = 0xffffff };
+            return maxColor.GetDifferenceFrom(minColor);
         }
 
         public void LiveOneTick()
