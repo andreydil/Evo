@@ -140,8 +140,7 @@ namespace Evo.Core.Units
                 case TargetType.Walk:
                     if (_world.CheckRng(Purpose))
                     {
-                        Target.Direction.X = _world.Random.Next(-1, 1);
-                        Target.Direction.Y = _world.Random.Next(-1, 1);
+                        Target.Direction = new Coord(_world.Random.Next(-1, 1), _world.Random.Next(-1, 1));
                     }
                     break;
                 case TargetType.Sex:
@@ -209,12 +208,13 @@ namespace Evo.Core.Units
                         if (_world.CheckRng(Fertility + partner.Fertility, 0, Fertility.Max * 2))
                         {
                             var child = _world.Mutator.GenerateChild(this, partner);
-                            child.Point = _world.Navigator.PlaceChild(Point, partner.Point);
+                            var newPoint = _world.Navigator.PlaceChild(Point, partner.Point);
                             Energy.Value -= Energy / 3;
                             partner.Energy.Value -= partner.Energy / 3;
                             child.Energy.Value = Energy / 3 + partner.Energy / 3;
-                            if (child.Point != null)
+                            if (newPoint.HasValue)
                             {
+                                child.Point = newPoint.Value;
                                 _world.AddIndividual(child);
                                 _world.MainStats.AddStat("Births");
                             }

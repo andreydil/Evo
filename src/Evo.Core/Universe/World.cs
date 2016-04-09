@@ -141,8 +141,7 @@ namespace Evo.Core.Universe
                 };
                 for (int j = 0; j < tryCount; j++)
                 {
-                    newFoodItem.Point.X = Random.Next(Size.X);
-                    newFoodItem.Point.Y = Random.Next(Size.Y);
+                    newFoodItem.Point = new Coord(Random.Next(Size.X), Random.Next(Size.Y));
                     var unitInPoint = Navigator.FindUnit(newFoodItem.Point);
                     if (unitInPoint == null)
                     {
@@ -172,8 +171,7 @@ namespace Evo.Core.Universe
             {
                 for (int i = 0; i < 100; i++)
                 {
-                    individual.Point.X = Random.Next(topLeftPoint.X, bottomRightPoint.X);
-                    individual.Point.Y = Random.Next(topLeftPoint.Y, bottomRightPoint.Y);
+                    individual.Point = new Coord(Random.Next(topLeftPoint.X, bottomRightPoint.X), Random.Next(topLeftPoint.Y, bottomRightPoint.Y));
                     Navigator.InsureBounds(individual.Point);
                     if (Navigator.FindIndividual(individual.Point) != null)
                     {

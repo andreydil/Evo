@@ -2,16 +2,16 @@
 
 namespace Evo.Core.Basic
 {
-    public class Coord : IEquatable<Coord>
+    public struct Coord : IEquatable<Coord>
     {
+        public int X;
+        public int Y;
+
         public Coord(int x, int y)
         {
             X = x;
             Y = y;
         }
-
-        public int X { get; set; }
-        public int Y { get; set; }
         
         public static Coord operator +(Coord p1, Coord p2)
         {
@@ -25,15 +25,6 @@ namespace Evo.Core.Basic
 
         public static bool operator ==(Coord p1, Coord p2)
         {
-            if (ReferenceEquals(p1, p2))
-            {
-                return true;
-            }
-            
-            if (((object)p1 == null) || ((object)p2 == null))
-            {
-                return false;
-            }
             return p1.Equals(p2);
         }
 
@@ -43,8 +34,8 @@ namespace Evo.Core.Basic
         }
 
         #region IEquatable implementation
-
-        protected bool Equals(Coord other)
+        
+        private bool Equals(Coord other)
         {
             return X == other.X && Y == other.Y;
         }
@@ -54,10 +45,6 @@ namespace Evo.Core.Basic
             if (ReferenceEquals(null, obj))
             {
                 return false;
-            }
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
             }
             return obj.GetType() == this.GetType() && Equals((Coord)obj);
         }

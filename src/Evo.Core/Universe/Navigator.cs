@@ -62,7 +62,7 @@ namespace Evo.Core.Universe
             return null;
         }
 
-        private static List<T> FindAllFoodInRadius<T>(Coord point, IList<T> list, int radius) where T : Unit
+        private List<T> FindAllFoodInRadius<T>(Coord point, IList<T> list, int radius) where T : Unit
         {
             return list.Where(f => f.Point.X >= point.X - radius && f.Point.X <= point.X + radius
                                    && f.Point.Y >= point.Y - radius && f.Point.Y <= point.Y + radius
@@ -109,12 +109,12 @@ namespace Evo.Core.Universe
             }
         }
 
-        public Coord PlaceChild(Coord fatherPoint, Coord motherPoint)
+        public Coord? PlaceChild(Coord fatherPoint, Coord motherPoint)
         {
             return PlaceNear(motherPoint) ?? PlaceNear(fatherPoint);
         }
 
-        private Coord PlaceNear(Coord point)
+        private Coord? PlaceNear(Coord point)
         {
             for (int deltaX = -1; deltaX <= 1; deltaX++)
             {

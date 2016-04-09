@@ -76,8 +76,8 @@ namespace Evo.Core.Tests
             world.AddIndividual(mother);
             var childPoint = world.Navigator.PlaceChild(father.Point, mother.Point);
             Assert.IsNotNull(childPoint);
-            Assert.AreEqual(1, childPoint.X);
-            Assert.AreEqual(13, childPoint.Y);
+            Assert.AreEqual(1, childPoint.Value.X);
+            Assert.AreEqual(13, childPoint.Value.Y);
         }
 
         [Test]
@@ -100,8 +100,9 @@ namespace Evo.Core.Tests
                 new Individual(10, world) { Point = new Coord(4, 11) },
             });
             var childPoint = world.Navigator.PlaceChild(father.Point, mother.Point);
-            Assert.AreEqual(1, childPoint.X);
-            Assert.AreEqual(11, childPoint.Y);
+            Assert.IsNotNull(childPoint);
+            Assert.AreEqual(1, childPoint.Value.X);
+            Assert.AreEqual(11, childPoint.Value.Y);
         }
 
         [Test]
@@ -113,8 +114,9 @@ namespace Evo.Core.Tests
             world.AddIndividual(father);
             world.AddIndividual(mother);
             var childPoint = world.Navigator.PlaceChild(father.Point, mother.Point);
-            Assert.AreEqual(1, childPoint.X);
-            Assert.AreEqual(0, childPoint.Y);
+            Assert.IsNotNull(childPoint);
+            Assert.AreEqual(1, childPoint.Value.X);
+            Assert.AreEqual(0, childPoint.Value.Y);
         }
     }
 }
