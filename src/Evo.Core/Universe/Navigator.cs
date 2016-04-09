@@ -47,12 +47,12 @@ namespace Evo.Core.Universe
 
         private Unit FindClosestUnit<T>(Coord point, IList<T> list, int sightRange) where T : Unit
         {
+            var allUnitsInSightRange = FindAllFoodInRadius(point, list, sightRange);
             int radius = 1;
+
             while (radius <= sightRange)
             {
-                var foodInRadius = list.Where(f => f.Point.X >= point.X - radius && f.Point.X <= point.X + radius
-                                                   && f.Point.Y >= point.Y - radius && f.Point.Y <= point.Y + radius
-                                                   && f.Point != point).ToList();
+                var foodInRadius = FindAllFoodInRadius(point, allUnitsInSightRange, radius);
                 if (foodInRadius.Any())
                 {
                     return foodInRadius[_world.Random.Next(foodInRadius.Count)];
@@ -60,6 +60,13 @@ namespace Evo.Core.Universe
                 ++radius;
             }
             return null;
+        }
+
+        private static List<T> FindAllFoodInRadius<T>(Coord point, IList<T> list, int radius) where T : Unit
+        {
+            return list.Where(f => f.Point.X >= point.X - radius && f.Point.X <= point.X + radius
+                                   && f.Point.Y >= point.Y - radius && f.Point.Y <= point.Y + radius
+                                   && f.Point != point).ToList();
         }
 
         public void BounceFromMapBorders(Coord point, Coord direction)
