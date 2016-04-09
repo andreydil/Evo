@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Evo.Core.Basic;
@@ -23,6 +25,9 @@ namespace Evo.GUI.Winforms
         private World _world;
         private Color bgColor = Color.Black;
 
+        private Task bgTask = null;
+        private CancellationTokenSource bgTaskCancelationSource;
+
         public FrmMain()
         {
             InitializeComponent();
@@ -38,17 +43,17 @@ namespace Evo.GUI.Winforms
             try
             {
                 _world = new World(new Random(), new Coord(Map.Size.Width / MapMultiplier, Map.Size.Height / MapMultiplier));
-                _world.MutationProbability.Value = 100;
+                _world.MutationProbability.Value = 120;
                 _world.MutationMaxDelta.Value = 40;
                 _world.EnergyDrainModificator.Value = 1;
-                _world.MaxFoodItemsPerTick.Value = 30;
+                _world.MaxFoodItemsPerTick.Value = 60;
                 _world.MaxEneryPerFoodItem.Value = 100;
-                _world.MaxFoodItems.Value = 300;
+                _world.MaxFoodItems.Value = 400;
 
                 var initPopulation = new List<Individual>(100);
                 for (int i = 0; i < 50; i++)
                 {
-                    var individual = _world.Mutator.GenerateRandom();
+                    var individual = _world.Mutator.GenerateAverage();
                     initPopulation.Add(individual);
                 }
                 _world.SpreadIndividuals(initPopulation, new Coord(0, 0), new Coord(Map.Size.Width / MapMultiplier, Map.Size.Height / MapMultiplier));
@@ -82,12 +87,57 @@ namespace Evo.GUI.Winforms
 
         private void btnToggleTimer_Click(object sender, EventArgs e)
         {
-            timer1.Enabled = !timer1.Enabled;
+            if (chkVisualize.Checked)
+            {
+                timer1.Enabled = !timer1.Enabled;
+                btn1Step.Enabled = chkVisualize.Enabled = !timer1.Enabled;
+            }
+            else
+            {
+                if (bgTask == null)
+                {
+                    chkVisualize.Enabled = btn1Step.Enabled = false;
+                    bgTaskCancelationSource = new CancellationTokenSource();
+                    var cancellationToken = bgTaskCancelationSource.Token;
+                    bgTask = Task.Factory.StartNew(() => 
+                    {
+                        while (true)
+                        {
+                            _world.Live1Tick();
+                            if (_world.Population.Count == 0)
+                            {
+                                break;
+                            }
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                break;
+                            }
+                        }
+                    }, cancellationToken);
+                }
+                else
+                {
+                    bgTaskCancelationSource.Cancel();
+                    if (!bgTask.IsCanceled)
+                    {
+                        bgTask.Wait();
+                    }
+                    bgTask = null;
+                    chkVisualize.Enabled = btn1Step.Enabled = true;
+                    DoStep();
+                }
+            }
         }
 
         private void Map_Paint_1(object sender, PaintEventArgs e)
         {
             e.Graphics.Clear(bgColor);
+
+            if (bgTask != null)
+            {
+                return;
+            }
+
             var foodBrush = new HatchBrush(HatchStyle.Percent50, Color.ForestGreen);
             foreach (var foodItem in _world.Food)
             {
@@ -104,10 +154,6 @@ namespace Evo.GUI.Winforms
         private void DoStep()
         {
             _world.Live1Tick();
-            if (_world.Population.Count == 0)
-            {
-                timer1.Stop();
-            }
             Map.Invalidate();
             this.Text = "Evo. Population = " + _world.Population.Count;
 
@@ -142,11 +188,13 @@ namespace Evo.GUI.Winforms
         private void showChart()
         {
             chtPopulation.Series.Clear();
+            chtPopulation.AlignDataPointsByAxisLabel();
+            
             var populationSeries = new Series
             {
                 Name = "Population",
                 Color = Color.DodgerBlue,
-                IsVisibleInLegend = false,
+                IsVisibleInLegend = true,
                 IsXValueIndexed = true,
                 ChartType = SeriesChartType.Line,
                 BorderWidth = 1,
@@ -162,7 +210,7 @@ namespace Evo.GUI.Winforms
             {
                 Name = "Food",
                 Color = Color.ForestGreen,
-                IsVisibleInLegend = false,
+                IsVisibleInLegend = true,
                 IsXValueIndexed = false,
                 ChartType = SeriesChartType.Line,
                 BorderWidth = 1,
@@ -174,7 +222,13 @@ namespace Evo.GUI.Winforms
             }
             chtPopulation.Series.Add(foodSeries);
 
-            chtPopulation.Invalidate();
+            var legend = chtPopulation.Legends[0];
+            legend.Docking = Docking.Bottom;
+            legend.IsDockedInsideChartArea = false;
+            legend.TableStyle = LegendTableStyle.Wide;
+            legend.Alignment = StringAlignment.Near;
+
+            chtPopulation.Refresh();
         }
         
         private void Map_MouseClick(object sender, MouseEventArgs e)
@@ -304,6 +358,11 @@ namespace Evo.GUI.Winforms
         private void numSpeed_ValueChanged(object sender, EventArgs e)
         {
             timer1.Interval = 1000 - (int)numSpeed.Value * 100;
+        }
+
+        private void chkVisualize_CheckedChanged(object sender, EventArgs e)
+        {
+            numSpeed.Enabled = chkVisualize.Checked;
         }
     }
 }

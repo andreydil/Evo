@@ -10,12 +10,12 @@ namespace Evo.Core.Universe
     public class World
     {
         public readonly Random Random;
-        private ulong _idGenerator = 0;
         public readonly Mutator Mutator;
         public readonly Navigator Navigator;
         public readonly DecisionMaker DecisionMaker;
         public readonly Coord Size;
         private readonly StatCounter _statCounter;
+        private ulong _idGenerator = 0;
 
         public World(Random random, Coord size)
         {
@@ -33,6 +33,8 @@ namespace Evo.Core.Universe
         public LimitedInt MaxEneryPerFoodItem { get; set; } = new LimitedInt(1, 100);
         public LimitedInt MaxFoodItems { get; set; } = new LimitedInt(1, 10000);
         public LimitedInt EnergyDrainModificator { get; set; } = new LimitedInt(1, 1000);
+
+        public Individual AverageIndividual => _statCounter.GetAverage(Population);
 
         public ulong Tick { get; private set; } = 0;
         public readonly List<Individual> Population = new List<Individual>();
@@ -183,7 +185,5 @@ namespace Evo.Core.Universe
                 }
             }
         }
-
-        public Individual AverageIndividual => _statCounter.GetAverage(Population);
     }
 }

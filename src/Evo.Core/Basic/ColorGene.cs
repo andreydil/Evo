@@ -18,9 +18,9 @@ namespace Evo.Core.Basic
 
         public double GetDifferenceFrom(ColorGene otherColor)
         {
-            return Math.Sqrt((Red - otherColor.Red) * (Red - otherColor.Red) + 
-                         (Green - otherColor.Green) * (Green - otherColor.Green) + (
-                            Blue - otherColor.Blue) *(Blue - otherColor.Blue));
+            return Math.Sqrt((Red - otherColor.Red) * (Red - otherColor.Red) +
+                             (Green - otherColor.Green) * (Green - otherColor.Green) + (
+                                 Blue - otherColor.Blue) * (Blue - otherColor.Blue));
         }
     }
 }

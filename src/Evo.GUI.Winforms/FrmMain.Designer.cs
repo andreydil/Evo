@@ -41,10 +41,13 @@ namespace Evo.GUI.Winforms
             this.btn1Step = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.chtPopulation = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.txtStats = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.txtUnit = new System.Windows.Forms.TextBox();
+            this.txtAverageUnit = new System.Windows.Forms.TextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rbSightRange = new System.Windows.Forms.RadioButton();
@@ -62,9 +65,7 @@ namespace Evo.GUI.Winforms
             this.Map = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.bgColorDialog = new System.Windows.Forms.ColorDialog();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.txtAverageUnit = new System.Windows.Forms.TextBox();
-            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.chkVisualize = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -73,19 +74,19 @@ namespace Evo.GUI.Winforms
             ((System.ComponentModel.ISupportInitialize)(this.numSpeed)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chtPopulation)).BeginInit();
-            this.tabPage3.SuspendLayout();
-            this.tabPage4.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chtPopulation)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -110,6 +111,7 @@ namespace Evo.GUI.Winforms
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.chkVisualize);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.numSpeed);
             this.groupBox2.Controls.Add(this.btnToggleTimer);
@@ -124,7 +126,7 @@ namespace Evo.GUI.Winforms
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(87, 53);
+            this.label1.Location = new System.Drawing.Point(164, 53);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 3;
@@ -132,7 +134,7 @@ namespace Evo.GUI.Winforms
             // 
             // numSpeed
             // 
-            this.numSpeed.Location = new System.Drawing.Point(131, 51);
+            this.numSpeed.Location = new System.Drawing.Point(208, 51);
             this.numSpeed.Maximum = new decimal(new int[] {
             9,
             0,
@@ -198,6 +200,24 @@ namespace Evo.GUI.Winforms
             this.tabPage2.Text = "Stats";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // splitContainer3
+            // 
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer3.Name = "splitContainer3";
+            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.chtPopulation);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.txtStats);
+            this.splitContainer3.Size = new System.Drawing.Size(344, 681);
+            this.splitContainer3.SplitterDistance = 340;
+            this.splitContainer3.TabIndex = 2;
+            // 
             // chtPopulation
             // 
             chartArea1.Name = "ChartArea1";
@@ -238,6 +258,24 @@ namespace Evo.GUI.Winforms
             this.tabPage3.Text = "Unit";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.txtUnit);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.txtAverageUnit);
+            this.splitContainer2.Size = new System.Drawing.Size(344, 681);
+            this.splitContainer2.SplitterDistance = 307;
+            this.splitContainer2.TabIndex = 1;
+            // 
             // txtUnit
             // 
             this.txtUnit.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -249,6 +287,17 @@ namespace Evo.GUI.Winforms
             this.txtUnit.TabIndex = 0;
             this.txtUnit.TabStop = false;
             this.txtUnit.Text = "<Click on a unit to get its info>";
+            // 
+            // txtAverageUnit
+            // 
+            this.txtAverageUnit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtAverageUnit.Location = new System.Drawing.Point(0, 0);
+            this.txtAverageUnit.Multiline = true;
+            this.txtAverageUnit.Name = "txtAverageUnit";
+            this.txtAverageUnit.ReadOnly = true;
+            this.txtAverageUnit.Size = new System.Drawing.Size(344, 370);
+            this.txtAverageUnit.TabIndex = 1;
+            this.txtAverageUnit.TabStop = false;
             // 
             // tabPage4
             // 
@@ -430,52 +479,18 @@ namespace Evo.GUI.Winforms
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // splitContainer2
+            // chkVisualize
             // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(3, 3);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.txtUnit);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.txtAverageUnit);
-            this.splitContainer2.Size = new System.Drawing.Size(344, 681);
-            this.splitContainer2.SplitterDistance = 307;
-            this.splitContainer2.TabIndex = 1;
-            // 
-            // txtAverageUnit
-            // 
-            this.txtAverageUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtAverageUnit.Location = new System.Drawing.Point(0, 0);
-            this.txtAverageUnit.Multiline = true;
-            this.txtAverageUnit.Name = "txtAverageUnit";
-            this.txtAverageUnit.ReadOnly = true;
-            this.txtAverageUnit.Size = new System.Drawing.Size(344, 370);
-            this.txtAverageUnit.TabIndex = 1;
-            this.txtAverageUnit.TabStop = false;
-            // 
-            // splitContainer3
-            // 
-            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.Location = new System.Drawing.Point(3, 3);
-            this.splitContainer3.Name = "splitContainer3";
-            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer3.Panel1
-            // 
-            this.splitContainer3.Panel1.Controls.Add(this.chtPopulation);
-            // 
-            // splitContainer3.Panel2
-            // 
-            this.splitContainer3.Panel2.Controls.Add(this.txtStats);
-            this.splitContainer3.Size = new System.Drawing.Size(344, 681);
-            this.splitContainer3.SplitterDistance = 340;
-            this.splitContainer3.TabIndex = 2;
+            this.chkVisualize.AutoSize = true;
+            this.chkVisualize.Checked = true;
+            this.chkVisualize.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkVisualize.Location = new System.Drawing.Point(87, 52);
+            this.chkVisualize.Name = "chkVisualize";
+            this.chkVisualize.Size = new System.Drawing.Size(67, 17);
+            this.chkVisualize.TabIndex = 4;
+            this.chkVisualize.Text = "Vizualize";
+            this.chkVisualize.UseVisualStyleBackColor = true;
+            this.chkVisualize.CheckedChanged += new System.EventHandler(this.chkVisualize_CheckedChanged);
             // 
             // FrmMain
             // 
@@ -496,23 +511,23 @@ namespace Evo.GUI.Winforms
             ((System.ComponentModel.ISupportInitialize)(this.numSpeed)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            this.splitContainer3.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chtPopulation)).EndInit();
             this.tabPage3.ResumeLayout(false);
-            this.tabPage4.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Map)).EndInit();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel1.PerformLayout();
             this.splitContainer2.Panel2.ResumeLayout(false);
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            this.splitContainer3.Panel1.ResumeLayout(false);
-            this.splitContainer3.Panel2.ResumeLayout(false);
-            this.splitContainer3.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
-            this.splitContainer3.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Map)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -551,6 +566,7 @@ namespace Evo.GUI.Winforms
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.TextBox txtAverageUnit;
         private System.Windows.Forms.SplitContainer splitContainer3;
+        private System.Windows.Forms.CheckBox chkVisualize;
     }
 }
 
