@@ -46,22 +46,24 @@ namespace Evo.Core.Stats
 
             var count = individuals.Count;
 
-            var average = new Individual(0, null)
-            {
-                Color = {Value = (int)(colorR/count*0x10000 + colorG/count*0x100+colorB/count) },
-                Aggression = { Value = (int)(aggression / count) },
-                Strength = { Value = (int)(strength / count) },
-                Fertility = { Value = (int)(fertility / count) },
-                LifeTime = { Value = (int)(lifeTime / count) },
-                Purpose = { Value = (int)(purpose / count) },
-                SightRange = { Value = (int)(sightRange / count) },
-                MinEnergyAcceptable = { Value = (int)(minEnergyAcceptable / count) },
+            var average = new Individual(0, null);
 
-                Energy = { Value = (int)(energy / count) },
-                Age = { Value = (int)(age / count) },
-                Desire = { Value = (int)(desire / count) }
-            };
-            
+            if (count == 0)
+            {
+                return average;
+            }
+            average.Color.Value = (int)(colorR / count * 0x10000 + colorG / count * 0x100 + colorB / count);
+            average.Aggression.Value = (int)(aggression / count);
+            average.Strength.Value = (int)(strength / count);
+            average.Fertility.Value = (int)(fertility / count);
+            average.LifeTime.Value = (int)(lifeTime / count);
+            average.Purpose.Value = (int)(purpose / count);
+            average.SightRange.Value = (int)(sightRange / count);
+            average.MinEnergyAcceptable.Value = (int)(minEnergyAcceptable / count);
+            average.Energy.Value = (int)(energy / count);
+            average.Age.Value = (int)(age / count);
+            average.Desire.Value = (int)(desire / count);
+
             return average;
         }
     }

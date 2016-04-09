@@ -104,6 +104,10 @@ namespace Evo.GUI.Winforms
         private void DoStep()
         {
             _world.Live1Tick();
+            if (_world.Population.Count == 0)
+            {
+                timer1.Stop();
+            }
             Map.Invalidate();
             this.Text = "Evo. Population = " + _world.Population.Count;
 

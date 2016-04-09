@@ -50,6 +50,10 @@ namespace Evo.Core.Universe
 
         public void Live1Tick()
         {
+            if (Population.Count == 0)
+            {
+                return;
+            }
             SpreadFood();
             foreach (var individual in Population.ToList())
             {
