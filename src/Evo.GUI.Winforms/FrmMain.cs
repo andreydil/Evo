@@ -271,6 +271,7 @@ namespace Evo.GUI.Winforms
                 sb.AppendLine($"Target: {individual.Target}");
             }
             sb.AppendLine("Genome:");
+            sb.AppendLine($"Color: {individual.Color.Value.ToString("X6")}");
             sb.AppendLine($"Lifetime: {individual.LifeTime}");
             sb.AppendLine($"Aggression: {individual.Aggression}");
             sb.AppendLine($"Strength: {individual.Strength}");
@@ -333,7 +334,7 @@ namespace Evo.GUI.Winforms
                 return GetColorFromValue(individual.MinEnergyAcceptable, false);
             }
 
-            return Color.FromArgb(individual.Color * 0x100);
+            return Color.FromArgb(individual.Color.Red, individual.Color.Green, individual.Color.Blue);
         }
 
         private Color GetColorFromValue(LimitedInt gene, bool biggerRed = true)

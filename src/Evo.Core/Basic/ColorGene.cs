@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Evo.Core.Basic
 {
@@ -10,11 +6,17 @@ namespace Evo.Core.Basic
     {
         public ColorGene() : base(0x000000, 0xffffff)
         {
+            Value = 0x808080;
         }
 
         public byte Red => (byte)(Value / 0x10000 % 0x100);
         public byte Green => (byte)(Value / 0x100 % 0x100);
         public byte Blue => (byte)(Value % 0x100);
+
+        public void SetRGB(byte red, byte green, byte blue)
+        {
+            Value = red * 0x10000 + green * 0x100 + blue;
+        }
 
         public double GetDifferenceFrom(ColorGene otherColor)
         {
