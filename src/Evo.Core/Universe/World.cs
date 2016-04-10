@@ -182,7 +182,7 @@ namespace Evo.Core.Universe
                 for (int i = 0; i < 100; i++)
                 {
                     individual.Point = new Coord(Random.Next(topLeftPoint.X, bottomRightPoint.X), Random.Next(topLeftPoint.Y, bottomRightPoint.Y));
-                    Navigator.InsureBounds(individual.Point);
+                    individual.Point = Navigator.EnsureBounds(individual.Point);
                     if (Navigator.FindIndividual(individual.Point) != null)
                     {
                         continue;

@@ -93,7 +93,7 @@ namespace Evo.Core.Universe
             return new Coord(x, y);
         }
 
-        public void InsureBounds(Coord point)
+        public Coord EnsureBounds(Coord point)
         {
             if (point.X < 0)
             {
@@ -111,6 +111,8 @@ namespace Evo.Core.Universe
             {
                 point.Y = _world.Size.Y - 1;
             }
+
+            return point;
         }
 
         public Coord? PlaceChild(Coord fatherPoint, Coord motherPoint)

@@ -152,7 +152,7 @@ namespace Evo.Core.Units
                 case TargetType.Walk:
                     if (_world.CheckRng(Purpose))
                     {
-                        Target.Direction = new Coord(_world.Random.Next(-1, 1), _world.Random.Next(-1, 1));
+                        Target.Direction = new Coord(_world.Random.Next(-1, 2), _world.Random.Next(-1, 2));
                     }
                     break;
                 case TargetType.Sex:
