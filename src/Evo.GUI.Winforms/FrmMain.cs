@@ -250,7 +250,7 @@ namespace Evo.GUI.Winforms
                 {
                     txtUnit.Text = $"{formatStatLine("Food", food.Id)}\r\n{formatStatLine("Energy", food.Energy)}";
                 }
-                tabView.SelectedIndex = 1;
+                tabView.SelectedIndex = 2;
             }
             else
             {
@@ -277,7 +277,7 @@ namespace Evo.GUI.Winforms
             sb.AppendLine(formatStatLine("Color", "#" + individual.Color.Value.ToString("X6")));
             foreach (var geneItem in individual.Genome.Where(gi => gi.Key != GeneNames.Color))
             {
-                sb.AppendLine(formatStatLine(geneItem.Key, individual.LifeTime.Value));
+                sb.AppendLine(formatStatLine(geneItem.Key, geneItem.Value.Value));
             }
             return sb.ToString();
         }
