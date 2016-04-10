@@ -78,6 +78,8 @@ namespace Evo.GUI.Winforms
                 Color = Color.ForestGreen,
             };
             chtPopulation.Series.Add(foodSeries);
+
+            buildTuners();
         }
 
         private void btn1Step_Click(object sender, EventArgs e)
@@ -248,7 +250,7 @@ namespace Evo.GUI.Winforms
                 {
                     txtUnit.Text = $"{formatStatLine("Food", food.Id)}\r\n{formatStatLine("Energy", food.Energy)}";
                 }
-                tabControl1.SelectedIndex = 1;
+                tabView.SelectedIndex = 1;
             }
             else
             {
@@ -363,5 +365,58 @@ namespace Evo.GUI.Winforms
         {
             numSpeed.Enabled = chkVisualize.Checked;
         }
+
+        private string SplitCamelCase(string input)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(input, "([A-Z])", " $1", System.Text.RegularExpressions.RegexOptions.Compiled).Trim();
+        }
+
+        private void buildTuners()
+        {
+            const int leftMargin = 5;
+            const int slidersX = 160;
+            const int yDelta = 40;
+            const int valueLabelX = 140;
+            const int labelYShift = 3;
+            int curY = 10;
+            foreach (var tunerItem in _world.Tuners)
+            {
+                var tuner = tunerItem.Value;
+                var nameLabel = new Label
+                {
+                    Text = SplitCamelCase(tunerItem.Key),
+                    Location = new Point(leftMargin,curY + labelYShift),
+                    AutoSize = true,
+                };
+                tabTune.Controls.Add(nameLabel);
+
+                var valueLabel = new Label
+                {
+                    Text = tuner.Value.ToString(),
+                    Location = new Point(valueLabelX, curY + labelYShift),
+                    AutoSize = true,
+                };
+                tabTune.Controls.Add(valueLabel);
+
+                var slider = new TrackBar
+                {
+                    Location = new Point(slidersX, curY),
+                    Minimum = tuner.Min,
+                    Maximum = tuner.Max,
+                    Value = tuner.Value,
+                    TickStyle = TickStyle.None,
+                    Width = tabTune.Width - slidersX - leftMargin,
+                };
+                slider.Scroll += (sender, args) =>
+                {
+                    valueLabel.Text = slider.Value.ToString();
+                    tuner.Value = slider.Value;
+                };
+                tabTune.Controls.Add(slider);
+
+                curY += yDelta;
+            }
+        }
+        
     }
 }

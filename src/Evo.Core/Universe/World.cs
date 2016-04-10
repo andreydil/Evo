@@ -14,6 +14,7 @@ namespace Evo.Core.Universe
         public readonly Navigator Navigator;
         public readonly DecisionMaker DecisionMaker;
         public readonly Coord Size;
+        public readonly Dictionary<string, LimitedInt> Tuners;
         private readonly StatCounter _statCounter;
         private ulong _idGenerator = 0;
 
@@ -25,14 +26,23 @@ namespace Evo.Core.Universe
             Navigator = new Navigator(this);
             DecisionMaker = new DecisionMaker(this);
             _statCounter = new StatCounter();
+            Tuners = new Dictionary<string, LimitedInt>
+            {
+                { "MaxFoodItems", MaxFoodItems },
+                { "MaxFoodItemsPerTick", MaxFoodItemsPerTick },
+                { "MaxEneryPerFoodItem", MaxEneryPerFoodItem },
+                { "MutationProbability", MutationProbability },
+                { "MutationMaxDelta", MutationMaxDelta },
+                { "EnergyDrainModificator", EnergyDrainModificator },
+            };
         }
 
         public LimitedInt MutationProbability { get; set; } = new LimitedInt(1, Constants.Probability100Percent);
         public LimitedInt MutationMaxDelta { get; set; } = new LimitedInt(1, 1000);
-        public LimitedInt MaxFoodItemsPerTick { get; set; } = new LimitedInt(1, 10000);
-        public LimitedInt MaxEneryPerFoodItem { get; set; } = new LimitedInt(1, 100);
+        public LimitedInt MaxFoodItemsPerTick { get; set; } = new LimitedInt(1, 1000);
+        public LimitedInt MaxEneryPerFoodItem { get; set; } = new LimitedInt(1, 1000);
         public LimitedInt MaxFoodItems { get; set; } = new LimitedInt(1, 10000);
-        public LimitedInt EnergyDrainModificator { get; set; } = new LimitedInt(1, 1000);
+        public LimitedInt EnergyDrainModificator { get; set; } = new LimitedInt(1, 100);
 
         public Individual AverageIndividual => _statCounter.GetAverage(Population);
 

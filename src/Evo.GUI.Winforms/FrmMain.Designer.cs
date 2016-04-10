@@ -30,9 +30,9 @@ namespace Evo.GUI.Winforms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.chkVisualize = new System.Windows.Forms.CheckBox();
@@ -40,12 +40,13 @@ namespace Evo.GUI.Winforms
             this.numSpeed = new System.Windows.Forms.NumericUpDown();
             this.btnToggleTimer = new System.Windows.Forms.Button();
             this.btn1Step = new System.Windows.Forms.Button();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabView = new System.Windows.Forms.TabControl();
+            this.tabStats = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.chtPopulation = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.txtStats = new System.Windows.Forms.TextBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabTune = new System.Windows.Forms.TabPage();
+            this.tabUnit = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.txtUnit = new System.Windows.Forms.TextBox();
             this.txtAverageUnit = new System.Windows.Forms.TextBox();
@@ -72,14 +73,14 @@ namespace Evo.GUI.Winforms
             this.splitContainer1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSpeed)).BeginInit();
-            this.tabControl1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.tabView.SuspendLayout();
+            this.tabStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chtPopulation)).BeginInit();
-            this.tabPage3.SuspendLayout();
+            this.tabUnit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -98,10 +99,11 @@ namespace Evo.GUI.Winforms
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.groupBox2);
-            this.splitContainer1.Panel1.Controls.Add(this.tabControl1);
+            this.splitContainer1.Panel1.Controls.Add(this.tabView);
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.Controls.Add(this.Map);
             this.splitContainer1.Size = new System.Drawing.Size(1509, 802);
             this.splitContainer1.SplitterDistance = 365;
@@ -128,7 +130,7 @@ namespace Evo.GUI.Winforms
             this.chkVisualize.AutoSize = true;
             this.chkVisualize.Checked = true;
             this.chkVisualize.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkVisualize.Location = new System.Drawing.Point(87, 52);
+            this.chkVisualize.Location = new System.Drawing.Point(87, 53);
             this.chkVisualize.Name = "chkVisualize";
             this.chkVisualize.Size = new System.Drawing.Size(67, 17);
             this.chkVisualize.TabIndex = 4;
@@ -139,7 +141,7 @@ namespace Evo.GUI.Winforms
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(164, 53);
+            this.label1.Location = new System.Drawing.Point(164, 55);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 3;
@@ -147,7 +149,7 @@ namespace Evo.GUI.Winforms
             // 
             // numSpeed
             // 
-            this.numSpeed.Location = new System.Drawing.Point(208, 51);
+            this.numSpeed.Location = new System.Drawing.Point(208, 52);
             this.numSpeed.Maximum = new decimal(new int[] {
             9,
             0,
@@ -188,30 +190,31 @@ namespace Evo.GUI.Winforms
             this.btn1Step.UseVisualStyleBackColor = true;
             this.btn1Step.Click += new System.EventHandler(this.btn1Step_Click);
             // 
-            // tabControl1
+            // tabView
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.tabView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Controls.Add(this.tabPage4);
-            this.tabControl1.Location = new System.Drawing.Point(0, 89);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(358, 713);
-            this.tabControl1.TabIndex = 0;
+            this.tabView.Controls.Add(this.tabStats);
+            this.tabView.Controls.Add(this.tabTune);
+            this.tabView.Controls.Add(this.tabUnit);
+            this.tabView.Controls.Add(this.tabPage4);
+            this.tabView.Location = new System.Drawing.Point(0, 89);
+            this.tabView.Name = "tabView";
+            this.tabView.SelectedIndex = 0;
+            this.tabView.Size = new System.Drawing.Size(358, 713);
+            this.tabView.TabIndex = 0;
             // 
-            // tabPage2
+            // tabStats
             // 
-            this.tabPage2.Controls.Add(this.splitContainer3);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(350, 687);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Stats";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabStats.Controls.Add(this.splitContainer3);
+            this.tabStats.Location = new System.Drawing.Point(4, 22);
+            this.tabStats.Name = "tabStats";
+            this.tabStats.Padding = new System.Windows.Forms.Padding(3);
+            this.tabStats.Size = new System.Drawing.Size(350, 687);
+            this.tabStats.TabIndex = 1;
+            this.tabStats.Text = "Stats";
+            this.tabStats.UseVisualStyleBackColor = true;
             // 
             // splitContainer3
             // 
@@ -233,17 +236,17 @@ namespace Evo.GUI.Winforms
             // 
             // chtPopulation
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chtPopulation.ChartAreas.Add(chartArea1);
+            chartArea5.Name = "ChartArea1";
+            this.chtPopulation.ChartAreas.Add(chartArea5);
             this.chtPopulation.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Name = "Legend1";
-            this.chtPopulation.Legends.Add(legend1);
+            legend5.Name = "Legend1";
+            this.chtPopulation.Legends.Add(legend5);
             this.chtPopulation.Location = new System.Drawing.Point(0, 0);
             this.chtPopulation.Name = "chtPopulation";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chtPopulation.Series.Add(series1);
+            series5.ChartArea = "ChartArea1";
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            this.chtPopulation.Series.Add(series5);
             this.chtPopulation.Size = new System.Drawing.Size(344, 340);
             this.chtPopulation.TabIndex = 1;
             this.chtPopulation.TabStop = false;
@@ -260,16 +263,27 @@ namespace Evo.GUI.Winforms
             this.txtStats.Size = new System.Drawing.Size(344, 337);
             this.txtStats.TabIndex = 0;
             // 
-            // tabPage3
+            // tabTune
             // 
-            this.tabPage3.Controls.Add(this.splitContainer2);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(350, 687);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Unit";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabTune.AutoScroll = true;
+            this.tabTune.Location = new System.Drawing.Point(4, 22);
+            this.tabTune.Name = "tabTune";
+            this.tabTune.Padding = new System.Windows.Forms.Padding(3);
+            this.tabTune.Size = new System.Drawing.Size(350, 687);
+            this.tabTune.TabIndex = 4;
+            this.tabTune.Text = "Tune";
+            this.tabTune.UseVisualStyleBackColor = true;
+            // 
+            // tabUnit
+            // 
+            this.tabUnit.Controls.Add(this.splitContainer2);
+            this.tabUnit.Location = new System.Drawing.Point(4, 22);
+            this.tabUnit.Name = "tabUnit";
+            this.tabUnit.Padding = new System.Windows.Forms.Padding(3);
+            this.tabUnit.Size = new System.Drawing.Size(350, 687);
+            this.tabUnit.TabIndex = 2;
+            this.tabUnit.Text = "Unit";
+            this.tabUnit.UseVisualStyleBackColor = true;
             // 
             // splitContainer2
             // 
@@ -511,15 +525,15 @@ namespace Evo.GUI.Winforms
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSpeed)).EndInit();
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
+            this.tabView.ResumeLayout(false);
+            this.tabStats.ResumeLayout(false);
             this.splitContainer3.Panel1.ResumeLayout(false);
             this.splitContainer3.Panel2.ResumeLayout(false);
             this.splitContainer3.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chtPopulation)).EndInit();
-            this.tabPage3.ResumeLayout(false);
+            this.tabUnit.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel1.PerformLayout();
             this.splitContainer2.Panel2.ResumeLayout(false);
@@ -537,14 +551,14 @@ namespace Evo.GUI.Winforms
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabControl tabView;
+        private System.Windows.Forms.TabPage tabStats;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button btn1Step;
         private System.Windows.Forms.Button btnToggleTimer;
         private System.Windows.Forms.PictureBox Map;
         private System.Windows.Forms.TextBox txtStats;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabUnit;
         private System.Windows.Forms.TextBox txtUnit;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.ColorDialog bgColorDialog;
@@ -569,6 +583,7 @@ namespace Evo.GUI.Winforms
         private System.Windows.Forms.TextBox txtAverageUnit;
         private System.Windows.Forms.SplitContainer splitContainer3;
         private System.Windows.Forms.CheckBox chkVisualize;
+        private System.Windows.Forms.TabPage tabTune;
     }
 }
 
