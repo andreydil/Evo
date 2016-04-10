@@ -39,7 +39,7 @@ namespace Evo.Core.Tests
             var world = new World(new Random(0), new Coord(100, 100));
             var point = new Coord(50, 30);
             var direction = new Coord(1, -1);
-            world.Navigator.BounceFromMapBorders(point, direction);
+            direction = world.Navigator.BounceFromMapBorders(point, direction);
             Assert.AreEqual(1, direction.X);
             Assert.AreEqual(-1, direction.Y);
         }
@@ -50,7 +50,7 @@ namespace Evo.Core.Tests
             var world = new World(new Random(0), new Coord(100, 100));
             var point = new Coord(0, 0);
             var direction = new Coord(-1, -1);
-            world.Navigator.BounceFromMapBorders(point, direction);
+            direction = world.Navigator.BounceFromMapBorders(point, direction);
             Assert.AreEqual(1, direction.X);
             Assert.AreEqual(1, direction.Y);
         }
@@ -61,7 +61,7 @@ namespace Evo.Core.Tests
             var world = new World(new Random(0), new Coord(100, 100));
             var point = new Coord(world.Size.X, world.Size.Y);
             var direction = new Coord(1, -1);
-            world.Navigator.BounceFromMapBorders(point, direction);
+            direction = world.Navigator.BounceFromMapBorders(point, direction);
             Assert.AreEqual(-1, direction.X);
             Assert.AreEqual(-1, direction.Y);
         }

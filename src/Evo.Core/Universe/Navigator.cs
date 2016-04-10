@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Evo.Core.Basic;
 using Evo.Core.Units;
 
@@ -69,24 +70,27 @@ namespace Evo.Core.Universe
                                    && f.Point != point).ToList();
         }
 
-        public void BounceFromMapBorders(Coord point, Coord direction)
+        public Coord BounceFromMapBorders(Coord point, Coord direction)
         {
+            int x = direction.X;
+            int y = direction.Y;
             if (direction.X == -1 && point.X <= 0)
             {
-                direction.X = 1;
+                x = 1;
             }
             if (direction.X == 1 && point.X >= _world.Size.X)
             {
-                direction.X = -1;
+                x = -1;
             }
             if (direction.Y == -1 && point.Y <= 0)
             {
-                direction.Y = 1;
+                y = 1;
             }
             if (direction.Y == 1 && point.Y >= _world.Size.Y)
             {
-                direction.Y = -1;
+                y = -1;
             }
+            return new Coord(x, y);
         }
 
         public void InsureBounds(Coord point)
