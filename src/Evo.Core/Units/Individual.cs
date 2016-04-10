@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Evo.Core.Basic;
@@ -9,12 +10,23 @@ namespace Evo.Core.Units
     public class Individual : Unit
     {
         private readonly World _world;
-        public readonly Gene[] Genome;
+        public readonly Dictionary<string, Gene> Genome;
 
         public Individual(ulong id, World world) : base(id)
         {
             _world = world;
-            Genome = new[] { Color, Aggression, Strength, Fertility, LifeTime, Purpose, SightRange, MinEnergyAcceptable };
+            Genome = new Dictionary<string, Gene>
+            {
+                { GeneNames.Color, Color },
+                { GeneNames.Aggression, Aggression },
+                { GeneNames.Strength, Strength },
+                { GeneNames.Fertility, Fertility },
+                { GeneNames.LifeTime, LifeTime },
+                { GeneNames.Purpose, Purpose },
+                { GeneNames.SightRange, SightRange },
+                { GeneNames.MinEnergyAcceptable, MinEnergyAcceptable },
+            };
+
             Energy.Value = Energy.Max / 2;
             Age.Value = 0;
             Desire.Value = 1;
@@ -174,7 +186,7 @@ namespace Evo.Core.Units
 
         private void Step()
         {
-            _world.Navigator.BounceFromMapBorders(Point, Target.Direction);
+            Target.Direction = _world.Navigator.BounceFromMapBorders(Point, Target.Direction);
             var pointToStep = Point + Target.Direction;
             if (Point == pointToStep)
             {

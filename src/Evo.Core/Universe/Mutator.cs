@@ -15,9 +15,9 @@ namespace Evo.Core.Universe
         public Individual GenerateRandom()
         {
             var individual = new Individual(_world.GenerateId(), _world);
-            foreach (var gene in individual.Genome)
+            foreach (var geneItem in individual.Genome)
             {
-                gene.Value = _world.Random.Next(gene.Min, gene.Max);
+                geneItem.Value.Value = _world.Random.Next(geneItem.Value.Min, geneItem.Value.Max);
             }
             return individual;
         }
@@ -30,10 +30,10 @@ namespace Evo.Core.Universe
         public Individual GenerateChild(Individual father, Individual mother)
         {
             var individual = new Individual(_world.GenerateId(), _world);
-            for (int i = 0; i < individual.Genome.Length; i++)
+            foreach (var geneItem in individual.Genome)
             {
-                var gene = individual.Genome[i];
-                gene.Value = _world.Random.Next(Math.Min(father.Genome[i], mother.Genome[i]), Math.Max(father.Genome[i], mother.Genome[i])); //somewhere between father and mother
+                var gene = geneItem.Value;
+                gene.Value = _world.Random.Next(Math.Min(father.Genome[geneItem.Key], mother.Genome[geneItem.Key]), Math.Max(father.Genome[geneItem.Key], mother.Genome[geneItem.Key])); //somewhere between father and mother
                 if (_world.CheckRng(_world.MutationProbability))
                 {
                     gene.Value += _world.Random.Next(-_world.MutationMaxDelta, _world.MutationMaxDelta);

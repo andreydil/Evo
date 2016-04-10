@@ -167,10 +167,10 @@ namespace Evo.GUI.Winforms
         private void showTextStats()
         {
             var sb = new StringBuilder();
-            sb.AppendLine(formatStatLine("Tick", _world.Tick.ToString()));
+            sb.AppendLine(formatStatLine("Tick", _world.Tick));
             foreach (var stat in _world.MainStats.GetStats().OrderBy(s => s.Key))
             {
-                sb.AppendLine(formatStatLine(stat.Key, stat.Value.ToString()));
+                sb.AppendLine(formatStatLine(stat.Key, stat.Value));
             }
             txtStats.Text = sb.ToString();
 
@@ -179,10 +179,11 @@ namespace Evo.GUI.Winforms
             lastStatsRefresh = DateTime.Now;
         }
 
-        private string formatStatLine(string label, string value)
+        private string formatStatLine(string label, object value)
         {
-            const int lineLength = 30;
-            return $"{label}{new string(' ', lineLength - label.Length - value.Length)}{value}";
+            const int lineLength = 25;
+            string str = value.ToString();
+            return $"{label}{new string(' ', lineLength - label.Length - str.Length)}{str}";
         }
 
         private void showChart()
@@ -245,7 +246,7 @@ namespace Evo.GUI.Winforms
                 var food = unit as FoodItem;
                 if (food != null)
                 {
-                    txtUnit.Text = $"Food\r\nID: {food.Id}\r\nEnergy: {food.Energy}";
+                    txtUnit.Text = $"{formatStatLine("Food", food.Id)}\r\n{formatStatLine("Energy", food.Energy)}";
                 }
                 tabControl1.SelectedIndex = 1;
             }
@@ -260,25 +261,22 @@ namespace Evo.GUI.Winforms
             var sb = new StringBuilder();
             if (!telemetryOnly)
             {
-                sb.AppendLine($"Id: {individual.Id}");
+                sb.AppendLine(formatStatLine("Id", individual.Id.ToString()));
             }
-            sb.AppendLine($"Status:");
-            sb.AppendLine($"Age: {individual.Age}");
-            sb.AppendLine($"Energy: {individual.Energy}");
-            sb.AppendLine($"Desire: {individual.Desire}");
+            sb.AppendLine("\r\nStatus:");
+            sb.AppendLine(formatStatLine("Age", individual.Age.Value));
+            sb.AppendLine(formatStatLine("Energy", individual.Energy.Value));
+            sb.AppendLine(formatStatLine("Desire", individual.Desire.Value));
             if (!telemetryOnly)
             {
-                sb.AppendLine($"Target: {individual.Target}");
+                sb.AppendLine(formatStatLine("Target", individual.Target));
             }
-            sb.AppendLine("Genome:");
-            sb.AppendLine($"Color: {individual.Color.Value.ToString("X6")}");
-            sb.AppendLine($"Lifetime: {individual.LifeTime}");
-            sb.AppendLine($"Aggression: {individual.Aggression}");
-            sb.AppendLine($"Strength: {individual.Strength}");
-            sb.AppendLine($"Fertility: {individual.Fertility}");
-            sb.AppendLine($"Purpose: {individual.Purpose}");
-            sb.AppendLine($"Sight Range: {individual.SightRange}");
-            sb.AppendLine($"Min Energy Acceptable: {individual.MinEnergyAcceptable}");
+            sb.AppendLine("\r\nGenome:");
+            sb.AppendLine(formatStatLine("Color", "#" + individual.Color.Value.ToString("X6")));
+            foreach (var geneItem in individual.Genome.Where(gi => gi.Key != GeneNames.Color))
+            {
+                sb.AppendLine(formatStatLine(geneItem.Key, individual.LifeTime.Value));
+            }
             return sb.ToString();
         }
 

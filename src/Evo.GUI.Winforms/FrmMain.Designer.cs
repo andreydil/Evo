@@ -35,6 +35,7 @@ namespace Evo.GUI.Winforms
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.chkVisualize = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.numSpeed = new System.Windows.Forms.NumericUpDown();
             this.btnToggleTimer = new System.Windows.Forms.Button();
@@ -65,7 +66,6 @@ namespace Evo.GUI.Winforms
             this.Map = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.bgColorDialog = new System.Windows.Forms.ColorDialog();
-            this.chkVisualize = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -122,6 +122,19 @@ namespace Evo.GUI.Winforms
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Control";
+            // 
+            // chkVisualize
+            // 
+            this.chkVisualize.AutoSize = true;
+            this.chkVisualize.Checked = true;
+            this.chkVisualize.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkVisualize.Location = new System.Drawing.Point(87, 52);
+            this.chkVisualize.Name = "chkVisualize";
+            this.chkVisualize.Size = new System.Drawing.Size(67, 17);
+            this.chkVisualize.TabIndex = 4;
+            this.chkVisualize.Text = "Vizualize";
+            this.chkVisualize.UseVisualStyleBackColor = true;
+            this.chkVisualize.CheckedChanged += new System.EventHandler(this.chkVisualize_CheckedChanged);
             // 
             // label1
             // 
@@ -279,6 +292,7 @@ namespace Evo.GUI.Winforms
             // txtUnit
             // 
             this.txtUnit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.txtUnit.Location = new System.Drawing.Point(0, 0);
             this.txtUnit.Multiline = true;
             this.txtUnit.Name = "txtUnit";
@@ -291,6 +305,7 @@ namespace Evo.GUI.Winforms
             // txtAverageUnit
             // 
             this.txtAverageUnit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtAverageUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.txtAverageUnit.Location = new System.Drawing.Point(0, 0);
             this.txtAverageUnit.Multiline = true;
             this.txtAverageUnit.Name = "txtAverageUnit";
@@ -478,19 +493,6 @@ namespace Evo.GUI.Winforms
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // chkVisualize
-            // 
-            this.chkVisualize.AutoSize = true;
-            this.chkVisualize.Checked = true;
-            this.chkVisualize.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkVisualize.Location = new System.Drawing.Point(87, 52);
-            this.chkVisualize.Name = "chkVisualize";
-            this.chkVisualize.Size = new System.Drawing.Size(67, 17);
-            this.chkVisualize.TabIndex = 4;
-            this.chkVisualize.Text = "Vizualize";
-            this.chkVisualize.UseVisualStyleBackColor = true;
-            this.chkVisualize.CheckedChanged += new System.EventHandler(this.chkVisualize_CheckedChanged);
             // 
             // FrmMain
             // 
