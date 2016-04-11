@@ -28,21 +28,30 @@ namespace Evo.Core.Universe
             _statCounter = new StatCounter();
             Tuners = new Dictionary<string, LimitedInt>
             {
-                { "MaxFoodItems", MaxFoodItems },
-                { "MaxFoodItemsPerTick", MaxFoodItemsPerTick },
-                { "MaxEneryPerFoodItem", MaxEneryPerFoodItem },
-                { "MutationProbability", MutationProbability },
-                { "MutationMaxDelta", MutationMaxDelta },
-                { "EnergyDrainModificator", EnergyDrainModificator },
+                { nameof(MaxFoodItems), MaxFoodItems },
+                { nameof(MaxFoodItemsPerTick), MaxFoodItemsPerTick },
+                { nameof(MaxEneryPerFoodItem), MaxEneryPerFoodItem },
+                { nameof(MutationProbability), MutationProbability },
+                { nameof(MutationMaxDelta), MutationMaxDelta },
+                { nameof(EnergyDrainModificator), EnergyDrainModificator },
+                { nameof(BirthEnergyShare), BirthEnergyShare },
+                { nameof(EatDecisionModificator), EatDecisionModificator },
+                { nameof(SexDecisionModificator), SexDecisionModificator },
+                { nameof(KillDecisionModificator), KillDecisionModificator },
             };
         }
 
+        //tuners
         public LimitedInt MutationProbability { get; set; } = new LimitedInt(1, Constants.Probability100Percent);
         public LimitedInt MutationMaxDelta { get; set; } = new LimitedInt(1, 1000);
         public LimitedInt MaxFoodItemsPerTick { get; set; } = new LimitedInt(1, 1000);
         public LimitedInt MaxEneryPerFoodItem { get; set; } = new LimitedInt(1, 1000);
         public LimitedInt MaxFoodItems { get; set; } = new LimitedInt(1, 10000);
         public LimitedInt EnergyDrainModificator { get; set; } = new LimitedInt(1, 100);
+        public LimitedInt BirthEnergyShare { get; set; } = new LimitedInt(1, 100);
+        public LimitedInt EatDecisionModificator { get; set; } = new LimitedInt(1, 10);
+        public LimitedInt SexDecisionModificator { get; set; } = new LimitedInt(1, 10);
+        public LimitedInt KillDecisionModificator { get; set; } = new LimitedInt(1, 10);
 
         public Individual AverageIndividual => _statCounter.GetAverage(Population);
 

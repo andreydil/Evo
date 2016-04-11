@@ -173,11 +173,11 @@ namespace Evo.Core.Units
                 case TargetType.Walk:
                     return true;
                 case TargetType.Eat:
-                    var foodItem = _world.Food.SingleOrDefault(f => f.Id == Target.Id);
+                    var foodItem = _world.Food.FirstOrDefault(f => f.Id == Target.Id);
                     return foodItem != null;
                 case TargetType.Sex:
                 case TargetType.Kill:
-                    var individual = _world.Population.SingleOrDefault(f => f.Id == Target.Id);
+                    var individual = _world.Population.FirstOrDefault(f => f.Id == Target.Id);
                     return individual != null;
                 default:
                     return false;
@@ -221,9 +221,9 @@ namespace Evo.Core.Units
                         {
                             var child = _world.Mutator.GenerateChild(this, partner);
                             var newPoint = _world.Navigator.PlaceChild(Point, partner.Point);
-                            Energy.Value -= Energy / 3;
-                            partner.Energy.Value -= partner.Energy / 3;
-                            child.Energy.Value = Energy / 3 + partner.Energy / 3;
+                            Energy.Value -= (int)(Energy * _world.BirthEnergyShare.NormalizedValue);
+                            partner.Energy.Value -= (int)(partner.Energy * _world.BirthEnergyShare.NormalizedValue);
+                            child.Energy.Value = (int)((Energy + partner.Energy) * _world.BirthEnergyShare.NormalizedValue);
                             if (newPoint.HasValue)
                             {
                                 child.Point = newPoint.Value;

@@ -21,9 +21,9 @@ namespace Evo.GUI.Winforms
     {
         private const int MapMultiplier = 5;
         private const int StatsRefreshTime = 100;
-        private DateTime lastStatsRefresh = DateTime.Now;
+        private DateTime _lastStatsRefresh = DateTime.Now;
         private World _world;
-        private Color bgColor = Color.Black;
+        private Color _bgColor = Color.Black;
 
         private Task bgTask = null;
         private CancellationTokenSource bgTaskCancelationSource;
@@ -49,6 +49,7 @@ namespace Evo.GUI.Winforms
                 _world.MaxFoodItemsPerTick.Value = 60;
                 _world.MaxEneryPerFoodItem.Value = 100;
                 _world.MaxFoodItems.Value = 400;
+                _world.BirthEnergyShare.Value = 30;
 
                 var initPopulation = new List<Individual>(100);
                 for (int i = 0; i < 50; i++)
@@ -133,7 +134,7 @@ namespace Evo.GUI.Winforms
 
         private void Map_Paint_1(object sender, PaintEventArgs e)
         {
-            e.Graphics.Clear(bgColor);
+            e.Graphics.Clear(_bgColor);
 
             if (bgTask != null)
             {
@@ -159,7 +160,7 @@ namespace Evo.GUI.Winforms
             Map.Invalidate();
             this.Text = "Evo. Population = " + _world.Population.Count;
 
-            if ((DateTime.Now - lastStatsRefresh).TotalMilliseconds >= StatsRefreshTime)
+            if ((DateTime.Now - _lastStatsRefresh).TotalMilliseconds >= StatsRefreshTime)
             {
                 showTextStats();
                 showChart();
@@ -178,7 +179,7 @@ namespace Evo.GUI.Winforms
 
             txtAverageUnit.Text = "Average Individual:\r\n" + GetIndividualInfo(_world.AverageIndividual, true);
 
-            lastStatsRefresh = DateTime.Now;
+            _lastStatsRefresh = DateTime.Now;
         }
 
         private string formatStatLine(string label, object value)
@@ -286,7 +287,7 @@ namespace Evo.GUI.Winforms
         {
             if (bgColorDialog.ShowDialog() == DialogResult.OK)
             {
-                bgColor = bgColorDialog.Color;
+                _bgColor = bgColorDialog.Color;
                 Map.Invalidate();
             }
         }
