@@ -139,7 +139,7 @@ namespace Evo.Core.Universe
 
         public bool CheckRng(int value, int minValue, int maxValue)
         {
-            return Random.Next(minValue, maxValue) <= value;
+            return Random.Next(minValue, maxValue + 1) <= value;
         }
 
         public void SpreadFood()
@@ -156,7 +156,7 @@ namespace Evo.Core.Universe
             {
                 var newFoodItem = new FoodItem(GenerateId())
                 {
-                    Energy = Random.Next(1, MaxEneryPerFoodItem),
+                    Energy = Random.Next(1, MaxEneryPerFoodItem + 1),
                 };
                 for (int j = 0; j < tryCount; j++)
                 {

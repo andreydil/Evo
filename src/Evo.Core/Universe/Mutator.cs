@@ -33,10 +33,10 @@ namespace Evo.Core.Universe
             foreach (var geneItem in individual.Genome)
             {
                 var gene = geneItem.Value;
-                gene.Value = _world.Random.Next(Math.Min(father.Genome[geneItem.Key], mother.Genome[geneItem.Key]), Math.Max(father.Genome[geneItem.Key], mother.Genome[geneItem.Key])); //somewhere between father and mother
+                gene.Value = _world.Random.Next(Math.Min(father.Genome[geneItem.Key], mother.Genome[geneItem.Key]), Math.Max(father.Genome[geneItem.Key], mother.Genome[geneItem.Key]) + 1); //somewhere between father and mother
                 if (_world.CheckRng(_world.MutationProbability))
                 {
-                    gene.Value += _world.Random.Next(-_world.MutationMaxDelta, _world.MutationMaxDelta);
+                    gene.Value += _world.Random.Next(-_world.MutationMaxDelta, _world.MutationMaxDelta + 1);
                 }
             }
 
@@ -49,11 +49,11 @@ namespace Evo.Core.Universe
 
         private byte GenerateColorComponent(byte fatherComponent, byte motherComponent)
         {
-            int component = _world.Random.Next(Math.Min(fatherComponent, motherComponent), Math.Max(fatherComponent, motherComponent));
+            int component = _world.Random.Next(Math.Min(fatherComponent, motherComponent), Math.Max(fatherComponent, motherComponent) + 1);
             int mutationMaxDelta = 0xff * _world.MutationMaxDelta / _world.MutationMaxDelta.Max;
             if (_world.CheckRng(_world.MutationProbability))
             {
-                component += _world.Random.Next(-mutationMaxDelta, mutationMaxDelta);
+                component += _world.Random.Next(-mutationMaxDelta, mutationMaxDelta + 1);
             }
             if (component < 0)
             {
