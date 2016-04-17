@@ -30,9 +30,9 @@ namespace Evo.GUI.Winforms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.chkVisualize = new System.Windows.Forms.CheckBox();
@@ -67,6 +67,7 @@ namespace Evo.GUI.Winforms
             this.Map = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.bgColorDialog = new System.Windows.Forms.ColorDialog();
+            this.rbDiffFromAverage = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -236,17 +237,17 @@ namespace Evo.GUI.Winforms
             // 
             // chtPopulation
             // 
-            chartArea5.Name = "ChartArea1";
-            this.chtPopulation.ChartAreas.Add(chartArea5);
+            chartArea1.Name = "ChartArea1";
+            this.chtPopulation.ChartAreas.Add(chartArea1);
             this.chtPopulation.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend5.Name = "Legend1";
-            this.chtPopulation.Legends.Add(legend5);
+            legend1.Name = "Legend1";
+            this.chtPopulation.Legends.Add(legend1);
             this.chtPopulation.Location = new System.Drawing.Point(0, 0);
             this.chtPopulation.Name = "chtPopulation";
-            series5.ChartArea = "ChartArea1";
-            series5.Legend = "Legend1";
-            series5.Name = "Series1";
-            this.chtPopulation.Series.Add(series5);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chtPopulation.Series.Add(series1);
             this.chtPopulation.Size = new System.Drawing.Size(344, 340);
             this.chtPopulation.TabIndex = 1;
             this.chtPopulation.TabStop = false;
@@ -342,6 +343,7 @@ namespace Evo.GUI.Winforms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rbDiffFromAverage);
             this.groupBox1.Controls.Add(this.rbSightRange);
             this.groupBox1.Controls.Add(this.rbMinEneryAcceptable);
             this.groupBox1.Controls.Add(this.rbPurpose);
@@ -355,7 +357,7 @@ namespace Evo.GUI.Winforms
             this.groupBox1.Controls.Add(this.rbAge);
             this.groupBox1.Location = new System.Drawing.Point(8, 35);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(164, 277);
+            this.groupBox1.Size = new System.Drawing.Size(164, 300);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Show";
@@ -508,6 +510,16 @@ namespace Evo.GUI.Winforms
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // rbDiffFromAverage
+            // 
+            this.rbDiffFromAverage.AutoSize = true;
+            this.rbDiffFromAverage.Location = new System.Drawing.Point(6, 272);
+            this.rbDiffFromAverage.Name = "rbDiffFromAverage";
+            this.rbDiffFromAverage.Size = new System.Drawing.Size(143, 17);
+            this.rbDiffFromAverage.TabIndex = 12;
+            this.rbDiffFromAverage.Text = "Difference From Average";
+            this.rbDiffFromAverage.UseVisualStyleBackColor = true;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -584,6 +596,7 @@ namespace Evo.GUI.Winforms
         private System.Windows.Forms.SplitContainer splitContainer3;
         private System.Windows.Forms.CheckBox chkVisualize;
         private System.Windows.Forms.TabPage tabTune;
+        private System.Windows.Forms.RadioButton rbDiffFromAverage;
     }
 }
 

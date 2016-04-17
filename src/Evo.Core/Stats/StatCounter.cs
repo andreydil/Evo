@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Evo.Core.Basic;
 using Evo.Core.Units;
 
 namespace Evo.Core.Stats
@@ -65,6 +66,52 @@ namespace Evo.Core.Stats
             average.Desire.Value = (int)(desire / count);
 
             return average;
+        }
+
+        public int GetEuclideanDistance(Individual individual1, Individual individual2)
+        {
+            long sum = 0;
+            foreach (var geneItem in individual1.Genome)
+            {
+                var gene1 = geneItem.Value;
+                var gene2 = individual2.Genome[geneItem.Key];
+                if (geneItem.Key == GeneNames.Color)
+                {
+                    var color1 = (ColorGene)gene1;
+                    var color2 = (ColorGene)gene2;
+                    sum += (color1.Red - color2.Red) * (color1.Red - color2.Red);
+                    sum += (color1.Green - color2.Green) * (color1.Green - color2.Green);
+                    sum += (color1.Blue - color2.Blue) * (color1.Blue - color2.Blue);
+                }
+                else
+                {
+                    sum += (gene1 - gene2) * (gene1 - gene2);
+                }
+            }
+            return (int)Math.Round(Math.Sqrt(sum));
+        }
+
+        public int GetDifference(Individual individual1, Individual individual2)
+        {
+            int sum = 0;
+            foreach (var geneItem in individual1.Genome)
+            {
+                var gene1 = geneItem.Value;
+                var gene2 = individual2.Genome[geneItem.Key];
+                if (geneItem.Key == GeneNames.Color)
+                {
+                    var color1 = (ColorGene)gene1;
+                    var color2 = (ColorGene)gene2;
+                    sum += Math.Abs(color1.Red - color2.Red);
+                    sum += Math.Abs(color1.Green - color2.Green);
+                    sum += Math.Abs(color1.Blue - color2.Blue);
+                }
+                else
+                {
+                    sum += Math.Abs(gene1 - gene2);
+                }
+            }
+            return sum;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Evo.Core.Universe
         public readonly DecisionMaker DecisionMaker;
         public readonly Coord Size;
         public readonly Dictionary<string, LimitedInt> Tuners;
-        private readonly StatCounter _statCounter;
+        public readonly StatCounter _statCounter;
         private readonly List<Individual> _population = new List<Individual>();
         private readonly List<FoodItem> _food = new List<FoodItem>();
         private ulong _idGenerator = 0;

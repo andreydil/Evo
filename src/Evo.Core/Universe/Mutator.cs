@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Evo.Core.Basic;
 using Evo.Core.Units;
 
 namespace Evo.Core.Universe
@@ -44,6 +46,16 @@ namespace Evo.Core.Universe
                                     GenerateColorComponent(father.Color.Green, mother.Color.Green),
                                     GenerateColorComponent(father.Color.Blue, mother.Color.Blue));
 
+            return individual;
+        }
+
+        public Individual GenerateIndividual(Func<Gene, int> geneFunc, ulong id, World world)
+        {
+            var individual = new Individual(id, world);
+            foreach (var gene in individual.Genome.Select(gi => gi.Value))
+            {
+                gene.Value = geneFunc(gene);
+            }
             return individual;
         }
 

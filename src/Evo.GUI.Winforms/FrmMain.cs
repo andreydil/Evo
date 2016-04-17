@@ -24,6 +24,8 @@ namespace Evo.GUI.Winforms
         private DateTime _lastStatsRefresh = DateTime.Now;
         private World _world;
         private Color _bgColor = Color.Black;
+        private Individual _curAverageIndividual;
+        private int _maxDifference;
 
         private Task bgTask = null;
         private CancellationTokenSource bgTaskCancelationSource;
@@ -59,6 +61,11 @@ namespace Evo.GUI.Winforms
                 }
                 _world.SpreadIndividuals(initPopulation, new Coord(0, 0), new Coord(Map.Size.Width / MapMultiplier, Map.Size.Height / MapMultiplier));
                 _world.SpreadFood();
+                _curAverageIndividual = _world.AverageIndividual;
+
+                var minIndividual = _world.Mutator.GenerateIndividual(g => g.Min, 0, null);
+                var maxIndividual = _world.Mutator.GenerateIndividual(g => g.Max, 0, null);
+                _maxDifference = _world._statCounter.GetDifference(minIndividual, maxIndividual);
             }
             catch (Exception ex)
             {
@@ -162,6 +169,7 @@ namespace Evo.GUI.Winforms
 
             if ((DateTime.Now - _lastStatsRefresh).TotalMilliseconds >= StatsRefreshTime)
             {
+                _curAverageIndividual = _world.AverageIndividual;
                 showTextStats();
                 showChart();
             }
@@ -177,7 +185,7 @@ namespace Evo.GUI.Winforms
             }
             txtStats.Text = sb.ToString();
 
-            txtAverageUnit.Text = "Average Individual:\r\n" + GetIndividualInfo(_world.AverageIndividual, true);
+            txtAverageUnit.Text = "Average Individual:\r\n" + GetIndividualInfo(_curAverageIndividual, true);
 
             _lastStatsRefresh = DateTime.Now;
         }
@@ -249,7 +257,9 @@ namespace Evo.GUI.Winforms
                 var individual = unit as Individual;
                 if (individual != null)
                 {
-                    txtUnit.Text = "Selected unit:\r\n" + GetIndividualInfo(individual);
+                    txtUnit.Text = "Selected unit:\r\n" + GetIndividualInfo(individual)
+                                   + formatStatLine("Difference from average", _world._statCounter.GetDifference(individual, _curAverageIndividual));
+
                 }
                 var food = unit as FoodItem;
                 if (food != null)
@@ -335,13 +345,17 @@ namespace Evo.GUI.Winforms
             {
                 return GetColorFromValue(individual.MinEnergyAcceptable, false);
             }
+            if (rbDiffFromAverage.Checked)
+            {
+                return GetColorFromValue(new Gene(0, _maxDifference) { Value = 5 * _world._statCounter.GetDifference(individual, _curAverageIndividual) });
+            }
 
             return Color.FromArgb(individual.Color.Red, individual.Color.Green, individual.Color.Blue);
         }
 
         private Color GetColorFromValue(LimitedInt gene, bool biggerRed = true)
         {
-            LimitedInt percent = new LimitedInt(0, 100)
+            var percent = new LimitedInt(0, 100)
             {
                 Value = (int)Math.Round(100 * gene.NormalizedValue, MidpointRounding.AwayFromZero)
             };
