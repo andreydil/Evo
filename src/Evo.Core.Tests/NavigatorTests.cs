@@ -13,23 +13,53 @@ namespace Evo.Core.Tests
     public class NavigatorTests
     {
         [Test]
-        public void FoodFindingTest()
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void PutUnitTwiceInTheSamePlace()
         {
             var world = new World(new Random(0), new Coord(100, 100));
-            world.Food.Clear();
+            var individual = new Individual(1, world)
+            {
+                Point = new Coord(5, 5),
+            };
+            world.Navigator.PutUnit(individual);
+            world.Navigator.PutUnit(individual);
+        }
+
+        [Test]
+        public void FoodFindingTest1()
+        {
+            var world = new World(new Random(0), new Coord(100, 100));
             world.AddFood(new FoodItem(1)
             {
                 Point = new Coord(43, 51),
             });
             world.AddFood(new FoodItem(2)
             {
-                Point = new Coord(54, 53),
+                Point = new Coord(53, 52),
             });
             world.AddFood(new FoodItem(3)
             {
                 Point = new Coord(50, 50),
             });
             var food = world.Navigator.FindClosestFood(new Coord(50, 50), 15);
+            Assert.IsNotNull(food);
+            Assert.AreEqual(2, food.Id);
+        }
+
+        [Test]
+        public void FoodFindingTest2()
+        {
+            var world = new World(new Random(0), new Coord(100, 100));
+            world.AddFood(new FoodItem(1)
+            {
+                Point = new Coord(0, 0),
+            });
+            world.AddFood(new FoodItem(2)
+            {
+                Point = new Coord(1, 2),
+            });
+            var food = world.Navigator.FindClosestFood(new Coord(0, 0), 5);
+            Assert.IsNotNull(food);
             Assert.AreEqual(2, food.Id);
         }
 

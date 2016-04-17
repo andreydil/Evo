@@ -16,7 +16,11 @@ namespace Evo.Core.Tests
         [SetUp]
         public void Init()
         {
-            _decisionMaker = new DecisionMaker(new World(new Random(), new Coord(100, 100)));
+            var world = new World(new Random(), new Coord(100, 100));
+            world.EatDecisionModificator.Value = 1;
+            world.SexDecisionModificator.Value = 1;
+            world.KillDecisionModificator.Value = 1;
+            _decisionMaker = new DecisionMaker(world);
         }
 
         [Test, Combinatorial]

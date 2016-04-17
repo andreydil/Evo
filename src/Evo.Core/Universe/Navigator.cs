@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Diagnostics;
 using Evo.Core.Basic;
 using Evo.Core.Units;
 
@@ -10,66 +8,133 @@ namespace Evo.Core.Universe
     public class Navigator
     {
         private readonly World _world;
+        private readonly Unit[,] _map;
 
         public Navigator(World world)
         {
             _world = world;
+            _map = new Unit[world.Size.X, world.Size.Y];
         }
 
+        public void PutUnit(Unit unit)
+        {
+            if (FindUnit(unit.Point) != null)
+            {
+                throw new ArgumentOutOfRangeException($"There is already a unit in coordinates {unit.Point}");
+            }
+            _map[unit.Point.X, unit.Point.Y] = unit;
+        }
+
+        public void MoveUnit(Unit unit, Coord newPoint)
+        {
+            _map[unit.Point.X, unit.Point.Y] = null;
+            unit.Point = newPoint;
+            PutUnit(unit);
+        }
+
+        public void RemoveUnit(Unit unit)
+        {
+            var unitAtPoint = FindUnit(unit.Point);
+            if (unitAtPoint != null && unitAtPoint.Id == unit.Id)
+            {
+                _map[unit.Point.X, unit.Point.Y] = null;
+            }
+        }
+        
         public Unit FindUnit(Coord point)
         {
-            return FindUnit(point, _world.Population) ?? FindUnit(point, _world.Food);
+            return FindUnit(point.X, point.Y);
+        }
+
+        public Unit FindUnit(int x, int y)
+        {
+            return _map[x, y];
         }
 
         public Individual FindIndividual(Coord point)
         {
-            return (Individual)FindUnit(point, _world.Population);
+            return FindUnit(point) as Individual;
         }
 
         public FoodItem FindFood(Coord point)
         {
-            return (FoodItem)FindUnit(point, _world.Food);
+            return FindUnit(point) as FoodItem;
         }
-
-        private Unit FindUnit<T>(Coord point, IList<T> list) where T : Unit
-        {
-            return list.FirstOrDefault(u => u.Point == point);
-        }
-
+        
         public FoodItem FindClosestFood(Coord point, int sightRange)
         {
-            return (FoodItem)FindClosestUnit(point, _world.Food, sightRange);
+            return FindClosestUnit<FoodItem>(point, sightRange);
         }
 
         public Individual FindClosestIndividual(Coord point, int sightRange)
         {
-            return (Individual)FindClosestUnit(point, _world.Population, sightRange);
+            return FindClosestUnit<Individual>(point, sightRange);
         }
 
-        private Unit FindClosestUnit<T>(Coord point, IList<T> list, int sightRange) where T : Unit
+        private T FindClosestUnit<T>(Coord point, int sightRange) where T : Unit
         {
-            var allUnitsInSightRange = FindAllFoodInRadius(point, list, sightRange);
             int radius = 1;
 
             while (radius <= sightRange)
             {
-                var foodInRadius = FindAllFoodInRadius(point, allUnitsInSightRange, radius);
-                if (foodInRadius.Any())
+                var topLeft = EnsureBounds(new Coord(point.X - radius, point.Y - radius));
+                var bottomRight = EnsureBounds(new Coord(point.X + radius, point.Y + radius));
+                int curX = topLeft.X;
+                int curY = topLeft.Y;
+                while (curX < bottomRight.X)   //right
                 {
-                    return foodInRadius[_world.Random.Next(foodInRadius.Count)];
+                    if (point.X != curX || point.Y != curY)
+                    {
+                        var unit = FindUnit(curX, curY) as T;
+                        if (unit != null)
+                        {
+                            return unit;
+                        }
+                    }
+                    ++curX;
                 }
+                while (curY < bottomRight.Y)   //down
+                {
+                    if (point.X != curX || point.Y != curY)
+                    {
+                        var unit = FindUnit(curX, curY) as T;
+                        if (unit != null)
+                        {
+                            return unit;
+                        }
+                    }
+                    ++curY;
+                }
+                while (curX > topLeft.X)   //left
+                {
+                    if (point.X != curX || point.Y != curY)
+                    {
+                        var unit = FindUnit(curX, curY) as T;
+                        if (unit != null)
+                        {
+                            return unit;
+                        }
+                    }
+                    --curX;
+                }
+                while (curY > bottomRight.Y)   //up
+                {
+                    if (point.X != curX || point.Y != curY)
+                    {
+                        var unit = FindUnit(curX, curY) as T;
+                        if (unit != null)
+                        {
+                            return unit;
+                        }
+                    }
+                    --curY;
+                }
+
                 ++radius;
             }
             return null;
         }
-
-        private List<T> FindAllFoodInRadius<T>(Coord point, IList<T> list, int radius) where T : Unit
-        {
-            return list.Where(f => f.Point.X >= point.X - radius && f.Point.X <= point.X + radius
-                                   && f.Point.Y >= point.Y - radius && f.Point.Y <= point.Y + radius
-                                   && f.Point != point).ToList();
-        }
-
+        
         public Coord BounceFromMapBorders(Coord point, Coord direction)
         {
             int x = direction.X;
@@ -78,7 +143,7 @@ namespace Evo.Core.Universe
             {
                 x = 1;
             }
-            if (direction.X == 1 && point.X >= _world.Size.X)
+            if (direction.X == 1 && point.X >= _world.Size.X - 1)
             {
                 x = -1;
             }
@@ -86,7 +151,7 @@ namespace Evo.Core.Universe
             {
                 y = 1;
             }
-            if (direction.Y == 1 && point.Y >= _world.Size.Y)
+            if (direction.Y == 1 && point.Y >= _world.Size.Y - 1)
             {
                 y = -1;
             }

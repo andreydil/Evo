@@ -16,6 +16,8 @@ namespace Evo.Core.Universe
         public readonly Coord Size;
         public readonly Dictionary<string, LimitedInt> Tuners;
         private readonly StatCounter _statCounter;
+        private readonly List<Individual> _population = new List<Individual>();
+        private readonly List<FoodItem> _food = new List<FoodItem>();
         private ulong _idGenerator = 0;
 
         public World(Random random, Coord size)
@@ -53,11 +55,11 @@ namespace Evo.Core.Universe
         public LimitedInt SexDecisionModificator { get; set; } = new LimitedInt(1, 10);
         public LimitedInt KillDecisionModificator { get; set; } = new LimitedInt(1, 10);
 
-        public Individual AverageIndividual => _statCounter.GetAverage(Population);
+        public Individual AverageIndividual => _statCounter.GetAverage(_population);
 
         public ulong Tick { get; private set; } = 0;
-        public readonly List<Individual> Population = new List<Individual>();
-        public readonly List<FoodItem> Food = new List<FoodItem>();
+        public IEnumerable<Individual> Population => _population.AsEnumerable();
+        public IEnumerable<FoodItem> Food => _food.AsEnumerable();
 
         public readonly IncStats MainStats = new IncStats();
         public readonly IncStats AdditionalStats = new IncStats();
@@ -71,16 +73,20 @@ namespace Evo.Core.Universe
 
         public void Live1Tick()
         {
-            if (Population.Count == 0)
+            if (_population.Count == 0)
             {
                 return;
             }
             SpreadFood();
-            foreach (var individual in Population.ToList())
+            foreach (var individual in _population.ToList())
             {
-                if (!individual.IsAlive)
+                if (individual.IsAlive)
                 {
-                    Population.Remove(individual);
+                    individual.LiveOneTick();
+                }
+                else
+                {
+                    RemoveIndividual(individual);
                     if (individual.Energy <= individual.Energy.Min)
                     {
                         MainStats.AddStat("Deaths from hunger");
@@ -94,42 +100,42 @@ namespace Evo.Core.Universe
                         MainStats.AddStat("Other deaths");
                     }
                 }
-                individual.LiveOneTick();
             }
-            PopulationSize.Add(Tick, Population.Count);
-            FoodAmount.Add(Tick, Food.Count);
+            PopulationSize.Add(Tick, _population.Count);
+            FoodAmount.Add(Tick, _food.Count);
             ++Tick;
         }
-
+        
         public void AddIndividual(Individual individual)
         {
-            if (Navigator.FindUnit(individual.Point) != null)
-            {
-                throw new ArgumentOutOfRangeException($"There is already a unit in coordinates {individual.Point}");
-            }
-            Population.Add(individual);
+            Navigator.PutUnit(individual);
+            _population.Add(individual);
         }
 
         public void AddIndividuals(IEnumerable<Individual> individuals)
         {
             foreach (var individual in individuals)
             {
-                if (Navigator.FindUnit(individual.Point) != null)
-                {
-                    throw new ArgumentOutOfRangeException($"There is already a unit in coordinates {individual.Point}");
-                }
-                Population.Add(individual);
+                AddIndividual(individual);
             }
+        }
+
+        public void RemoveIndividual(Individual individual)
+        {
+            Navigator.RemoveUnit(individual);
+            _population.Remove(individual);
         }
 
         public void AddFood(FoodItem foodItem)
         {
-            if (Navigator.FindUnit(foodItem.Point) != null)
-            {
-                return; //TODO: investigate why
-                //throw new ArgumentOutOfRangeException($"There is already a unit in coordinates {foodItem.Point}");
-            }
-            Food.Add(foodItem);
+            Navigator.PutUnit(foodItem);
+            _food.Add(foodItem);
+        }
+
+        public void RemoveFood(FoodItem foodItem)
+        {
+            Navigator.RemoveUnit(foodItem);
+            _food.Remove(foodItem);
         }
 
         public bool CheckRng(LimitedInt range)
@@ -144,13 +150,13 @@ namespace Evo.Core.Universe
 
         public void SpreadFood()
         {
-            if (Food.Count >= MaxFoodItems)
+            if (_food.Count >= MaxFoodItems)
             {
                 return;
             }
 
             const int tryCount = 100;
-            var foodCount = Random.Next(Math.Min(MaxFoodItemsPerTick, MaxFoodItems - Food.Count));
+            var foodCount = Random.Next(Math.Min(MaxFoodItemsPerTick, MaxFoodItems - _food.Count));
 
             for (int i = 0; i < foodCount; i++)
             {
@@ -168,8 +174,8 @@ namespace Evo.Core.Universe
                         break;
                     }
 
-                    var induvidual = unitInPoint as Individual;
-                    if (induvidual != null)
+                    var individual = unitInPoint as Individual;
+                    if (individual != null)
                     {
                         continue;
                     }
@@ -190,14 +196,13 @@ namespace Evo.Core.Universe
             {
                 for (int i = 0; i < 100; i++)
                 {
-                    individual.Point = new Coord(Random.Next(topLeftPoint.X, bottomRightPoint.X), Random.Next(topLeftPoint.Y, bottomRightPoint.Y));
-                    individual.Point = Navigator.EnsureBounds(individual.Point);
+                    individual.Point = Navigator.EnsureBounds(new Coord(Random.Next(topLeftPoint.X, bottomRightPoint.X), Random.Next(topLeftPoint.Y, bottomRightPoint.Y)));
                     if (Navigator.FindIndividual(individual.Point) != null)
                     {
                         continue;
                     }
 
-                    Population.Add(individual);
+                    AddIndividual(individual);
                     break;
                 }
             }

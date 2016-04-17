@@ -45,8 +45,6 @@ namespace Evo.Core.Universe
             double wantWalk = wantEat * 2;
 
             var r = _world.Random.Next((int)(1000 * (wantEat + wantSex + wantKill + wantWalk)));
-            Debug.WriteLine("wantEat={0}; wantWalk = {1}; wantSex={2}; wantKill={3}; sum={4}; ",
-                wantEat.ToString("0.00"), wantWalk.ToString("0.00"), wantSex.ToString("0.00"), wantKill.ToString("0.00"), (wantEat + wantWalk + wantSex + wantKill).ToString("0.00"));
             if (r <= wantEat * 1000)
             {
                 return TargetType.Eat;

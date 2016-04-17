@@ -41,7 +41,7 @@ namespace Evo.Core.Units
         public Gene LifeTime { get; set; } = new Gene(100, 10000);
         public Gene Purpose { get; set; } = new Gene(1, Constants.Probability100Percent);
         public Gene SightRange { get; set; } = new Gene(2, 30);
-        public Gene MinEnergyAcceptable { get; set; } = new Gene(10, 1000);
+        public Gene MinEnergyAcceptable { get; set; } = new Gene(10, 800);
 
         #endregion
 
@@ -54,7 +54,8 @@ namespace Evo.Core.Units
 
         #endregion
 
-        public bool IsAlive => Energy > 0 && Age <= LifeTime;
+        public bool IsKilled { get; set; }
+        public bool IsAlive => !IsKilled && Energy > 0 && Age <= LifeTime;
 
         public int EnergyDrainPerTick
             => (int)Math.Round((Strength.NormalizedValue + Aggression.NormalizedValue) * _world.EnergyDrainModificator, MidpointRounding.AwayFromZero) + 1;
@@ -93,15 +94,23 @@ namespace Evo.Core.Units
         {
             var food = _world.Navigator.FindClosestFood(Point, SightRange);
 
-            if (food != null && Energy < MinEnergyAcceptable) //too hungry
+            if (Energy < MinEnergyAcceptable) //too hungry
             {
-                Target.TargetType = TargetType.Eat;
-                Target.Id = food.Id;
-                Target.Direction = Point.FindDirection(food.Point);
-                return;
+                if (food != null)
+                {
+                    Target.TargetType = TargetType.Eat;
+                    Target.Id = food.Id;
+                    Target.Direction = Point.FindDirection(food.Point);
+                    return;
+                }
+                Target.TargetType = TargetType.Walk;
+                if (_world.CheckRng(Purpose))
+                {
+                    Target.Direction = GetRandomDirection();
+                }
             }
 
-            var individual = _world.Navigator.FindClosestIndividual(Point, 20);
+            var individual = _world.Navigator.FindClosestIndividual(Point, SightRange);
             double distanceToIndividual, strengthQuotient, differenceFromIndividual;
             if (individual != null)
             {
@@ -150,9 +159,9 @@ namespace Evo.Core.Units
                     }
                     break;
                 case TargetType.Walk:
-                    if (_world.CheckRng(Purpose))
+                    if (!_world.CheckRng(Purpose))
                     {
-                        Target.Direction = new Coord(_world.Random.Next(-1, 2), _world.Random.Next(-1, 2));
+                        Target.Direction = GetRandomDirection();
                     }
                     break;
                 case TargetType.Sex:
@@ -164,6 +173,11 @@ namespace Evo.Core.Units
                     }
                     break;
             }
+        }
+
+        private Coord GetRandomDirection()
+        {
+            return new Coord(_world.Random.Next(-1, 2), _world.Random.Next(-1, 2));
         }
 
         private bool TargetStillValid()
@@ -194,6 +208,7 @@ namespace Evo.Core.Units
             }
 
             var partner = _world.Navigator.FindIndividual(pointToStep);
+            var food = _world.Navigator.FindFood(pointToStep);
 
             switch (Target.TargetType)
             {
@@ -201,69 +216,79 @@ namespace Evo.Core.Units
                 case TargetType.Eat:
                     if (partner == null)
                     {
-                        var food = _world.Navigator.FindFood(pointToStep);
-                        if (food != null) //eat
-                        {
-                            Energy.Value += food.Energy;
-                            _world.Food.Remove(food);
-                            Target.TargetType = TargetType.Walk;
-                        }
-                        if (_world.Navigator.FindIndividual(pointToStep) == null)
-                        {
-                            Point = pointToStep;
-                        }
+                        Eat(food);
+                        _world.Navigator.MoveUnit(this, pointToStep);
                     }
                     break;
                 case TargetType.Sex:
-                    if (partner != null && partner.Id == Target.Id)
+                    if (partner != null)
                     {
-                        if (_world.CheckRng(Fertility + partner.Fertility, 0, Fertility.Max * 2))
+                        if (partner.Id == Target.Id)
                         {
-                            var child = _world.Mutator.GenerateChild(this, partner);
-                            var newPoint = _world.Navigator.PlaceChild(Point, partner.Point);
-                            Energy.Value -= (int)(Energy * _world.BirthEnergyShare.NormalizedValue);
-                            partner.Energy.Value -= (int)(partner.Energy * _world.BirthEnergyShare.NormalizedValue);
-                            child.Energy.Value = (int)((Energy + partner.Energy) * _world.BirthEnergyShare.NormalizedValue);
-                            if (newPoint.HasValue)
+                            if (_world.CheckRng(Fertility + partner.Fertility, 0, Fertility.Max * 2))
                             {
-                                child.Point = newPoint.Value;
-                                _world.AddIndividual(child);
-                                _world.MainStats.AddStat("Births");
+                                var child = _world.Mutator.GenerateChild(this, partner);
+                                var newPoint = _world.Navigator.PlaceChild(Point, partner.Point);
+                                Energy.Value -= (int)(Energy * _world.BirthEnergyShare.NormalizedValue);
+                                partner.Energy.Value -= (int)(partner.Energy * _world.BirthEnergyShare.NormalizedValue);
+                                child.Energy.Value = (int)((Energy + partner.Energy) * _world.BirthEnergyShare.NormalizedValue);
+                                if (newPoint.HasValue)
+                                {
+                                    child.Point = newPoint.Value;
+                                    _world.AddIndividual(child);
+                                    _world.MainStats.AddStat("Births");
+                                }
                             }
+                            Desire.Value = 0;
+                            partner.Desire.Value = 0;
+                            Target.TargetType = TargetType.Walk;
                         }
-                        Desire.Value = 0;
-                        partner.Desire.Value = 0;
-                        Target.TargetType = TargetType.Walk;
                     }
                     else
                     {
-                        Point = pointToStep;
+                        Eat(food);
+                        _world.Navigator.MoveUnit(this, pointToStep);
                     }
                     break;
                 case TargetType.Kill:
-                    if (partner != null && partner.Id == Target.Id)
+                    if (partner != null)
                     {
-                        if (_world.CheckRng(Strength, 0, Strength + partner.Strength))
+                        if (partner.Id == Target.Id)
                         {
-                            Kill(this, partner);
-                            Target.TargetType = TargetType.Walk;
-                        }
-                        else
-                        {
-                            Kill(partner, this);
+                            if (_world.CheckRng(Strength, 0, Strength + partner.Strength))
+                            {
+                                Kill(this, partner);
+                                Target.TargetType = TargetType.Walk;
+                            }
+                            else
+                            {
+                                Kill(partner, this);
+                            }
                         }
                     }
                     else
                     {
-                        Point = pointToStep;
+                        Eat(food);
+                        _world.Navigator.MoveUnit(this, pointToStep);
                     }
                     break;
             }
         }
 
-        private void Kill(Individual killer, Individual victim)
+        private void Eat(FoodItem food)
         {
-            _world.Population.Remove(victim);
+            if (food != null)
+            {
+                Energy.Value += food.Energy;
+                _world.RemoveFood(food);
+                Target.TargetType = TargetType.Walk;
+            }
+        }
+
+        public void Kill(Individual killer, Individual victim)
+        {
+            victim.IsKilled = true;
+            _world.RemoveIndividual(victim);
             var foodItem = new FoodItem(_world.GenerateId())
             {
                 Energy = victim.Energy / 2,

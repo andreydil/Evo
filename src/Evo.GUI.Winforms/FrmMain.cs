@@ -107,7 +107,7 @@ namespace Evo.GUI.Winforms
                         while (true)
                         {
                             _world.Live1Tick();
-                            if (_world.Population.Count == 0)
+                            if (!_world.Population.Any())
                             {
                                 break;
                             }
@@ -158,7 +158,7 @@ namespace Evo.GUI.Winforms
         {
             _world.Live1Tick();
             Map.Invalidate();
-            this.Text = "Evo. Population = " + _world.Population.Count;
+            this.Text = "Evo. Population = " + _world.Population.Count();
 
             if ((DateTime.Now - _lastStatsRefresh).TotalMilliseconds >= StatsRefreshTime)
             {
@@ -184,9 +184,14 @@ namespace Evo.GUI.Winforms
 
         private string formatStatLine(string label, object value)
         {
-            const int lineLength = 25;
+            const int lineLength = 26;
             string str = value.ToString();
-            return $"{label}{new string(' ', lineLength - label.Length - str.Length)}{str}";
+            var numOfSpaces = lineLength - label.Length - str.Length;
+            if (numOfSpaces <= 0)
+            {
+                numOfSpaces = 1;
+            }
+            return $"{label}{new string(' ', numOfSpaces)}{str}";
         }
 
         private void showChart()
@@ -252,10 +257,6 @@ namespace Evo.GUI.Winforms
                     txtUnit.Text = $"{formatStatLine("Food", food.Id)}\r\n{formatStatLine("Energy", food.Energy)}";
                 }
                 tabView.SelectedIndex = 2;
-            }
-            else
-            {
-                Debug.WriteLine("Unit not found at " + worldCoord);
             }
         }
 
