@@ -65,7 +65,7 @@ namespace Evo.GUI.Winforms
 
                 var minIndividual = _world.Mutator.GenerateIndividual(g => g.Min, 0, null);
                 var maxIndividual = _world.Mutator.GenerateIndividual(g => g.Max, 0, null);
-                _maxDifference = _world._statCounter.GetDifference(minIndividual, maxIndividual);
+                _maxDifference = _world.StatCounter.GetDifference(minIndividual, maxIndividual);
             }
             catch (Exception ex)
             {
@@ -258,7 +258,7 @@ namespace Evo.GUI.Winforms
                 if (individual != null)
                 {
                     txtUnit.Text = "Selected unit:\r\n" + GetIndividualInfo(individual)
-                                   + formatStatLine("Difference from average", _world._statCounter.GetDifference(individual, _curAverageIndividual));
+                                   + formatStatLine("Difference from average", _world.StatCounter.GetDifference(individual, _curAverageIndividual));
 
                 }
                 var food = unit as FoodItem;
@@ -347,7 +347,7 @@ namespace Evo.GUI.Winforms
             }
             if (rbDiffFromAverage.Checked)
             {
-                return GetColorFromValue(new Gene(0, _maxDifference) { Value = 5 * _world._statCounter.GetDifference(individual, _curAverageIndividual) });
+                return GetColorFromValue(new Gene(0, _maxDifference) { Value = 5 * _world.StatCounter.GetDifference(individual, _curAverageIndividual) });
             }
 
             return Color.FromArgb(individual.Color.Red, individual.Color.Green, individual.Color.Blue);

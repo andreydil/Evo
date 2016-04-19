@@ -15,7 +15,7 @@ namespace Evo.Core.Universe
         public readonly DecisionMaker DecisionMaker;
         public readonly Coord Size;
         public readonly Dictionary<string, LimitedInt> Tuners;
-        public readonly StatCounter _statCounter;
+        public readonly StatCounter StatCounter;
         private readonly List<Individual> _population = new List<Individual>();
         private readonly List<FoodItem> _food = new List<FoodItem>();
         private ulong _idGenerator = 0;
@@ -27,7 +27,7 @@ namespace Evo.Core.Universe
             Mutator = new Mutator(this);
             Navigator = new Navigator(this);
             DecisionMaker = new DecisionMaker(this);
-            _statCounter = new StatCounter();
+            StatCounter = new StatCounter();
             Tuners = new Dictionary<string, LimitedInt>
             {
                 { nameof(MaxFoodItems), MaxFoodItems },
@@ -55,7 +55,7 @@ namespace Evo.Core.Universe
         public LimitedInt SexDecisionModificator { get; set; } = new LimitedInt(1, 10);
         public LimitedInt KillDecisionModificator { get; set; } = new LimitedInt(1, 10);
 
-        public Individual AverageIndividual => _statCounter.GetAverage(_population);
+        public Individual AverageIndividual => StatCounter.GetAverage(_population);
 
         public ulong Tick { get; private set; } = 0;
         public IEnumerable<Individual> Population => _population.AsEnumerable();
