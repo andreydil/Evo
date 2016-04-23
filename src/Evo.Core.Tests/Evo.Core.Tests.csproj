@@ -54,6 +54,7 @@
     <Compile Include="RandomTests.cs" />
     <Compile Include="StatCounterTests.cs" />
     <Compile Include="TimeSpanStatsTests.cs" />
+    <Compile Include="UnitSearchTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Evo.Core\Evo.Core.csproj">

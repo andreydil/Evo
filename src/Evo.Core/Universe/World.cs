@@ -105,7 +105,7 @@ namespace Evo.Core.Universe
             FoodAmount.Add(Tick, _food.Count);
             ++Tick;
         }
-        
+
         public void AddIndividual(Individual individual)
         {
             Navigator.PutUnit(individual);
@@ -206,6 +206,24 @@ namespace Evo.Core.Universe
                     break;
                 }
             }
+        }
+
+        public Individual FindIndividualById(ulong id)
+        {
+            var individual = new Individual(id, null);
+            return FindBUnitById(_population, individual);
+        }
+
+        public FoodItem FindFoodById(ulong id)
+        {
+            var food = new FoodItem(id);
+            return FindBUnitById(_food, food);
+        }
+
+        private static T FindBUnitById<T>(List<T> list, T unit) where T : Unit
+        {
+            var i = list.BinarySearch(unit, new UnitIdComparer());
+            return i < 0 ? null : list[i];
         }
     }
 }

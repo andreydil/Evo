@@ -187,11 +187,11 @@ namespace Evo.Core.Units
                 case TargetType.Walk:
                     return true;
                 case TargetType.Eat:
-                    var foodItem = _world.Food.FirstOrDefault(f => f.Id == Target.Id);
+                    var foodItem = _world.FindFoodById(Target.Id);
                     return foodItem != null;
                 case TargetType.Sex:
                 case TargetType.Kill:
-                    var individual = _world.Population.FirstOrDefault(f => f.Id == Target.Id);
+                    var individual = _world.FindIndividualById(Target.Id);
                     return individual != null;
                 default:
                     return false;

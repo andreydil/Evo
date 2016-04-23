@@ -44,12 +44,12 @@ namespace Evo.GUI.Winforms
         {
             try
             {
-                _world = new World(new Random(), new Coord(Map.Size.Width / MapMultiplier, Map.Size.Height / MapMultiplier));
+                _world = new World(new Random(0), new Coord(Map.Size.Width / MapMultiplier, Map.Size.Height / MapMultiplier));
                 _world.MutationProbability.Value = 120;
                 _world.MutationMaxDelta.Value = 40;
                 _world.EnergyDrainModificator.Value = 1;
                 _world.MaxFoodItemsPerTick.Value = 60;
-                _world.MaxEneryPerFoodItem.Value = 100;
+                _world.MaxEneryPerFoodItem.Value = 140;
                 _world.MaxFoodItems.Value = 400;
                 _world.BirthEnergyShare.Value = 30;
 
