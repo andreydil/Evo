@@ -21,11 +21,14 @@ namespace Evo.GUI.Winforms
     {
         private const int MapMultiplier = 5;
         private const int StatsRefreshTime = 100;
+        private const string StartTimerCaption = "Start Timer";
+        private const string StopTimerCaption = "Stop Timer";
         private DateTime _lastStatsRefresh = DateTime.Now;
         private World _world;
         private Color _bgColor = Color.Black;
         private Individual _curAverageIndividual;
         private int _maxDifference;
+        private object _lockObj = new object();
 
         private Task bgTask = null;
         private CancellationTokenSource bgTaskCancelationSource;
@@ -99,44 +102,82 @@ namespace Evo.GUI.Winforms
         {
             if (chkVisualize.Checked)
             {
-                timer1.Enabled = !timer1.Enabled;
-                btn1Step.Enabled = chkVisualize.Enabled = !timer1.Enabled;
+                if (timer1.Enabled)
+                {
+                    stopWithVisualization();
+                }
+                else
+                {
+                    startWithVisualization();
+                }
+                
             }
             else
             {
                 if (bgTask == null)
                 {
-                    chkVisualize.Enabled = btn1Step.Enabled = false;
-                    bgTaskCancelationSource = new CancellationTokenSource();
-                    var cancellationToken = bgTaskCancelationSource.Token;
-                    bgTask = Task.Factory.StartNew(() => 
-                    {
-                        while (true)
-                        {
-                            _world.Live1Tick();
-                            if (!_world.Population.Any())
-                            {
-                                break;
-                            }
-                            if (cancellationToken.IsCancellationRequested)
-                            {
-                                break;
-                            }
-                        }
-                    }, cancellationToken);
+                    startBackGround();
                 }
                 else
                 {
-                    bgTaskCancelationSource.Cancel();
-                    if (!bgTask.IsCanceled)
-                    {
-                        bgTask.Wait();
-                    }
-                    bgTask = null;
-                    chkVisualize.Enabled = btn1Step.Enabled = true;
-                    DoStep();
+                    stopBackGround();
                 }
             }
+        }
+
+        private void startWithVisualization()
+        {
+            timer1.Enabled = true;
+            btn1Step.Enabled = false;
+            btnToggleTimer.Text = StopTimerCaption;
+        }
+
+        private void stopWithVisualization()
+        {
+            timer1.Enabled = false;
+            btn1Step.Enabled = true;
+            btnToggleTimer.Text = StartTimerCaption;
+        }
+
+        private void startBackGround()
+        {
+            btn1Step.Enabled = false;
+            bgTaskCancelationSource = new CancellationTokenSource();
+            var cancellationToken = bgTaskCancelationSource.Token;
+            bgTask = Task.Factory.StartNew(() =>
+            {
+                while (true)
+                {
+                    lock (_lockObj)
+                    {
+                        _world.Live1Tick();
+                        if (!_world.Population.Any())
+                        {
+                            break;
+                        }
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }, cancellationToken);
+            btn1Step.Enabled = false;
+            btnToggleTimer.Text = StopTimerCaption;
+        }
+
+        private void stopBackGround()
+        {
+            bgTaskCancelationSource.Cancel();
+            if (!bgTask.IsCanceled)
+            {
+                bgTask.Wait();
+            }
+            bgTask = null;
+            chkVisualize.Enabled = btn1Step.Enabled = true;
+            DoStep();
+            btn1Step.Enabled = true;
+            btnToggleTimer.Text = StartTimerCaption;
         }
 
         private void Map_Paint_1(object sender, PaintEventArgs e)
@@ -374,11 +415,21 @@ namespace Evo.GUI.Winforms
 
         private void numSpeed_ValueChanged(object sender, EventArgs e)
         {
-            timer1.Interval = 1000 - (int)numSpeed.Value * 100;
+            timer1.Interval = 500 - (int)numSpeed.Value * 50;
         }
 
         private void chkVisualize_CheckedChanged(object sender, EventArgs e)
         {
+            if (timer1.Enabled)
+            {
+                stopWithVisualization();
+                startBackGround();
+            }
+            else if (bgTask != null)
+            {
+                stopBackGround();
+                startWithVisualization();
+            }
             numSpeed.Enabled = chkVisualize.Checked;
         }
 
