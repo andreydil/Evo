@@ -28,7 +28,7 @@ namespace Evo.GUI.Winforms
         private Color _bgColor = Color.Black;
         private Individual _curAverageIndividual;
         private int _maxDifference;
-        private object _lockObj = new object();
+        private readonly object _lockObj = new object();
 
         private Task bgTask = null;
         private CancellationTokenSource bgTaskCancelationSource;
@@ -47,23 +47,9 @@ namespace Evo.GUI.Winforms
         {
             try
             {
-                _world = new World(new Random(0), new Coord(Map.Size.Width / MapMultiplier, Map.Size.Height / MapMultiplier));
-                _world.MutationProbability.Value = 120;
-                _world.MutationMaxDelta.Value = 40;
-                _world.EnergyDrainModificator.Value = 1;
-                _world.MaxFoodItemsPerTick.Value = 60;
-                _world.MaxEneryPerFoodItem.Value = 140;
-                _world.MaxFoodItems.Value = 400;
-                _world.BirthEnergyShare.Value = 30;
-
-                var initPopulation = new List<Individual>(100);
-                for (int i = 0; i < 50; i++)
-                {
-                    var individual = _world.Mutator.GenerateAverage();
-                    initPopulation.Add(individual);
-                }
-                _world.SpreadIndividuals(initPopulation, new Coord(0, 0), new Coord(Map.Size.Width / MapMultiplier, Map.Size.Height / MapMultiplier));
-                _world.SpreadFood();
+                var worldConfigurator = new DefaultWorldConfigurator(Map.Size.Width / MapMultiplier, Map.Size.Height / MapMultiplier);
+                _world = worldConfigurator.CreateWorld();
+                
                 _curAverageIndividual = _world.AverageIndividual;
 
                 var minIndividual = _world.Mutator.GenerateIndividual(g => g.Min, 0, null);
@@ -72,7 +58,7 @@ namespace Evo.GUI.Winforms
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
+                MessageBox.Show(ex.Message);
             }
 
             chtPopulation.Series.Clear();
@@ -129,6 +115,7 @@ namespace Evo.GUI.Winforms
         {
             timer1.Enabled = true;
             btn1Step.Enabled = false;
+            btnNewWorld.Enabled = false;
             btnToggleTimer.Text = StopTimerCaption;
         }
 
@@ -136,6 +123,7 @@ namespace Evo.GUI.Winforms
         {
             timer1.Enabled = false;
             btn1Step.Enabled = true;
+            btnNewWorld.Enabled = true;
             btnToggleTimer.Text = StartTimerCaption;
         }
 
@@ -163,6 +151,7 @@ namespace Evo.GUI.Winforms
                 }
             }, cancellationToken);
             btn1Step.Enabled = false;
+            btnNewWorld.Enabled = false;
             btnToggleTimer.Text = StopTimerCaption;
         }
 
@@ -177,6 +166,7 @@ namespace Evo.GUI.Winforms
             chkVisualize.Enabled = btn1Step.Enabled = true;
             DoStep();
             btn1Step.Enabled = true;
+            btnNewWorld.Enabled = true;
             btnToggleTimer.Text = StartTimerCaption;
         }
 
@@ -484,6 +474,17 @@ namespace Evo.GUI.Winforms
                 curY += yDelta;
             }
         }
-        
+
+        private void btnNewWorld_Click(object sender, EventArgs e)
+        {
+            var frmNewWorld = new FrmNewWorld(_world.Size.X, _world.Size.Y);
+            if (frmNewWorld.ShowDialog() == DialogResult.OK)
+            {
+                _world = frmNewWorld.GetWorld();
+                Map.Width = _world.Size.X * MapMultiplier;
+                Map.Height = _world.Size.Y * MapMultiplier;
+                DoStep();
+            }
+        }
     }
 }

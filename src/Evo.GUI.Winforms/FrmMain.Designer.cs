@@ -68,6 +68,7 @@ namespace Evo.GUI.Winforms
             this.Map = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.bgColorDialog = new System.Windows.Forms.ColorDialog();
+            this.btnNewWorld = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -114,6 +115,7 @@ namespace Evo.GUI.Winforms
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.btnNewWorld);
             this.groupBox2.Controls.Add(this.chkVisualize);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.numSpeed);
@@ -507,7 +509,6 @@ namespace Evo.GUI.Winforms
             // 
             // Map
             // 
-            this.Map.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Map.Location = new System.Drawing.Point(0, 0);
             this.Map.Name = "Map";
             this.Map.Size = new System.Drawing.Size(1140, 802);
@@ -520,13 +521,22 @@ namespace Evo.GUI.Winforms
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // btnNewWorld
+            // 
+            this.btnNewWorld.Location = new System.Drawing.Point(258, 19);
+            this.btnNewWorld.Name = "btnNewWorld";
+            this.btnNewWorld.Size = new System.Drawing.Size(86, 23);
+            this.btnNewWorld.TabIndex = 5;
+            this.btnNewWorld.Text = "New World";
+            this.btnNewWorld.UseVisualStyleBackColor = true;
+            this.btnNewWorld.Click += new System.EventHandler(this.btnNewWorld_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1509, 802);
             this.Controls.Add(this.splitContainer1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "FrmMain";
             this.Text = "Evo";
             this.Load += new System.EventHandler(this.FrmMain_Load);
@@ -597,6 +607,7 @@ namespace Evo.GUI.Winforms
         private System.Windows.Forms.CheckBox chkVisualize;
         private System.Windows.Forms.TabPage tabTune;
         private System.Windows.Forms.RadioButton rbDiffFromAverage;
+        private System.Windows.Forms.Button btnNewWorld;
     }
 }
 
