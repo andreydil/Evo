@@ -200,7 +200,7 @@ namespace Evo.Core.Units
 
         private void Step()
         {
-            Target.Direction = _world.Navigator.BounceFromMapBorders(Point, Target.Direction);
+            Target.Direction = _world.Navigator.BounceFromWalls(Point, Target.Direction);
             var pointToStep = Point + Target.Direction;
             if (Point == pointToStep)
             {

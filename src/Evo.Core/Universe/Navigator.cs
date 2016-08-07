@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using Evo.Core.Basic;
 using Evo.Core.Units;
 
@@ -79,12 +80,19 @@ namespace Evo.Core.Universe
             {
                 var topLeft = EnsureBounds(new Coord(point.X - radius, point.Y - radius));
                 var bottomRight = EnsureBounds(new Coord(point.X + radius, point.Y + radius));
+                topLeft = EnsureTopLeftPointWalls(topLeft, point);
+                bottomRight = EnsureBottomRightPointWalls(bottomRight, point);
                 int curX = topLeft.X;
                 int curY = topLeft.Y;
                 while (curX < bottomRight.X)   //right
                 {
                     if (point.X != curX || point.Y != curY)
                     {
+                        if (_world.Walls.Vertical().Any(w => w.Coord == curX))  //TODO this may not work when it's the first iteration
+                        {
+                            --curX;
+                            break;
+                        }
                         var unit = FindUnit(curX, curY) as T;
                         if (unit != null)
                         {
@@ -97,6 +105,11 @@ namespace Evo.Core.Universe
                 {
                     if (point.X != curX || point.Y != curY)
                     {
+                        if (_world.Walls.Horizontal().Any(w => w.Coord == curY))
+                        {
+                            --curY;
+                            break;
+                        }
                         var unit = FindUnit(curX, curY) as T;
                         if (unit != null)
                         {
@@ -109,6 +122,11 @@ namespace Evo.Core.Universe
                 {
                     if (point.X != curX || point.Y != curY)
                     {
+                        if (_world.Walls.Vertical().Any(w => w.Coord == curX))
+                        {
+                            ++curX;
+                            break;
+                        }
                         var unit = FindUnit(curX, curY) as T;
                         if (unit != null)
                         {
@@ -121,6 +139,11 @@ namespace Evo.Core.Universe
                 {
                     if (point.X != curX || point.Y != curY)
                     {
+                        if (_world.Walls.Horizontal().Any(w => w.Coord == curY))
+                        {
+                            ++curY;
+                            break;
+                        }
                         var unit = FindUnit(curX, curY) as T;
                         if (unit != null)
                         {
@@ -135,25 +158,38 @@ namespace Evo.Core.Universe
             return null;
         }
         
-        public Coord BounceFromMapBorders(Coord point, Coord direction)
+        public Coord BounceFromWalls(Coord point, Coord direction)
         {
             int x = direction.X;
             int y = direction.Y;
+            bool bouncedX = false, bouncedY = false;
             if (direction.X == -1 && point.X <= 0)
             {
                 x = 1;
+                bouncedX = true;
             }
             if (direction.X == 1 && point.X >= _world.Size.X - 1)
             {
                 x = -1;
+                bouncedX = true;
             }
             if (direction.Y == -1 && point.Y <= 0)
             {
                 y = 1;
+                bouncedY = true;
             }
             if (direction.Y == 1 && point.Y >= _world.Size.Y - 1)
             {
                 y = -1;
+                bouncedY = true;
+            }
+            if (_world.Walls.Vertical().Any(wall => wall.Coord == point.X + direction.X))
+            {
+                x = bouncedX ? 0 : -direction.X;
+            }
+            if (_world.Walls.Horizontal().Any(wall => wall.Coord == point.Y + direction.Y))
+            {
+                y = bouncedY ? 0 : -direction.Y;
             }
             return new Coord(x, y);
         }
@@ -180,9 +216,33 @@ namespace Evo.Core.Universe
             return point;
         }
 
+        public Coord EnsureTopLeftPointWalls(Coord topLeftPoint, Coord pointFrom)
+        {
+            var vertWalls = _world.Walls.Vertical().Where(w => w.Coord >= topLeftPoint.X && w.Coord < pointFrom.X).ToList();
+            var x = vertWalls.Any() ? vertWalls.Max(w => w.Coord) + 1 : topLeftPoint.X;
+            var horizWalls = _world.Walls.Horizontal().Where(w => w.Coord >= topLeftPoint.Y && w.Coord < pointFrom.Y).ToList();
+            var y = horizWalls.Any() ? horizWalls.Max(w => w.Coord) + 1 : topLeftPoint.Y;
+            return new Coord(x, y);
+        }
+
+        public Coord EnsureBottomRightPointWalls(Coord bottomRightPoint, Coord pointFrom)
+        {
+            var vertWalls = _world.Walls.Vertical().Where(w => w.Coord <= bottomRightPoint.X && w.Coord > pointFrom.X).ToList();
+            var x = vertWalls.Any() ? vertWalls.Min(w => w.Coord) - 1 : bottomRightPoint.X;
+            var horizWalls = _world.Walls.Horizontal().Where(w => w.Coord <= bottomRightPoint.Y && w.Coord > pointFrom.Y).ToList();
+            var y = horizWalls.Any() ? horizWalls.Min(w => w.Coord) - 1 : bottomRightPoint.Y;
+            return new Coord(x, y);
+        }
+
         public Coord? PlaceChild(Coord fatherPoint, Coord motherPoint)
         {
             return PlaceNear(motherPoint) ?? PlaceNear(fatherPoint);
+        }
+
+        public bool IsWall(Coord point)
+        {
+            return _world.Walls.Any(w => w.Type == WallType.Vertical && w.Coord == point.X)
+                   || _world.Walls.Any(w => w.Type == WallType.Horizontal && w.Coord == point.Y);
         }
 
         private Coord? PlaceNear(Coord point)

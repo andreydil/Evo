@@ -30,11 +30,12 @@ namespace Evo.GUI.Winforms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnNewWorld = new System.Windows.Forms.Button();
             this.chkVisualize = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.numSpeed = new System.Windows.Forms.NumericUpDown();
@@ -65,10 +66,17 @@ namespace Evo.GUI.Winforms
             this.rbColor = new System.Windows.Forms.RadioButton();
             this.rbAge = new System.Windows.Forms.RadioButton();
             this.button1 = new System.Windows.Forms.Button();
+            this.tabEditWorld = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.chkRemoveWall = new System.Windows.Forms.CheckBox();
+            this.chkHorizontalWall = new System.Windows.Forms.CheckBox();
+            this.chkVerticalWall = new System.Windows.Forms.CheckBox();
             this.Map = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.bgColorDialog = new System.Windows.Forms.ColorDialog();
-            this.btnNewWorld = new System.Windows.Forms.Button();
+            this.tipVerticalWall = new System.Windows.Forms.ToolTip(this.components);
+            this.tipHorizontalWall = new System.Windows.Forms.ToolTip(this.components);
+            this.tipRemoveWall = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -89,6 +97,8 @@ namespace Evo.GUI.Winforms
             this.splitContainer2.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tabEditWorld.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
             this.SuspendLayout();
             // 
@@ -127,6 +137,16 @@ namespace Evo.GUI.Winforms
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Control";
+            // 
+            // btnNewWorld
+            // 
+            this.btnNewWorld.Location = new System.Drawing.Point(258, 19);
+            this.btnNewWorld.Name = "btnNewWorld";
+            this.btnNewWorld.Size = new System.Drawing.Size(86, 23);
+            this.btnNewWorld.TabIndex = 5;
+            this.btnNewWorld.Text = "New World";
+            this.btnNewWorld.UseVisualStyleBackColor = true;
+            this.btnNewWorld.Click += new System.EventHandler(this.btnNewWorld_Click);
             // 
             // chkVisualize
             // 
@@ -202,6 +222,7 @@ namespace Evo.GUI.Winforms
             this.tabView.Controls.Add(this.tabTune);
             this.tabView.Controls.Add(this.tabUnit);
             this.tabView.Controls.Add(this.tabPage4);
+            this.tabView.Controls.Add(this.tabEditWorld);
             this.tabView.Location = new System.Drawing.Point(0, 89);
             this.tabView.Name = "tabView";
             this.tabView.SelectedIndex = 0;
@@ -239,17 +260,17 @@ namespace Evo.GUI.Winforms
             // 
             // chtPopulation
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chtPopulation.ChartAreas.Add(chartArea2);
+            chartArea5.Name = "ChartArea1";
+            this.chtPopulation.ChartAreas.Add(chartArea5);
             this.chtPopulation.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend2.Name = "Legend1";
-            this.chtPopulation.Legends.Add(legend2);
+            legend5.Name = "Legend1";
+            this.chtPopulation.Legends.Add(legend5);
             this.chtPopulation.Location = new System.Drawing.Point(0, 0);
             this.chtPopulation.Name = "chtPopulation";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chtPopulation.Series.Add(series2);
+            series5.ChartArea = "ChartArea1";
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            this.chtPopulation.Series.Add(series5);
             this.chtPopulation.Size = new System.Drawing.Size(344, 340);
             this.chtPopulation.TabIndex = 1;
             this.chtPopulation.TabStop = false;
@@ -507,6 +528,79 @@ namespace Evo.GUI.Winforms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // tabEditWorld
+            // 
+            this.tabEditWorld.Controls.Add(this.groupBox3);
+            this.tabEditWorld.Location = new System.Drawing.Point(4, 22);
+            this.tabEditWorld.Name = "tabEditWorld";
+            this.tabEditWorld.Padding = new System.Windows.Forms.Padding(3);
+            this.tabEditWorld.Size = new System.Drawing.Size(350, 687);
+            this.tabEditWorld.TabIndex = 5;
+            this.tabEditWorld.Text = "Edit world";
+            this.tabEditWorld.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.chkRemoveWall);
+            this.groupBox3.Controls.Add(this.chkHorizontalWall);
+            this.groupBox3.Controls.Add(this.chkVerticalWall);
+            this.groupBox3.Location = new System.Drawing.Point(9, 6);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(139, 67);
+            this.groupBox3.TabIndex = 1;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Walls";
+            // 
+            // chkRemoveWall
+            // 
+            this.chkRemoveWall.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkRemoveWall.AutoSize = true;
+            this.chkRemoveWall.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chkRemoveWall.ForeColor = System.Drawing.Color.DarkRed;
+            this.chkRemoveWall.Location = new System.Drawing.Point(92, 19);
+            this.chkRemoveWall.MinimumSize = new System.Drawing.Size(35, 35);
+            this.chkRemoveWall.Name = "chkRemoveWall";
+            this.chkRemoveWall.Size = new System.Drawing.Size(35, 35);
+            this.chkRemoveWall.TabIndex = 2;
+            this.chkRemoveWall.Text = "x";
+            this.chkRemoveWall.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tipRemoveWall.SetToolTip(this.chkRemoveWall, "Click on an existing wall to remove it");
+            this.chkRemoveWall.UseVisualStyleBackColor = true;
+            this.chkRemoveWall.CheckedChanged += new System.EventHandler(this.chkRemoveWall_CheckedChanged);
+            this.chkRemoveWall.Click += new System.EventHandler(this.chkRemoveWall_Click);
+            // 
+            // chkHorizontalWall
+            // 
+            this.chkHorizontalWall.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkHorizontalWall.AutoSize = true;
+            this.chkHorizontalWall.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chkHorizontalWall.Location = new System.Drawing.Point(47, 19);
+            this.chkHorizontalWall.MinimumSize = new System.Drawing.Size(35, 35);
+            this.chkHorizontalWall.Name = "chkHorizontalWall";
+            this.chkHorizontalWall.Size = new System.Drawing.Size(35, 35);
+            this.chkHorizontalWall.TabIndex = 1;
+            this.chkHorizontalWall.Text = "—";
+            this.chkHorizontalWall.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tipVerticalWall.SetToolTip(this.chkHorizontalWall, "Add a vertical wall");
+            this.chkHorizontalWall.UseVisualStyleBackColor = true;
+            this.chkHorizontalWall.Click += new System.EventHandler(this.chkHorizontalWall_Click);
+            // 
+            // chkVerticalWall
+            // 
+            this.chkVerticalWall.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkVerticalWall.AutoSize = true;
+            this.chkVerticalWall.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chkVerticalWall.Location = new System.Drawing.Point(6, 19);
+            this.chkVerticalWall.MinimumSize = new System.Drawing.Size(35, 35);
+            this.chkVerticalWall.Name = "chkVerticalWall";
+            this.chkVerticalWall.Size = new System.Drawing.Size(35, 35);
+            this.chkVerticalWall.TabIndex = 0;
+            this.chkVerticalWall.Text = "|";
+            this.chkVerticalWall.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tipVerticalWall.SetToolTip(this.chkVerticalWall, "Add a vertical wall");
+            this.chkVerticalWall.UseVisualStyleBackColor = true;
+            this.chkVerticalWall.Click += new System.EventHandler(this.chkVerticalWall_Click);
+            // 
             // Map
             // 
             this.Map.Location = new System.Drawing.Point(0, 0);
@@ -514,22 +608,27 @@ namespace Evo.GUI.Winforms
             this.Map.Size = new System.Drawing.Size(1140, 802);
             this.Map.TabIndex = 0;
             this.Map.TabStop = false;
+            this.Map.Click += new System.EventHandler(this.Map_Click);
             this.Map.Paint += new System.Windows.Forms.PaintEventHandler(this.Map_Paint_1);
             this.Map.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Map_MouseClick);
+            this.Map.MouseEnter += new System.EventHandler(this.Map_MouseEnter);
+            this.Map.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Map_MouseMove);
             // 
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // btnNewWorld
+            // tipVerticalWall
             // 
-            this.btnNewWorld.Location = new System.Drawing.Point(258, 19);
-            this.btnNewWorld.Name = "btnNewWorld";
-            this.btnNewWorld.Size = new System.Drawing.Size(86, 23);
-            this.btnNewWorld.TabIndex = 5;
-            this.btnNewWorld.Text = "New World";
-            this.btnNewWorld.UseVisualStyleBackColor = true;
-            this.btnNewWorld.Click += new System.EventHandler(this.btnNewWorld_Click);
+            this.tipVerticalWall.ToolTipTitle = "Vertical wall";
+            // 
+            // tipHorizontalWall
+            // 
+            this.tipHorizontalWall.ToolTipTitle = "Horizontal wall";
+            // 
+            // tipRemoveWall
+            // 
+            this.tipRemoveWall.ToolTipTitle = "Remove a wall";
             // 
             // FrmMain
             // 
@@ -565,6 +664,9 @@ namespace Evo.GUI.Winforms
             this.tabPage4.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabEditWorld.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).EndInit();
             this.ResumeLayout(false);
 
@@ -608,6 +710,14 @@ namespace Evo.GUI.Winforms
         private System.Windows.Forms.TabPage tabTune;
         private System.Windows.Forms.RadioButton rbDiffFromAverage;
         private System.Windows.Forms.Button btnNewWorld;
+        private System.Windows.Forms.TabPage tabEditWorld;
+        private System.Windows.Forms.CheckBox chkVerticalWall;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.CheckBox chkRemoveWall;
+        private System.Windows.Forms.CheckBox chkHorizontalWall;
+        private System.Windows.Forms.ToolTip tipVerticalWall;
+        private System.Windows.Forms.ToolTip tipHorizontalWall;
+        private System.Windows.Forms.ToolTip tipRemoveWall;
     }
 }
 

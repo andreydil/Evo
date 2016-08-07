@@ -18,6 +18,7 @@ namespace Evo.Core.Universe
         public readonly StatCounter StatCounter;
         private readonly List<Individual> _population = new List<Individual>();
         private readonly List<FoodItem> _food = new List<FoodItem>();
+        private readonly List<Wall> _walls = new List<Wall>();
         private ulong _idGenerator = 0;
 
         public World(Random random, Coord size)
@@ -60,6 +61,7 @@ namespace Evo.Core.Universe
         public ulong Tick { get; private set; } = 0;
         public IEnumerable<Individual> Population => _population.AsEnumerable();
         public IEnumerable<FoodItem> Food => _food.AsEnumerable();
+        public IEnumerable<Wall> Walls => _walls.AsEnumerable();
 
         public readonly IncStats MainStats = new IncStats();
         public readonly IncStats AdditionalStats = new IncStats();
@@ -167,6 +169,12 @@ namespace Evo.Core.Universe
                 for (int j = 0; j < tryCount; j++)
                 {
                     newFoodItem.Point = new Coord(Random.Next(Size.X), Random.Next(Size.Y));
+
+                    if (Navigator.IsWall(newFoodItem.Point))
+                    {
+                        continue;
+                    }
+
                     var unitInPoint = Navigator.FindUnit(newFoodItem.Point);
                     if (unitInPoint == null)
                     {
@@ -206,6 +214,48 @@ namespace Evo.Core.Universe
                     break;
                 }
             }
+        }
+
+        public void AddWall(Wall wall)
+        {
+            _walls.Add(wall);
+            if (wall.Type == WallType.Vertical)
+            {
+                for (int y = 0; y < Size.Y; y++)
+                {
+                    KillUnitByWall(wall.Coord, y);
+                }
+            }
+            else
+            {
+                for (int x = 0; x < Size.X; x++)
+                {
+                    KillUnitByWall(x, wall.Coord);
+                }
+            }
+        }
+
+        private void KillUnitByWall(int x, int y)
+        {
+            var unit = Navigator.FindUnit(x, y);
+            var individual = unit as Individual;
+            if (individual != null)
+            {
+                RemoveIndividual(individual);
+            }
+            else
+            {
+                var foodItem = unit as FoodItem;
+                if (foodItem != null)
+                {
+                    RemoveFood(foodItem);
+                }
+            }
+        }
+
+        public void RemoveWall(int x, int y)
+        {
+            _walls.RemoveAll(w => w.Coord == x || w.Coord == y);
         }
 
         public Individual FindIndividualById(ulong id)

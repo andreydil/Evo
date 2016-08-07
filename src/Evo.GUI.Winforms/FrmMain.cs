@@ -33,6 +33,10 @@ namespace Evo.GUI.Winforms
         private Task bgTask = null;
         private CancellationTokenSource bgTaskCancelationSource;
 
+        private int _curMouseX = 0;
+        private int _curMouseY = 0;
+        private Pen _wallPen = new Pen(Color.Coral, MapMultiplier);
+
         public FrmMain()
         {
             InitializeComponent();
@@ -116,6 +120,7 @@ namespace Evo.GUI.Winforms
             timer1.Enabled = true;
             btn1Step.Enabled = false;
             btnNewWorld.Enabled = false;
+            tabEditWorld.Enabled = false;
             btnToggleTimer.Text = StopTimerCaption;
         }
 
@@ -124,6 +129,7 @@ namespace Evo.GUI.Winforms
             timer1.Enabled = false;
             btn1Step.Enabled = true;
             btnNewWorld.Enabled = true;
+            tabEditWorld.Enabled = true;
             btnToggleTimer.Text = StartTimerCaption;
         }
 
@@ -152,6 +158,7 @@ namespace Evo.GUI.Winforms
             }, cancellationToken);
             btn1Step.Enabled = false;
             btnNewWorld.Enabled = false;
+            tabEditWorld.Enabled = false;
             btnToggleTimer.Text = StopTimerCaption;
         }
 
@@ -167,6 +174,7 @@ namespace Evo.GUI.Winforms
             DoStep();
             btn1Step.Enabled = true;
             btnNewWorld.Enabled = true;
+            tabEditWorld.Enabled = true;
             btnToggleTimer.Text = StartTimerCaption;
         }
 
@@ -189,6 +197,30 @@ namespace Evo.GUI.Winforms
             {
                 e.Graphics.FillRectangle(new SolidBrush(GetIndividualColor(individual)),
                     individual.Point.X * MapMultiplier, individual.Point.Y * MapMultiplier, MapMultiplier, MapMultiplier);
+            }
+            foreach (var wall in _world.Walls)
+            {
+                int wallCoord = wall.Coord * MapMultiplier + MapMultiplier / 2;
+                switch (wall.Type)
+                {
+                    case WallType.Vertical:
+                        e.Graphics.DrawLine(_wallPen, wallCoord, 0, wallCoord, Map.Height - 1);
+                        break;
+                    case WallType.Horizontal:
+                        e.Graphics.DrawLine(_wallPen, 0, wallCoord, Map.Width - 1, wallCoord);
+                        break;
+                }
+            }
+
+            if (chkVerticalWall.Checked)
+            {
+                int wallX = _curMouseX / MapMultiplier * MapMultiplier + MapMultiplier / 2;
+                e.Graphics.DrawLine(_wallPen, wallX, 0, wallX, Map.Height - 1);
+            }
+            else if (chkHorizontalWall.Checked)
+            {
+                int wallY = _curMouseY / MapMultiplier * MapMultiplier + MapMultiplier / 2;
+                e.Graphics.DrawLine(_wallPen, 0, wallY, Map.Width - 1, wallY);
             }
         }
 
@@ -485,6 +517,73 @@ namespace Evo.GUI.Winforms
                 Map.Height = _world.Size.Y * MapMultiplier;
                 DoStep();
             }
+        }
+
+        private void Map_MouseEnter(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void Map_MouseMove(object sender, MouseEventArgs e)
+        {
+            _curMouseX = e.X;
+            _curMouseY = e.Y;
+            Map.Invalidate();
+        }
+        
+        private void chkVerticalWall_Click(object sender, EventArgs e)
+        {
+            chkHorizontalWall.Checked = chkRemoveWall.Checked = false;
+            Map.Invalidate();
+        }
+
+        private void chkHorizontalWall_Click(object sender, EventArgs e)
+        {
+            chkVerticalWall.Checked = chkRemoveWall.Checked = false;
+            Map.Invalidate();
+        }
+
+        private void chkRemoveWall_Click(object sender, EventArgs e)
+        {
+            chkHorizontalWall.Checked = chkVerticalWall.Checked = false;
+            Map.Invalidate();
+        }
+
+        private void chkRemoveWall_CheckedChanged(object sender, EventArgs e)
+        {
+            Map.Cursor = chkRemoveWall.Checked ? Cursors.Cross : DefaultCursor;
+        }
+
+        private void Map_Click(object sender, EventArgs e)
+        {
+            if (chkVerticalWall.Checked)
+            {
+                _world.AddWall(new Wall(WallType.Vertical, _curMouseX / MapMultiplier));
+                chkVerticalWall.Checked = false;
+                Map.Invalidate();
+            }
+            else if(chkHorizontalWall.Checked)
+            {
+                _world.AddWall(new Wall(WallType.Horizontal, _curMouseY / MapMultiplier));
+                chkHorizontalWall.Checked = false;
+                Map.Invalidate();
+            }
+            else if (chkRemoveWall.Checked)
+            {
+                _world.RemoveWall(_curMouseX / MapMultiplier, _curMouseY / MapMultiplier);
+                chkRemoveWall.Checked = false;
+                Map.Invalidate();
+            }
+        }
+
+        private Coord ConvertCoordFormToWorld(Coord point)
+        {
+            return new Coord(point.X / MapMultiplier, point.Y / MapMultiplier);
+        }
+
+        private Coord ConvertCoordWorldToForm(Coord point)
+        {
+            return new Coord(point.X * MapMultiplier, point.Y * MapMultiplier);
         }
     }
 }

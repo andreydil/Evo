@@ -46,6 +46,8 @@
     <Compile Include="Stats\TimeSpanStats.cs" />
     <Compile Include="Units\GeneNames.cs" />
     <Compile Include="Units\UnitIdComparer.cs" />
+    <Compile Include="Units\Wall.cs" />
+    <Compile Include="Units\WallType.cs" />
     <Compile Include="Universe\Constants.cs" />
     <Compile Include="Basic\Coord.cs" />
     <Compile Include="Units\FoodItem.cs" />
