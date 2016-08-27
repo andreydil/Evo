@@ -156,7 +156,7 @@ namespace Evo.Core.Tests
             var behindWall = new Individual(1, world) { Point = new Coord(5, 1) };
             var notBehindWall = new Individual(2, world) { Point = new Coord(2, 8) };
             world.AddIndividuals(new[] { behindWall, notBehindWall });
-            world.AddWall(new Wall(WallType.Vertical, 4));
+            world.Navigator.AddWall(new Wall(WallType.Vertical, 4));
             var target = world.Navigator.FindClosestIndividual(new Coord(2, 2), 10);
             Assert.AreEqual(2, target.Point.X);
             Assert.AreEqual(8, target.Point.Y);
@@ -169,7 +169,7 @@ namespace Evo.Core.Tests
             var behindWall = new Individual(1, world) { Point = new Coord(2, 8) };
             var notBehindWall = new Individual(2, world) { Point = new Coord(5, 1) };
             world.AddIndividuals(new[] { behindWall, notBehindWall });
-            world.AddWall(new Wall(WallType.Vertical, 4));
+            world.Navigator.AddWall(new Wall(WallType.Vertical, 4));
             var target = world.Navigator.FindClosestIndividual(new Coord(5, 9), 10);
             Assert.AreEqual(5, target.Point.X);
             Assert.AreEqual(1, target.Point.Y);
@@ -179,7 +179,7 @@ namespace Evo.Core.Tests
         public void IsWallTest()
         {
             var world = new World(new Random(0), new Coord(50, 50));
-            world.AddWall(new Wall(WallType.Vertical, 4));
+            world.Navigator.AddWall(new Wall(WallType.Vertical, 4));
             Assert.IsTrue(world.Navigator.IsWall(new Coord(4, 2)));
             Assert.IsFalse(world.Navigator.IsWall(new Coord(5, 2)));
         }
@@ -188,8 +188,8 @@ namespace Evo.Core.Tests
         public void EnsureTopLeftPointWallsTest1()
         {
             var world = new World(new Random(0), new Coord(50, 50));
-            world.AddWall(new Wall(WallType.Vertical, 4));
-            world.AddWall(new Wall(WallType.Horizontal, 3));
+            world.Navigator.AddWall(new Wall(WallType.Vertical, 4));
+            world.Navigator.AddWall(new Wall(WallType.Horizontal, 3));
             var pointFrom = new Coord(6, 6);
             var topLeft = world.Navigator.EnsureTopLeftPointWalls(new Coord(0, 0), pointFrom);
             Assert.AreEqual(5, topLeft.X);
@@ -200,7 +200,7 @@ namespace Evo.Core.Tests
         public void EnsureTopLeftPointWallsTest2()
         {
             var world = new World(new Random(0), new Coord(50, 50));
-            world.AddWall(new Wall(WallType.Vertical, 5));
+            world.Navigator.AddWall(new Wall(WallType.Vertical, 5));
             var pointFrom = new Coord(6, 6);
             var topLeft = world.Navigator.EnsureTopLeftPointWalls(new Coord(0, 0), pointFrom);
             Assert.AreEqual(6, topLeft.X);
@@ -211,8 +211,8 @@ namespace Evo.Core.Tests
         public void EnsureBottomRightWallsTest1()
         {
             var world = new World(new Random(0), new Coord(50, 50));
-            world.AddWall(new Wall(WallType.Vertical, 4));
-            world.AddWall(new Wall(WallType.Horizontal, 3));
+            world.Navigator.AddWall(new Wall(WallType.Vertical, 4));
+            world.Navigator.AddWall(new Wall(WallType.Horizontal, 3));
             var pointFrom = new Coord(2, 2);
             var topLeft = world.Navigator.EnsureBottomRightPointWalls(new Coord(20, 160), pointFrom);
             Assert.AreEqual(3, topLeft.X);
@@ -223,7 +223,7 @@ namespace Evo.Core.Tests
         public void EnsureBottomRightWallsTest2()
         {
             var world = new World(new Random(0), new Coord(50, 50));
-            world.AddWall(new Wall(WallType.Horizontal, 3));
+            world.Navigator.AddWall(new Wall(WallType.Horizontal, 3));
             var pointFrom = new Coord(2, 2);
             var topLeft = world.Navigator.EnsureBottomRightPointWalls(new Coord(20, 160), pointFrom);
             Assert.AreEqual(20, topLeft.X);

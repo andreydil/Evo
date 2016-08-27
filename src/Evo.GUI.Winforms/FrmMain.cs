@@ -198,7 +198,7 @@ namespace Evo.GUI.Winforms
                 e.Graphics.FillRectangle(new SolidBrush(GetIndividualColor(individual)),
                     individual.Point.X * MapMultiplier, individual.Point.Y * MapMultiplier, MapMultiplier, MapMultiplier);
             }
-            foreach (var wall in _world.Walls)
+            foreach (var wall in _world.Navigator.Walls)
             {
                 int wallCoord = wall.Coord * MapMultiplier + MapMultiplier / 2;
                 switch (wall.Type)
@@ -558,19 +558,19 @@ namespace Evo.GUI.Winforms
         {
             if (chkVerticalWall.Checked)
             {
-                _world.AddWall(new Wall(WallType.Vertical, _curMouseX / MapMultiplier));
+                _world.Navigator.AddWall(new Wall(WallType.Vertical, _curMouseX / MapMultiplier));
                 chkVerticalWall.Checked = false;
                 Map.Invalidate();
             }
             else if(chkHorizontalWall.Checked)
             {
-                _world.AddWall(new Wall(WallType.Horizontal, _curMouseY / MapMultiplier));
+                _world.Navigator.AddWall(new Wall(WallType.Horizontal, _curMouseY / MapMultiplier));
                 chkHorizontalWall.Checked = false;
                 Map.Invalidate();
             }
             else if (chkRemoveWall.Checked)
             {
-                _world.RemoveWall(_curMouseX / MapMultiplier, _curMouseY / MapMultiplier);
+                _world.Navigator.RemoveWall(_curMouseX / MapMultiplier, _curMouseY / MapMultiplier);
                 chkRemoveWall.Checked = false;
                 Map.Invalidate();
             }

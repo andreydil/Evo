@@ -18,7 +18,6 @@ namespace Evo.Core.Universe
         public readonly StatCounter StatCounter;
         private readonly List<Individual> _population = new List<Individual>();
         private readonly List<FoodItem> _food = new List<FoodItem>();
-        private readonly List<Wall> _walls = new List<Wall>();
         private ulong _idGenerator = 0;
 
         public World(Random random, Coord size)
@@ -61,7 +60,6 @@ namespace Evo.Core.Universe
         public ulong Tick { get; private set; } = 0;
         public IEnumerable<Individual> Population => _population.AsEnumerable();
         public IEnumerable<FoodItem> Food => _food.AsEnumerable();
-        public IEnumerable<Wall> Walls => _walls.AsEnumerable();
 
         public readonly IncStats MainStats = new IncStats();
         public readonly IncStats AdditionalStats = new IncStats();
@@ -216,26 +214,8 @@ namespace Evo.Core.Universe
             }
         }
 
-        public void AddWall(Wall wall)
-        {
-            _walls.Add(wall);
-            if (wall.Type == WallType.Vertical)
-            {
-                for (int y = 0; y < Size.Y; y++)
-                {
-                    KillUnitByWall(wall.Coord, y);
-                }
-            }
-            else
-            {
-                for (int x = 0; x < Size.X; x++)
-                {
-                    KillUnitByWall(x, wall.Coord);
-                }
-            }
-        }
 
-        private void KillUnitByWall(int x, int y)
+        public void KillUnitByWall(int x, int y)
         {
             var unit = Navigator.FindUnit(x, y);
             var individual = unit as Individual;
@@ -251,11 +231,6 @@ namespace Evo.Core.Universe
                     RemoveFood(foodItem);
                 }
             }
-        }
-
-        public void RemoveWall(int x, int y)
-        {
-            _walls.RemoveAll(w => w.Coord == x || w.Coord == y);
         }
 
         public Individual FindIndividualById(ulong id)

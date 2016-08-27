@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Evo.Core.Basic;
 using Evo.Core.Units;
 
@@ -11,10 +13,14 @@ namespace Evo.Core.Universe
         private readonly World _world;
         private readonly Unit[,] _map;
 
+        private readonly Dictionary<int, Wall> _verticalWalls = new Dictionary<int, Wall>();
+        private readonly Dictionary<int, Wall> _horizontalWalls = new Dictionary<int, Wall>();
+
         public Navigator(World world)
         {
             _world = world;
             _map = new Unit[world.Size.X, world.Size.Y];
+
         }
 
         public void PutUnit(Unit unit)
@@ -88,7 +94,7 @@ namespace Evo.Core.Universe
                 {
                     if (point.X != curX || point.Y != curY)
                     {
-                        if (_world.Walls.Vertical().Any(w => w.Coord == curX))  //TODO this may not work when it's the first iteration
+                        if (_verticalWalls.ContainsKey(curX))  //TODO this may not work when it's the first iteration
                         {
                             --curX;
                             break;
@@ -105,7 +111,7 @@ namespace Evo.Core.Universe
                 {
                     if (point.X != curX || point.Y != curY)
                     {
-                        if (_world.Walls.Horizontal().Any(w => w.Coord == curY))
+                        if (_horizontalWalls.ContainsKey(curY))
                         {
                             --curY;
                             break;
@@ -122,7 +128,7 @@ namespace Evo.Core.Universe
                 {
                     if (point.X != curX || point.Y != curY)
                     {
-                        if (_world.Walls.Vertical().Any(w => w.Coord == curX))
+                        if (_verticalWalls.ContainsKey(curX))
                         {
                             ++curX;
                             break;
@@ -139,7 +145,7 @@ namespace Evo.Core.Universe
                 {
                     if (point.X != curX || point.Y != curY)
                     {
-                        if (_world.Walls.Horizontal().Any(w => w.Coord == curY))
+                        if (_horizontalWalls.ContainsKey(curY))
                         {
                             ++curY;
                             break;
@@ -183,11 +189,11 @@ namespace Evo.Core.Universe
                 y = -1;
                 bouncedY = true;
             }
-            if (_world.Walls.Vertical().Any(wall => wall.Coord == point.X + direction.X))
+            if (_verticalWalls.ContainsKey(point.X + direction.X))
             {
                 x = bouncedX ? 0 : -direction.X;
             }
-            if (_world.Walls.Horizontal().Any(wall => wall.Coord == point.Y + direction.Y))
+            if (_horizontalWalls.ContainsKey(point.Y + direction.Y))
             {
                 y = bouncedY ? 0 : -direction.Y;
             }
@@ -218,18 +224,18 @@ namespace Evo.Core.Universe
 
         public Coord EnsureTopLeftPointWalls(Coord topLeftPoint, Coord pointFrom)
         {
-            var vertWalls = _world.Walls.Vertical().Where(w => w.Coord >= topLeftPoint.X && w.Coord < pointFrom.X).ToList();
+            var vertWalls = _verticalWalls.Where(w => w.Key >= topLeftPoint.X && w.Key < pointFrom.X).Select(p => p.Value).ToList();
             var x = vertWalls.Any() ? vertWalls.Max(w => w.Coord) + 1 : topLeftPoint.X;
-            var horizWalls = _world.Walls.Horizontal().Where(w => w.Coord >= topLeftPoint.Y && w.Coord < pointFrom.Y).ToList();
+            var horizWalls = _horizontalWalls.Where(w => w.Key >= topLeftPoint.Y && w.Key < pointFrom.Y).Select(p => p.Value).ToList();
             var y = horizWalls.Any() ? horizWalls.Max(w => w.Coord) + 1 : topLeftPoint.Y;
             return new Coord(x, y);
         }
 
         public Coord EnsureBottomRightPointWalls(Coord bottomRightPoint, Coord pointFrom)
         {
-            var vertWalls = _world.Walls.Vertical().Where(w => w.Coord <= bottomRightPoint.X && w.Coord > pointFrom.X).ToList();
+            var vertWalls = _verticalWalls.Where(w => w.Key <= bottomRightPoint.X && w.Key > pointFrom.X).Select(p => p.Value).ToList();
             var x = vertWalls.Any() ? vertWalls.Min(w => w.Coord) - 1 : bottomRightPoint.X;
-            var horizWalls = _world.Walls.Horizontal().Where(w => w.Coord <= bottomRightPoint.Y && w.Coord > pointFrom.Y).ToList();
+            var horizWalls = _horizontalWalls.Where(w => w.Key <= bottomRightPoint.Y && w.Key > pointFrom.Y).Select(p => p.Value).ToList();
             var y = horizWalls.Any() ? horizWalls.Min(w => w.Coord) - 1 : bottomRightPoint.Y;
             return new Coord(x, y);
         }
@@ -241,9 +247,43 @@ namespace Evo.Core.Universe
 
         public bool IsWall(Coord point)
         {
-            return _world.Walls.Any(w => w.Type == WallType.Vertical && w.Coord == point.X)
-                   || _world.Walls.Any(w => w.Type == WallType.Horizontal && w.Coord == point.Y);
+            return _verticalWalls.ContainsKey(point.X) || _horizontalWalls.ContainsKey(point.Y);
         }
+
+        public bool IsWall(WallType type, int coord)
+        {
+            return type == WallType.Vertical ? _verticalWalls.ContainsKey(coord) : _horizontalWalls.ContainsKey(coord);
+        }
+        
+        public void AddWall(Wall wall)
+        {
+            if (wall.Type == WallType.Vertical)
+            {
+                _verticalWalls.Add(wall.Coord, wall);
+                for (int y = 0; y < _world.Size.Y; y++)
+                {
+                    _world.KillUnitByWall(wall.Coord, y);
+                }
+            }
+            else
+            {
+                _horizontalWalls.Add(wall.Coord, wall);
+                for (int x = 0; x < _world.Size.X; x++)
+                {
+                    _world.KillUnitByWall(x, wall.Coord);
+                }
+            }
+        }
+        
+        public void RemoveWall(int x, int y)
+        {
+            _verticalWalls.Remove(x);
+            _verticalWalls.Remove(y);
+            _horizontalWalls.Remove(x);
+            _horizontalWalls.Remove(y);
+        }
+
+        public IEnumerable<Wall> Walls => _verticalWalls.Values.Concat(_horizontalWalls.Values);
 
         private Coord? PlaceNear(Coord point)
         {
