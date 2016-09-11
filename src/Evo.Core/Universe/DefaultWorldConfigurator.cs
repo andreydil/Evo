@@ -16,7 +16,7 @@ namespace Evo.Core.Universe
 
         public World CreateWorld()
         {
-            var world = new World(new Random(), Size);
+            var world = new World(new Random(0), Size);
             world.MutationProbability.Value = 120;
             world.MutationMaxDelta.Value = 40;
             world.EnergyDrainModificator.Value = 1;
