@@ -17,11 +17,11 @@ namespace Evo.Core.Universe
         public World CreateWorld()
         {
             var world = new World(new Random(0), Size);
-            world.MutationProbability.Value = 120;
-            world.MutationMaxDelta.Value = 40;
+            world.MutationProbability.Value = 100;
+            world.MutationMaxDelta.Value = 100;
             world.EnergyDrainModificator.Value = 1;
             world.MaxFoodItemsPerTick.Value = 60;
-            world.MaxEneryPerFoodItem.Value = 140;
+            world.MaxEneryPerFoodItem.Value = 150;
             world.MaxFoodItems.Value = 400;
             world.BirthEnergyShare.Value = 30;
 
