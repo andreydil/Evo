@@ -30,9 +30,10 @@ namespace Evo.GUI.Winforms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnNewWorld = new System.Windows.Forms.Button();
@@ -260,17 +261,17 @@ namespace Evo.GUI.Winforms
             // 
             // chtPopulation
             // 
-            chartArea5.Name = "ChartArea1";
-            this.chtPopulation.ChartAreas.Add(chartArea5);
+            chartArea1.Name = "ChartArea1";
+            this.chtPopulation.ChartAreas.Add(chartArea1);
             this.chtPopulation.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend5.Name = "Legend1";
-            this.chtPopulation.Legends.Add(legend5);
+            legend1.Name = "Legend1";
+            this.chtPopulation.Legends.Add(legend1);
             this.chtPopulation.Location = new System.Drawing.Point(0, 0);
             this.chtPopulation.Name = "chtPopulation";
-            series5.ChartArea = "ChartArea1";
-            series5.Legend = "Legend1";
-            series5.Name = "Series1";
-            this.chtPopulation.Series.Add(series5);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chtPopulation.Series.Add(series1);
             this.chtPopulation.Size = new System.Drawing.Size(344, 340);
             this.chtPopulation.TabIndex = 1;
             this.chtPopulation.TabStop = false;
@@ -636,6 +637,7 @@ namespace Evo.GUI.Winforms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1509, 802);
             this.Controls.Add(this.splitContainer1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMain";
             this.Text = "Evo";
             this.Load += new System.EventHandler(this.FrmMain_Load);
