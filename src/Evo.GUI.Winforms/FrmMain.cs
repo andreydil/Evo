@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -28,6 +27,7 @@ namespace Evo.GUI.Winforms
         private Color _bgColor = Color.Black;
         private Individual _curAverageIndividual;
         private int _maxDifference;
+        private int _benchmarkTicks = 0;
         private readonly object _lockObj = new object();
 
         private Task bgTask = null;
@@ -49,11 +49,16 @@ namespace Evo.GUI.Winforms
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            Init();
+        }
+
+        public void Init()
+        {
             try
             {
                 var worldConfigurator = new DefaultWorldConfigurator(Map.Size.Width / MapMultiplier, Map.Size.Height / MapMultiplier);
                 _world = worldConfigurator.CreateWorld();
-                
+
                 _curAverageIndividual = _world.AverageIndividual;
 
                 var minIndividual = _world.Mutator.GenerateIndividual(g => g.Min, 0, null);
@@ -176,6 +181,39 @@ namespace Evo.GUI.Winforms
             btnNewWorld.Enabled = true;
             tabEditWorld.Enabled = true;
             btnToggleTimer.Text = StartTimerCaption;
+        }
+
+        public void EnableBenchmarking(int ticks)
+        {
+            _benchmarkTicks = ticks;
+        }
+        
+        private void FrmMain_Shown(object sender, EventArgs e)
+        {
+            Benchmark();
+        }
+
+        private void Benchmark()
+        {
+            if (_benchmarkTicks <= 0)
+            {
+                return;
+            }
+
+            Text = $"Benchmarking {_benchmarkTicks} ticks...";
+            Enabled = false;
+
+            int ticks;
+            lock (_lockObj)
+            {
+                 ticks = _benchmarkTicks;
+                _benchmarkTicks = 0;
+            }
+            for (int i = 0; i < ticks; ++i)
+            {
+                _world.Live1Tick();
+            }
+            Close();
         }
 
         private void Map_Paint_1(object sender, PaintEventArgs e)
@@ -585,5 +623,6 @@ namespace Evo.GUI.Winforms
         {
             return new Coord(point.X * MapMultiplier, point.Y * MapMultiplier);
         }
+
     }
 }
