@@ -27,6 +27,9 @@ namespace Evo.Core.Stats
             long age = 0;
             long desire = 0;
 
+            int minGeneration = 0;
+            int maxGeneration = 0;
+
             foreach (var individual in individuals)
             {
                 colorR += individual.Color.Red;
@@ -43,11 +46,14 @@ namespace Evo.Core.Stats
                 energy += individual.Energy;
                 age += individual.Age;
                 desire += individual.Desire;
+
+                minGeneration += individual.MinGeneration;
+                maxGeneration += individual.MaxGeneration;
             }
 
             var count = individuals.Count;
 
-            var average = new Individual(0, null);
+            var average = new Individual(0, null, minGeneration / count, maxGeneration / count);
 
             if (count == 0)
             {

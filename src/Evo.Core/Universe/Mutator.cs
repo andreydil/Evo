@@ -31,7 +31,7 @@ namespace Evo.Core.Universe
 
         public Individual GenerateChild(Individual father, Individual mother)
         {
-            var individual = new Individual(_world.GenerateId(), _world);
+            var individual = new Individual(_world.GenerateId(), _world, Math.Min(father.MinGeneration, mother.MinGeneration) + 1, Math.Max(father.MaxGeneration, mother.MaxGeneration) + 1);
             foreach (var geneItem in individual.Genome)
             {
                 var gene = geneItem.Value;

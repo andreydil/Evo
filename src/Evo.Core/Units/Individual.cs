@@ -11,10 +11,14 @@ namespace Evo.Core.Units
     {
         private readonly World _world;
         public readonly Dictionary<string, Gene> Genome;
+        public readonly int MinGeneration;
+        public readonly int MaxGeneration;
 
-        public Individual(ulong id, World world) : base(id)
+        public Individual(ulong id, World world, int minGeneration = 1, int maxGeneration = 1) : base(id)
         {
             _world = world;
+            MinGeneration = minGeneration;
+            MaxGeneration = maxGeneration;
             Genome = new Dictionary<string, Gene>
             {
                 { GeneNames.Color, Color },

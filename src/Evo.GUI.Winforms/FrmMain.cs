@@ -392,6 +392,8 @@ namespace Evo.GUI.Winforms
             {
                 sb.AppendLine(formatStatLine(geneItem.Key, geneItem.Value.Value));
             }
+            sb.AppendLine(formatStatLine("Min generation", individual.MinGeneration));
+            sb.AppendLine(formatStatLine("Max generation", individual.MaxGeneration));
             return sb.ToString();
         }
 
