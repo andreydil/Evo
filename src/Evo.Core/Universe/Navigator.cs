@@ -56,14 +56,46 @@ namespace Evo.Core.Universe
             return _map[x, y];
         }
 
+        public T FindUnit<T>(Coord point) where T : Unit
+        {
+            return FindUnit<T>(point.X, point.Y);
+        }
+
+        public T FindUnit<T>(int x, int y) where T: Unit
+        {
+            Unit unit = FindUnit(x, y);
+            if (unit == null)
+            {
+                return null;
+            }
+            if (unit.Type != GetUnitType(typeof(T)))
+            {
+                return null;
+            }
+            return (T)unit;
+        }
+        
+        private UnitType GetUnitType(Type type)
+        {
+            if (type == typeof (Individual))
+            {
+                return UnitType.Individual;
+            }
+            if (type == typeof (FoodItem))
+            {
+                return UnitType.Food;
+            }
+            throw new ArgumentOutOfRangeException($"Unknown UnitType {type.Name}");
+        }
+
         public Individual FindIndividual(Coord point)
         {
-            return FindUnit(point) as Individual;
+            return FindUnit<Individual>(point);
         }
 
         public FoodItem FindFood(Coord point)
         {
-            return FindUnit(point) as FoodItem;
+            return FindUnit<FoodItem>(point);
         }
         
         public FoodItem FindClosestFood(Coord point, int sightRange)
@@ -109,7 +141,7 @@ namespace Evo.Core.Universe
                             --curX;
                             break;
                         }
-                        var unit = FindUnit(curX, curY) as T;
+                        var unit = FindUnit<T>(curX, curY);
                         if (unit != null)
                         {
                             return unit;
@@ -126,7 +158,7 @@ namespace Evo.Core.Universe
                             --curY;
                             break;
                         }
-                        var unit = FindUnit(curX, curY) as T;
+                        var unit = FindUnit<T>(curX, curY);
                         if (unit != null)
                         {
                             return unit;
@@ -143,7 +175,7 @@ namespace Evo.Core.Universe
                             ++curX;
                             break;
                         }
-                        var unit = FindUnit(curX, curY) as T;
+                        var unit = FindUnit<T>(curX, curY);
                         if (unit != null)
                         {
                             return unit;
@@ -160,7 +192,7 @@ namespace Evo.Core.Universe
                             ++curY;
                             break;
                         }
-                        var unit = FindUnit(curX, curY) as T;
+                        var unit = FindUnit<T>(curX, curY);
                         if (unit != null)
                         {
                             return unit;
@@ -249,9 +281,9 @@ namespace Evo.Core.Universe
                 }
             }
             var y = topLeftPoint.Y;
-            for (int i = 0; i < _verticalWalls.Count; i++)
+            for (int i = 0; i < _horizontalWalls.Count; i++)
             {
-                var curY = _verticalWalls[i];
+                var curY = _horizontalWalls[i];
                 if (curY >= pointFrom.Y)
                 {
                     break;

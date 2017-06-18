@@ -7,5 +7,7 @@
         }
 
         public int Energy { get; set; }
+
+        public override UnitType Type => UnitType.Food;
     }
 }

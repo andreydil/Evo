@@ -32,6 +32,8 @@ namespace Evo.Core.Units
             Desire.Value = 1;
         }
 
+        public override UnitType Type => UnitType.Individual;
+
         #region Genome
 
         public ColorGene Color { get; set; } = new ColorGene();
