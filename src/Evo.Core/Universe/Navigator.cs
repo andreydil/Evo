@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Evo.Core.Basic;
 using Evo.Core.Units;
 
@@ -108,9 +109,12 @@ namespace Evo.Core.Universe
             return FindClosestUnit<Individual>(point, sightRange);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool FastContains(List<int> list, int val)
         {
-            for (int i = 0, length = list.Count; i < length; ++i)
+            int length = list.Count;
+            if (length == 0) return false;
+            for (int i = 0; i < length; ++i)
             {
                 if (list[i] == val)
                 {
