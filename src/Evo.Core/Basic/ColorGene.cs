@@ -2,6 +2,7 @@
 
 namespace Evo.Core.Basic
 {
+    [Serializable]
     public class ColorGene : Gene
     {
         public ColorGene() : base(0x000000, 0xffffff)

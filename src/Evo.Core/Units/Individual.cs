@@ -7,6 +7,7 @@ using Evo.Core.Universe;
 
 namespace Evo.Core.Units
 {
+    [Serializable]
     public class Individual : Unit
     {
         private readonly World _world;

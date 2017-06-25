@@ -36,7 +36,6 @@ namespace Evo.GUI.Winforms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btnNewWorld = new System.Windows.Forms.Button();
             this.chkVisualize = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.numSpeed = new System.Windows.Forms.NumericUpDown();
@@ -78,6 +77,15 @@ namespace Evo.GUI.Winforms
             this.tipVerticalWall = new System.Windows.Forms.ToolTip(this.components);
             this.tipHorizontalWall = new System.Windows.Forms.ToolTip(this.components);
             this.tipRemoveWall = new System.Windows.Forms.ToolTip(this.components);
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.worldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.quitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveWorldDialog = new System.Windows.Forms.SaveFileDialog();
+            this.openWorldDialog = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -101,12 +109,13 @@ namespace Evo.GUI.Winforms
             this.tabEditWorld.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 24);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -118,7 +127,7 @@ namespace Evo.GUI.Winforms
             // 
             this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.Controls.Add(this.Map);
-            this.splitContainer1.Size = new System.Drawing.Size(1509, 802);
+            this.splitContainer1.Size = new System.Drawing.Size(1510, 806);
             this.splitContainer1.SplitterDistance = 365;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -126,7 +135,6 @@ namespace Evo.GUI.Winforms
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.btnNewWorld);
             this.groupBox2.Controls.Add(this.chkVisualize);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.numSpeed);
@@ -138,16 +146,6 @@ namespace Evo.GUI.Winforms
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Control";
-            // 
-            // btnNewWorld
-            // 
-            this.btnNewWorld.Location = new System.Drawing.Point(258, 19);
-            this.btnNewWorld.Name = "btnNewWorld";
-            this.btnNewWorld.Size = new System.Drawing.Size(86, 23);
-            this.btnNewWorld.TabIndex = 5;
-            this.btnNewWorld.Text = "New World";
-            this.btnNewWorld.UseVisualStyleBackColor = true;
-            this.btnNewWorld.Click += new System.EventHandler(this.btnNewWorld_Click);
             // 
             // chkVisualize
             // 
@@ -227,7 +225,7 @@ namespace Evo.GUI.Winforms
             this.tabView.Location = new System.Drawing.Point(0, 89);
             this.tabView.Name = "tabView";
             this.tabView.SelectedIndex = 0;
-            this.tabView.Size = new System.Drawing.Size(358, 713);
+            this.tabView.Size = new System.Drawing.Size(358, 717);
             this.tabView.TabIndex = 0;
             // 
             // tabStats
@@ -236,7 +234,7 @@ namespace Evo.GUI.Winforms
             this.tabStats.Location = new System.Drawing.Point(4, 22);
             this.tabStats.Name = "tabStats";
             this.tabStats.Padding = new System.Windows.Forms.Padding(3);
-            this.tabStats.Size = new System.Drawing.Size(350, 687);
+            this.tabStats.Size = new System.Drawing.Size(350, 691);
             this.tabStats.TabIndex = 1;
             this.tabStats.Text = "Stats";
             this.tabStats.UseVisualStyleBackColor = true;
@@ -255,8 +253,8 @@ namespace Evo.GUI.Winforms
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.txtStats);
-            this.splitContainer3.Size = new System.Drawing.Size(344, 681);
-            this.splitContainer3.SplitterDistance = 340;
+            this.splitContainer3.Size = new System.Drawing.Size(344, 685);
+            this.splitContainer3.SplitterDistance = 341;
             this.splitContainer3.TabIndex = 2;
             // 
             // chtPopulation
@@ -272,7 +270,7 @@ namespace Evo.GUI.Winforms
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chtPopulation.Series.Add(series1);
-            this.chtPopulation.Size = new System.Drawing.Size(344, 340);
+            this.chtPopulation.Size = new System.Drawing.Size(344, 341);
             this.chtPopulation.TabIndex = 1;
             this.chtPopulation.TabStop = false;
             this.chtPopulation.Text = "Population";
@@ -285,7 +283,7 @@ namespace Evo.GUI.Winforms
             this.txtStats.Multiline = true;
             this.txtStats.Name = "txtStats";
             this.txtStats.ReadOnly = true;
-            this.txtStats.Size = new System.Drawing.Size(344, 337);
+            this.txtStats.Size = new System.Drawing.Size(344, 340);
             this.txtStats.TabIndex = 0;
             // 
             // tabTune
@@ -294,7 +292,7 @@ namespace Evo.GUI.Winforms
             this.tabTune.Location = new System.Drawing.Point(4, 22);
             this.tabTune.Name = "tabTune";
             this.tabTune.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTune.Size = new System.Drawing.Size(350, 687);
+            this.tabTune.Size = new System.Drawing.Size(350, 691);
             this.tabTune.TabIndex = 4;
             this.tabTune.Text = "Tune";
             this.tabTune.UseVisualStyleBackColor = true;
@@ -305,7 +303,7 @@ namespace Evo.GUI.Winforms
             this.tabUnit.Location = new System.Drawing.Point(4, 22);
             this.tabUnit.Name = "tabUnit";
             this.tabUnit.Padding = new System.Windows.Forms.Padding(3);
-            this.tabUnit.Size = new System.Drawing.Size(350, 687);
+            this.tabUnit.Size = new System.Drawing.Size(350, 691);
             this.tabUnit.TabIndex = 2;
             this.tabUnit.Text = "Unit";
             this.tabUnit.UseVisualStyleBackColor = true;
@@ -324,7 +322,7 @@ namespace Evo.GUI.Winforms
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.txtAverageUnit);
-            this.splitContainer2.Size = new System.Drawing.Size(344, 681);
+            this.splitContainer2.Size = new System.Drawing.Size(344, 685);
             this.splitContainer2.SplitterDistance = 307;
             this.splitContainer2.TabIndex = 1;
             // 
@@ -349,7 +347,7 @@ namespace Evo.GUI.Winforms
             this.txtAverageUnit.Multiline = true;
             this.txtAverageUnit.Name = "txtAverageUnit";
             this.txtAverageUnit.ReadOnly = true;
-            this.txtAverageUnit.Size = new System.Drawing.Size(344, 370);
+            this.txtAverageUnit.Size = new System.Drawing.Size(344, 374);
             this.txtAverageUnit.TabIndex = 1;
             this.txtAverageUnit.TabStop = false;
             // 
@@ -360,7 +358,7 @@ namespace Evo.GUI.Winforms
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(350, 687);
+            this.tabPage4.Size = new System.Drawing.Size(350, 691);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "View";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -535,7 +533,7 @@ namespace Evo.GUI.Winforms
             this.tabEditWorld.Location = new System.Drawing.Point(4, 22);
             this.tabEditWorld.Name = "tabEditWorld";
             this.tabEditWorld.Padding = new System.Windows.Forms.Padding(3);
-            this.tabEditWorld.Size = new System.Drawing.Size(350, 687);
+            this.tabEditWorld.Size = new System.Drawing.Size(350, 691);
             this.tabEditWorld.TabIndex = 5;
             this.tabEditWorld.Text = "Edit world";
             this.tabEditWorld.UseVisualStyleBackColor = true;
@@ -631,13 +629,88 @@ namespace Evo.GUI.Winforms
             // 
             this.tipRemoveWall.ToolTipTitle = "Remove a wall";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.worldToolStripMenuItem,
+            this.aboutMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1510, 24);
+            this.menuStrip1.TabIndex = 1;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // worldToolStripMenuItem
+            // 
+            this.worldToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newMenuItem,
+            this.openMenuItem,
+            this.saveMenuItem,
+            this.quitMenuItem});
+            this.worldToolStripMenuItem.Name = "worldToolStripMenuItem";
+            this.worldToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.worldToolStripMenuItem.Text = "World";
+            // 
+            // newMenuItem
+            // 
+            this.newMenuItem.Name = "newMenuItem";
+            this.newMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.newMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newMenuItem.Text = "New";
+            this.newMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            // 
+            // openMenuItem
+            // 
+            this.openMenuItem.Name = "openMenuItem";
+            this.openMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.openMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openMenuItem.Text = "Open";
+            this.openMenuItem.Click += new System.EventHandler(this.openMenuItem_Click);
+            // 
+            // saveMenuItem
+            // 
+            this.saveMenuItem.Name = "saveMenuItem";
+            this.saveMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.saveMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveMenuItem.Text = "Save";
+            this.saveMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // quitMenuItem
+            // 
+            this.quitMenuItem.Name = "quitMenuItem";
+            this.quitMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+            this.quitMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.quitMenuItem.Text = "Quit";
+            this.quitMenuItem.Click += new System.EventHandler(this.quitMenuItem_Click);
+            // 
+            // aboutMenuItem
+            // 
+            this.aboutMenuItem.Name = "aboutMenuItem";
+            this.aboutMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.aboutMenuItem.Text = "About";
+            this.aboutMenuItem.Click += new System.EventHandler(this.aboutMenuItem_Click);
+            // 
+            // saveWorldDialog
+            // 
+            this.saveWorldDialog.DefaultExt = "wld";
+            this.saveWorldDialog.Filter = "World files|*.wld";
+            this.saveWorldDialog.RestoreDirectory = true;
+            // 
+            // openWorldDialog
+            // 
+            this.openWorldDialog.DefaultExt = "wld";
+            this.openWorldDialog.Filter = "World files|*.wld";
+            this.openWorldDialog.RestoreDirectory = true;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1509, 802);
+            this.ClientSize = new System.Drawing.Size(1510, 830);
             this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmMain";
             this.Text = "Evo";
             this.Load += new System.EventHandler(this.FrmMain_Load);
@@ -671,7 +744,10 @@ namespace Evo.GUI.Winforms
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -712,7 +788,6 @@ namespace Evo.GUI.Winforms
         private System.Windows.Forms.CheckBox chkVisualize;
         private System.Windows.Forms.TabPage tabTune;
         private System.Windows.Forms.RadioButton rbDiffFromAverage;
-        private System.Windows.Forms.Button btnNewWorld;
         private System.Windows.Forms.TabPage tabEditWorld;
         private System.Windows.Forms.CheckBox chkVerticalWall;
         private System.Windows.Forms.GroupBox groupBox3;
@@ -721,6 +796,15 @@ namespace Evo.GUI.Winforms
         private System.Windows.Forms.ToolTip tipVerticalWall;
         private System.Windows.Forms.ToolTip tipHorizontalWall;
         private System.Windows.Forms.ToolTip tipRemoveWall;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem worldToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem quitMenuItem;
+        private System.Windows.Forms.SaveFileDialog saveWorldDialog;
+        private System.Windows.Forms.OpenFileDialog openWorldDialog;
+        private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newMenuItem;
     }
 }
 

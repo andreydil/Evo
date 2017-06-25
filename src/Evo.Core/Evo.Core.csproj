@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Basic\ColorGene.cs" />
+    <Compile Include="Saving\WorldSaver.cs" />
     <Compile Include="Stats\IncStats.cs" />
     <Compile Include="Stats\StatCounter.cs" />
     <Compile Include="Stats\TimeSpanStats.cs" />

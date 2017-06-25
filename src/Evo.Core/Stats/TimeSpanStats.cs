@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Evo.Core.Stats
 {
+    [Serializable]
     public class TimeSpanStats<T>: IEnumerable<TimeSpanStatItem<T>>
     {
         private readonly List<TimeSpanStatItem<T>> _data;
@@ -45,6 +46,7 @@ namespace Evo.Core.Stats
         }
     }
 
+    [Serializable]
     public struct TimeSpanStatItem<T>
     {
         public ulong Tick;

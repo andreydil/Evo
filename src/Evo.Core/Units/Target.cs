@@ -1,7 +1,9 @@
-﻿using Evo.Core.Basic;
+﻿using System;
+using Evo.Core.Basic;
 
 namespace Evo.Core.Units
 {
+    [Serializable]
     public class Target
     {
         public TargetType TargetType { get; set; }

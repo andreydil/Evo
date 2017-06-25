@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Evo.Core.Stats
 {
+    [Serializable]
     public class IncStats
     {
         private readonly Dictionary<string, int> _statItems = new Dictionary<string, int>();

@@ -1,5 +1,8 @@
-﻿namespace Evo.Core.Units
+﻿using System;
+
+namespace Evo.Core.Units
 {
+    [Serializable]
     public class FoodItem : Unit
     {
         public FoodItem(ulong id) : base(id)

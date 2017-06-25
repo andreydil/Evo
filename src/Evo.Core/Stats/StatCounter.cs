@@ -8,6 +8,7 @@ using Evo.Core.Units;
 
 namespace Evo.Core.Stats
 {
+    [Serializable]
     public class StatCounter
     {
         public Individual GetAverage(ICollection<Individual> individuals)

@@ -2,6 +2,7 @@
 
 namespace Evo.Core.Basic
 {
+    [Serializable]
     public struct Coord : IEquatable<Coord>
     {
         public int X;

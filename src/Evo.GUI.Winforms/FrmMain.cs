@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Evo.Core.Basic;
+using Evo.Core.Saving;
 using Evo.Core.Units;
 using Evo.Core.Universe;
 
@@ -124,7 +125,7 @@ namespace Evo.GUI.Winforms
         {
             timer1.Enabled = true;
             btn1Step.Enabled = false;
-            btnNewWorld.Enabled = false;
+            worldToolStripMenuItem.Enabled = false;
             tabEditWorld.Enabled = false;
             btnToggleTimer.Text = StopTimerCaption;
         }
@@ -133,7 +134,7 @@ namespace Evo.GUI.Winforms
         {
             timer1.Enabled = false;
             btn1Step.Enabled = true;
-            btnNewWorld.Enabled = true;
+            worldToolStripMenuItem.Enabled = true;
             tabEditWorld.Enabled = true;
             btnToggleTimer.Text = StartTimerCaption;
         }
@@ -162,7 +163,7 @@ namespace Evo.GUI.Winforms
                 }
             }, cancellationToken);
             btn1Step.Enabled = false;
-            btnNewWorld.Enabled = false;
+            worldToolStripMenuItem.Enabled = false;
             tabEditWorld.Enabled = false;
             btnToggleTimer.Text = StopTimerCaption;
         }
@@ -178,7 +179,7 @@ namespace Evo.GUI.Winforms
             chkVisualize.Enabled = btn1Step.Enabled = true;
             DoStep();
             btn1Step.Enabled = true;
-            btnNewWorld.Enabled = true;
+            worldToolStripMenuItem.Enabled = true;
             tabEditWorld.Enabled = true;
             btnToggleTimer.Text = StartTimerCaption;
         }
@@ -546,19 +547,7 @@ namespace Evo.GUI.Winforms
                 curY += yDelta;
             }
         }
-
-        private void btnNewWorld_Click(object sender, EventArgs e)
-        {
-            var frmNewWorld = new FrmNewWorld(_world.Size.X, _world.Size.Y);
-            if (frmNewWorld.ShowDialog() == DialogResult.OK)
-            {
-                _world = frmNewWorld.GetWorld();
-                Map.Width = _world.Size.X * MapMultiplier;
-                Map.Height = _world.Size.Y * MapMultiplier;
-                DoStep();
-            }
-        }
-
+        
         private void Map_MouseEnter(object sender, EventArgs e)
         {
             
@@ -626,5 +615,52 @@ namespace Evo.GUI.Winforms
             return new Coord(point.X * MapMultiplier, point.Y * MapMultiplier);
         }
 
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!worldToolStripMenuItem.Enabled) return;
+
+            if (saveWorldDialog.ShowDialog() == DialogResult.OK)
+            {
+                WorldSaver.Save(_world, saveWorldDialog.FileName);
+            }
+        }
+
+        private void openMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!worldToolStripMenuItem.Enabled) return;
+
+            if (openWorldDialog.ShowDialog() == DialogResult.OK)
+            {
+                _world = WorldSaver.Load(openWorldDialog.FileName);
+                Map.Invalidate();
+            }
+        }
+
+        private void aboutMenuItem_Click(object sender, EventArgs e)
+        {
+            var frmAbout = new FrmAbout { StartPosition = FormStartPosition.CenterParent };
+            frmAbout.ShowDialog();
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!worldToolStripMenuItem.Enabled) return;
+
+            var frmNewWorld = new FrmNewWorld(_world.Size.X, _world.Size.Y) { StartPosition = FormStartPosition.CenterParent };
+            if (frmNewWorld.ShowDialog() == DialogResult.OK)
+            {
+                _world = frmNewWorld.GetWorld();
+                Map.Width = _world.Size.X * MapMultiplier;
+                Map.Height = _world.Size.Y * MapMultiplier;
+                DoStep();
+            }
+        }
+
+        private void quitMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!worldToolStripMenuItem.Enabled) return;
+
+            this.Close();
+        }
     }
 }

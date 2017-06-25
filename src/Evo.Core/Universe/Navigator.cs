@@ -7,6 +7,7 @@ using Evo.Core.Units;
 
 namespace Evo.Core.Universe
 {
+    [Serializable]
     public class Navigator
     {
         private readonly World _world;

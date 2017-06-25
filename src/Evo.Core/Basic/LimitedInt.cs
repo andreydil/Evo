@@ -2,6 +2,7 @@
 
 namespace Evo.Core.Basic
 {
+    [Serializable]
     public class LimitedInt
     {
         private int _value;

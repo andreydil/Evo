@@ -7,6 +7,7 @@ using Evo.Core.Units;
 
 namespace Evo.Core.Universe
 {
+    [Serializable]
     public class DecisionMaker
     {
         private readonly World _world;

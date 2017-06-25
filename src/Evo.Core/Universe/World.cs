@@ -7,6 +7,7 @@ using Evo.Core.Units;
 
 namespace Evo.Core.Universe
 {
+    [Serializable]
     public class World
     {
         public readonly Random Random;

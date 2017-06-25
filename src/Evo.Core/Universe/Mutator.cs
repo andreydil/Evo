@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.Serialization;
 using Evo.Core.Basic;
 using Evo.Core.Units;
 
 namespace Evo.Core.Universe
 {
+    [Serializable]
     public class Mutator
     {
         private readonly World _world;
