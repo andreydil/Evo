@@ -53,13 +53,13 @@ namespace Evo.Core.Stats
             }
 
             var count = individuals.Count;
-
-            var average = new Individual(0, null, minGeneration / count, maxGeneration / count);
-
             if (count == 0)
             {
-                return average;
+                return new Individual(0, null, -1, -1);
             }
+
+            var average = new Individual(0, null, minGeneration / count, maxGeneration / count);
+            
             average.Color.Value = (int)(colorR / count * 0x10000 + colorG / count * 0x100 + colorB / count);
             average.Aggression.Value = (int)(aggression / count);
             average.Strength.Value = (int)(strength / count);
