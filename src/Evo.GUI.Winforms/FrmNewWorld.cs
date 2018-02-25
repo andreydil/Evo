@@ -19,6 +19,7 @@ namespace Evo.GUI.Winforms
             var worldConfigurator = new ParamsWorldConfigurator((int)numWidth.Value, (int)numHeight.Value);
             worldConfigurator.Random = random;
             worldConfigurator.RandomIndividuals = rbIndividualsRandom.Checked;
+            worldConfigurator.InitPopulationSize = (int)numPopulationSize.Value;
             return worldConfigurator.CreateWorld();
         }
         

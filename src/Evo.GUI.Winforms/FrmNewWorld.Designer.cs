@@ -179,7 +179,7 @@
             // 
             this.numPopulationSize.Location = new System.Drawing.Point(184, 64);
             this.numPopulationSize.Maximum = new decimal(new int[] {
-            1000,
+            5000,
             0,
             0,
             0});
@@ -192,7 +192,7 @@
             this.numPopulationSize.Size = new System.Drawing.Size(113, 20);
             this.numPopulationSize.TabIndex = 9;
             this.numPopulationSize.Value = new decimal(new int[] {
-            50,
+            100,
             0,
             0,
             0});
