@@ -355,7 +355,7 @@ namespace Evo.Core.Universe
                 _verticalWalls.Add(wall.Coord);
                 for (int y = 0; y < _world.Size.Y; y++)
                 {
-                    _world.KillUnitByWall(wall.Coord, y);
+                    _world.KillUnitAtPoint(wall.Coord, y);
                 }
                 _verticalWalls.Sort();
             }
@@ -364,12 +364,27 @@ namespace Evo.Core.Universe
                 _horizontalWalls.Add(wall.Coord);
                 for (int x = 0; x < _world.Size.X; x++)
                 {
-                    _world.KillUnitByWall(x, wall.Coord);
+                    _world.KillUnitAtPoint(x, wall.Coord);
                 }
                 _horizontalWalls.Sort();
             }
         }
         
+        public void KillAllInArea(Coord point1, Coord point2)
+        {
+            var left = Math.Min(point1.X, point2.X);
+            var right = Math.Max(point1.X, point2.X) - 1;
+            var top = Math.Min(point1.Y, point2.Y);
+            var bottom = Math.Max(point1.Y, point2.Y) - 1;
+            for (int x = left; x <= right; x++)
+            {
+                for (int y = top; y <= bottom; y++)
+                {
+                    _world.KillUnitAtPoint(x, y);
+                }
+            }
+        }
+
         public void RemoveWall(int x, int y)
         {
             _verticalWalls.Remove(x);
@@ -394,6 +409,11 @@ namespace Evo.Core.Universe
                     var curPoint = new Coord(point.X + deltaX, point.Y + deltaY);
 
                     if (curPoint.X < 0 || curPoint.X >= _world.Size.X || curPoint.Y < 0 || curPoint.Y >= _world.Size.Y)
+                    {
+                        continue;
+                    }
+
+                    if (IsWall(curPoint))
                     {
                         continue;
                     }

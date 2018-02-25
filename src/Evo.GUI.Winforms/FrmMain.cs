@@ -38,6 +38,9 @@ namespace Evo.GUI.Winforms
         private int _curMouseY = 0;
         private Pen _wallPen = new Pen(Color.Coral, MapMultiplier);
 
+        private Coord? _killAllAreaStartingPoint  = null;
+        private Brush _killAllBrush = new SolidBrush(Color.Red);
+
         public FrmMain()
         {
             InitializeComponent();
@@ -53,23 +56,10 @@ namespace Evo.GUI.Winforms
             Init();
         }
 
-        public void Init()
+        private void Init()
         {
-            try
-            {
-                var worldConfigurator = new DefaultWorldConfigurator(Map.Size.Width / MapMultiplier, Map.Size.Height / MapMultiplier);
-                _world = worldConfigurator.CreateWorld();
-
-                _curAverageIndividual = _world.AverageIndividual;
-
-                var minIndividual = _world.Mutator.GenerateIndividual(g => g.Min, 0, null);
-                var maxIndividual = _world.Mutator.GenerateIndividual(g => g.Max, 0, null);
-                _maxDifference = _world.StatCounter.GetDifference(minIndividual, maxIndividual);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            var worldConfigurator = new DefaultWorldConfigurator(Map.Size.Width / MapMultiplier, Map.Size.Height / MapMultiplier);
+            InitWithNewWorld(worldConfigurator.CreateWorld());
 
             chtPopulation.Series.Clear();
             var populationSeries = new Series
@@ -85,8 +75,25 @@ namespace Evo.GUI.Winforms
                 Color = Color.ForestGreen,
             };
             chtPopulation.Series.Add(foodSeries);
+        }
 
-            buildTuners();
+        private void InitWithNewWorld(World world)
+        {
+            try
+            {
+                _world = world;
+
+                _curAverageIndividual = _world.AverageIndividual;
+
+                var minIndividual = _world.Mutator.GenerateIndividual(g => g.Min, 0, null);
+                var maxIndividual = _world.Mutator.GenerateIndividual(g => g.Max, 0, null);
+                _maxDifference = _world.StatCounter.GetDifference(minIndividual, maxIndividual);
+                buildTuners();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void btn1Step_Click(object sender, EventArgs e)
@@ -260,6 +267,14 @@ namespace Evo.GUI.Winforms
             {
                 int wallY = _curMouseY / MapMultiplier * MapMultiplier + MapMultiplier / 2;
                 e.Graphics.DrawLine(_wallPen, 0, wallY, Map.Width - 1, wallY);
+            }
+            if (chkKillInArea.Checked && _killAllAreaStartingPoint.HasValue)
+            {
+                var minX = Math.Min(_killAllAreaStartingPoint.Value.X * MapMultiplier, _curMouseX / MapMultiplier * MapMultiplier);
+                var minY = Math.Min(_killAllAreaStartingPoint.Value.Y * MapMultiplier, _curMouseY / MapMultiplier * MapMultiplier);
+                var maxX = Math.Max(_killAllAreaStartingPoint.Value.X * MapMultiplier, _curMouseX / MapMultiplier * MapMultiplier);
+                var maxY = Math.Max(_killAllAreaStartingPoint.Value.Y * MapMultiplier, _curMouseY / MapMultiplier * MapMultiplier);
+                e.Graphics.FillRectangle(_killAllBrush, minX, minY, maxX - minX, maxY - minY);
             }
         }
 
@@ -509,6 +524,10 @@ namespace Evo.GUI.Winforms
             const int valueLabelX = 140;
             const int labelYShift = 3;
             int curY = 10;
+            for (int i = 0, n = tabTune.Controls.Count; i < n; ++i)
+            {
+                tabTune.Controls.RemoveAt(0);
+            }
             foreach (var tunerItem in _world.Tuners)
             {
                 var tuner = tunerItem.Value;
@@ -562,19 +581,25 @@ namespace Evo.GUI.Winforms
         
         private void chkVerticalWall_Click(object sender, EventArgs e)
         {
-            chkHorizontalWall.Checked = chkRemoveWall.Checked = false;
+            chkHorizontalWall.Checked = chkRemoveWall.Checked = chkKillInArea.Checked = false;
             Map.Invalidate();
         }
 
         private void chkHorizontalWall_Click(object sender, EventArgs e)
         {
-            chkVerticalWall.Checked = chkRemoveWall.Checked = false;
+            chkVerticalWall.Checked = chkRemoveWall.Checked = chkKillInArea.Checked = false;
             Map.Invalidate();
         }
 
         private void chkRemoveWall_Click(object sender, EventArgs e)
         {
-            chkHorizontalWall.Checked = chkVerticalWall.Checked = false;
+            chkHorizontalWall.Checked = chkVerticalWall.Checked = chkKillInArea.Checked = false;
+            Map.Invalidate();
+        }
+
+        private void chkKillInArea_Click(object sender, EventArgs e)
+        {
+            chkHorizontalWall.Checked = chkRemoveWall.Checked = chkVerticalWall.Checked = false;
             Map.Invalidate();
         }
 
@@ -591,7 +616,7 @@ namespace Evo.GUI.Winforms
                 chkVerticalWall.Checked = false;
                 Map.Invalidate();
             }
-            else if(chkHorizontalWall.Checked)
+            else if (chkHorizontalWall.Checked)
             {
                 _world.Navigator.AddWall(new Wall(WallType.Horizontal, _curMouseY / MapMultiplier));
                 chkHorizontalWall.Checked = false;
@@ -601,6 +626,19 @@ namespace Evo.GUI.Winforms
             {
                 _world.Navigator.RemoveWall(_curMouseX / MapMultiplier, _curMouseY / MapMultiplier);
                 chkRemoveWall.Checked = false;
+                Map.Invalidate();
+            }
+            else if (chkKillInArea.Checked)
+            {
+                if (_killAllAreaStartingPoint.HasValue)
+                {
+                    _world.Navigator.KillAllInArea(_killAllAreaStartingPoint.Value, new Coord(_curMouseX / MapMultiplier, _curMouseY / MapMultiplier));
+                    _killAllAreaStartingPoint = null;
+                }
+                else
+                {
+                    _killAllAreaStartingPoint = new Coord(_curMouseX / MapMultiplier, _curMouseY / MapMultiplier);
+                }
                 Map.Invalidate();
             }
         }
@@ -649,7 +687,7 @@ namespace Evo.GUI.Winforms
             var frmNewWorld = new FrmNewWorld(_world.Size.X, _world.Size.Y) { StartPosition = FormStartPosition.CenterParent };
             if (frmNewWorld.ShowDialog() == DialogResult.OK)
             {
-                _world = frmNewWorld.GetWorld();
+                InitWithNewWorld(frmNewWorld.GetWorld());
                 Map.Width = _world.Size.X * MapMultiplier;
                 Map.Height = _world.Size.Y * MapMultiplier;
                 DoStep();

@@ -17,16 +17,17 @@ namespace Evo.Core.Universe
         public World CreateWorld()
         {
             var world = new World(new Random(0), Size);
-            world.MutationProbability.Value = 90;
-            world.MutationMaxDelta.Value = 90;
+            world.MutationProbability.Value = 100;
+            world.MutationMaxDelta.Value = 100;
             world.EnergyDrainModificator.Value = 1;
             world.MaxFoodItemsPerTick.Value = 100;
-            world.MaxEneryPerFoodItem.Value = 150;
-            world.MaxFoodItems.Value = 500;
+            world.MaxEnergyPerFoodItem.Value = 150;
+            world.MaxFoodItems.Value = 1500;
             world.BirthEnergyShare.Value = 30;
 
-            var initPopulation = new List<Individual>(100);
-            for (int i = 0; i < 50; i++)
+            const int initPopulationCount = 100;
+            var initPopulation = new List<Individual>(initPopulationCount);
+            for (int i = 0; i < initPopulationCount; i++)
             {
                 var individual = world.Mutator.GenerateAverage();
                 initPopulation.Add(individual);

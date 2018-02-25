@@ -33,7 +33,7 @@ namespace Evo.Core.Universe
             {
                 { nameof(MaxFoodItems), MaxFoodItems },
                 { nameof(MaxFoodItemsPerTick), MaxFoodItemsPerTick },
-                { nameof(MaxEneryPerFoodItem), MaxEneryPerFoodItem },
+                { nameof(MaxEnergyPerFoodItem), MaxEnergyPerFoodItem },
                 { nameof(MutationProbability), MutationProbability },
                 { nameof(MutationMaxDelta), MutationMaxDelta },
                 { nameof(EnergyDrainModificator), EnergyDrainModificator },
@@ -48,9 +48,9 @@ namespace Evo.Core.Universe
         public LimitedInt MutationProbability { get; set; } = new LimitedInt(1, Constants.Probability100Percent);
         public LimitedInt MutationMaxDelta { get; set; } = new LimitedInt(1, 1000);
         public LimitedInt MaxFoodItemsPerTick { get; set; } = new LimitedInt(1, 1000);
-        public LimitedInt MaxEneryPerFoodItem { get; set; } = new LimitedInt(1, 1000);
+        public LimitedInt MaxEnergyPerFoodItem { get; set; } = new LimitedInt(1, 1000);
         public LimitedInt MaxFoodItems { get; set; } = new LimitedInt(1, 10000);
-        public LimitedInt EnergyDrainModificator { get; set; } = new LimitedInt(1, 100);
+        public LimitedInt EnergyDrainModificator { get; set; } = new LimitedInt(1, 20);
         public LimitedInt BirthEnergyShare { get; set; } = new LimitedInt(1, 100);
         public LimitedInt EatDecisionModificator { get; set; } = new LimitedInt(1, 10);
         public LimitedInt SexDecisionModificator { get; set; } = new LimitedInt(1, 10);
@@ -163,7 +163,7 @@ namespace Evo.Core.Universe
             {
                 var newFoodItem = new FoodItem(GenerateId())
                 {
-                    Energy = Random.Next(1, MaxEneryPerFoodItem + 1),
+                    Energy = Random.Next(1, MaxEnergyPerFoodItem + 1),
                 };
                 for (int j = 0; j < tryCount; j++)
                 {
@@ -216,7 +216,7 @@ namespace Evo.Core.Universe
         }
 
 
-        public void KillUnitByWall(int x, int y)
+        public void KillUnitAtPoint(int x, int y)
         {
             var unit = Navigator.FindUnit(x, y);
             var individual = unit as Individual;

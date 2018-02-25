@@ -86,6 +86,8 @@ namespace Evo.GUI.Winforms
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveWorldDialog = new System.Windows.Forms.SaveFileDialog();
             this.openWorldDialog = new System.Windows.Forms.OpenFileDialog();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.chkKillInArea = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -110,6 +112,7 @@ namespace Evo.GUI.Winforms
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -529,6 +532,7 @@ namespace Evo.GUI.Winforms
             // 
             // tabEditWorld
             // 
+            this.tabEditWorld.Controls.Add(this.groupBox4);
             this.tabEditWorld.Controls.Add(this.groupBox3);
             this.tabEditWorld.Location = new System.Drawing.Point(4, 22);
             this.tabEditWorld.Name = "tabEditWorld";
@@ -655,7 +659,7 @@ namespace Evo.GUI.Winforms
             // 
             this.newMenuItem.Name = "newMenuItem";
             this.newMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newMenuItem.Size = new System.Drawing.Size(140, 22);
             this.newMenuItem.Text = "New";
             this.newMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
@@ -663,7 +667,7 @@ namespace Evo.GUI.Winforms
             // 
             this.openMenuItem.Name = "openMenuItem";
             this.openMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openMenuItem.Size = new System.Drawing.Size(140, 22);
             this.openMenuItem.Text = "Open";
             this.openMenuItem.Click += new System.EventHandler(this.openMenuItem_Click);
             // 
@@ -671,7 +675,7 @@ namespace Evo.GUI.Winforms
             // 
             this.saveMenuItem.Name = "saveMenuItem";
             this.saveMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveMenuItem.Size = new System.Drawing.Size(140, 22);
             this.saveMenuItem.Text = "Save";
             this.saveMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -679,7 +683,7 @@ namespace Evo.GUI.Winforms
             // 
             this.quitMenuItem.Name = "quitMenuItem";
             this.quitMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.quitMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.quitMenuItem.Size = new System.Drawing.Size(140, 22);
             this.quitMenuItem.Text = "Quit";
             this.quitMenuItem.Click += new System.EventHandler(this.quitMenuItem_Click);
             // 
@@ -701,6 +705,32 @@ namespace Evo.GUI.Winforms
             this.openWorldDialog.DefaultExt = "wld";
             this.openWorldDialog.Filter = "World files|*.wld";
             this.openWorldDialog.RestoreDirectory = true;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.chkKillInArea);
+            this.groupBox4.Location = new System.Drawing.Point(9, 79);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(139, 67);
+            this.groupBox4.TabIndex = 3;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Actions";
+            // 
+            // chkKillInArea
+            // 
+            this.chkKillInArea.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkKillInArea.AutoSize = true;
+            this.chkKillInArea.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chkKillInArea.Location = new System.Drawing.Point(6, 19);
+            this.chkKillInArea.MinimumSize = new System.Drawing.Size(35, 35);
+            this.chkKillInArea.Name = "chkKillInArea";
+            this.chkKillInArea.Size = new System.Drawing.Size(35, 35);
+            this.chkKillInArea.TabIndex = 0;
+            this.chkKillInArea.Text = "†";
+            this.chkKillInArea.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tipVerticalWall.SetToolTip(this.chkKillInArea, "Kill all in an area");
+            this.chkKillInArea.UseVisualStyleBackColor = true;
+            this.chkKillInArea.Click += new System.EventHandler(this.chkKillInArea_Click);
             // 
             // FrmMain
             // 
@@ -746,6 +776,8 @@ namespace Evo.GUI.Winforms
             ((System.ComponentModel.ISupportInitialize)(this.Map)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -805,6 +837,8 @@ namespace Evo.GUI.Winforms
         private System.Windows.Forms.OpenFileDialog openWorldDialog;
         private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newMenuItem;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.CheckBox chkKillInArea;
     }
 }
 

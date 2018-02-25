@@ -21,11 +21,11 @@ namespace Evo.Core.Universe
         {
             var world = new World(Random, Size);
             world.MutationProbability.Value = 120;
-            world.MutationMaxDelta.Value = 40;
+            world.MutationMaxDelta.Value = 100;
             world.EnergyDrainModificator.Value = 1;
-            world.MaxFoodItemsPerTick.Value = 60;
-            world.MaxEneryPerFoodItem.Value = 140;
-            world.MaxFoodItems.Value = 400;
+            world.MaxFoodItemsPerTick.Value = 120;
+            world.MaxEnergyPerFoodItem.Value = 140;
+            world.MaxFoodItems.Value = 1000;
             world.BirthEnergyShare.Value = 30;
 
             var initPopulation = new List<Individual>(InitPopulationSize);

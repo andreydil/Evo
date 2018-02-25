@@ -150,6 +150,26 @@ namespace Evo.Core.Tests
         }
 
         [Test]
+        public void PlaceChildNearWallTest()
+        {
+            var world = new World(new Random(0), new Coord(100, 100));
+            var mother = new Individual(1, world) { Point = new Coord(3, 5) };
+            var father = new Individual(2, world) { Point = new Coord(3, 6) };
+            var annoyingGuy1 = new Individual(3, world) { Point = new Coord(4, 5) };
+            var annoyingGuy2 = new Individual(4, world) { Point = new Coord(4, 6) };
+            world.AddIndividual(mother);
+            world.AddIndividual(father);
+            world.AddIndividual(annoyingGuy1);
+            world.AddIndividual(annoyingGuy2);
+            world.Navigator.AddWall(new Wall(WallType.Horizontal, 4));
+            world.Navigator.AddWall(new Wall(WallType.Vertical, 2));
+            var childPoint = world.Navigator.PlaceChild(father.Point, mother.Point);
+            Assert.IsNotNull(childPoint);
+            Assert.AreEqual(3, childPoint.Value.X);
+            Assert.AreEqual(7, childPoint.Value.Y);
+        }
+
+        [Test]
         public void FindUnitNotBehindAWallTest1()
         {
             var world = new World(new Random(0), new Coord(100, 100));
