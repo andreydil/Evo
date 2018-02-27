@@ -67,6 +67,9 @@ namespace Evo.GUI.Winforms
             this.rbAge = new System.Windows.Forms.RadioButton();
             this.button1 = new System.Windows.Forms.Button();
             this.tabEditWorld = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.chkSpreadFood = new System.Windows.Forms.CheckBox();
+            this.chkKillInArea = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.chkRemoveWall = new System.Windows.Forms.CheckBox();
             this.chkHorizontalWall = new System.Windows.Forms.CheckBox();
@@ -86,8 +89,6 @@ namespace Evo.GUI.Winforms
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveWorldDialog = new System.Windows.Forms.SaveFileDialog();
             this.openWorldDialog = new System.Windows.Forms.OpenFileDialog();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.chkKillInArea = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -109,10 +110,10 @@ namespace Evo.GUI.Winforms
             this.tabPage4.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabEditWorld.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
             this.menuStrip1.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -542,6 +543,50 @@ namespace Evo.GUI.Winforms
             this.tabEditWorld.Text = "Edit world";
             this.tabEditWorld.UseVisualStyleBackColor = true;
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.chkSpreadFood);
+            this.groupBox4.Controls.Add(this.chkKillInArea);
+            this.groupBox4.Location = new System.Drawing.Point(9, 79);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(139, 67);
+            this.groupBox4.TabIndex = 3;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Actions";
+            // 
+            // chkSpreadFood
+            // 
+            this.chkSpreadFood.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkSpreadFood.AutoSize = true;
+            this.chkSpreadFood.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chkSpreadFood.Location = new System.Drawing.Point(47, 19);
+            this.chkSpreadFood.MinimumSize = new System.Drawing.Size(35, 35);
+            this.chkSpreadFood.Name = "chkSpreadFood";
+            this.chkSpreadFood.Size = new System.Drawing.Size(35, 35);
+            this.chkSpreadFood.TabIndex = 1;
+            this.chkSpreadFood.Text = "ȫ";
+            this.chkSpreadFood.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tipVerticalWall.SetToolTip(this.chkSpreadFood, "Spread food");
+            this.chkSpreadFood.UseVisualStyleBackColor = true;
+            this.chkSpreadFood.CheckedChanged += new System.EventHandler(this.chkSpreadFood_CheckedChanged);
+            this.chkSpreadFood.Click += new System.EventHandler(this.uncheckAllOther);
+            // 
+            // chkKillInArea
+            // 
+            this.chkKillInArea.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkKillInArea.AutoSize = true;
+            this.chkKillInArea.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chkKillInArea.Location = new System.Drawing.Point(6, 19);
+            this.chkKillInArea.MinimumSize = new System.Drawing.Size(35, 35);
+            this.chkKillInArea.Name = "chkKillInArea";
+            this.chkKillInArea.Size = new System.Drawing.Size(35, 35);
+            this.chkKillInArea.TabIndex = 0;
+            this.chkKillInArea.Text = "†";
+            this.chkKillInArea.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tipVerticalWall.SetToolTip(this.chkKillInArea, "Kill all in an area");
+            this.chkKillInArea.UseVisualStyleBackColor = true;
+            this.chkKillInArea.Click += new System.EventHandler(this.uncheckAllOther);
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.chkRemoveWall);
@@ -570,7 +615,7 @@ namespace Evo.GUI.Winforms
             this.tipRemoveWall.SetToolTip(this.chkRemoveWall, "Click on an existing wall to remove it");
             this.chkRemoveWall.UseVisualStyleBackColor = true;
             this.chkRemoveWall.CheckedChanged += new System.EventHandler(this.chkRemoveWall_CheckedChanged);
-            this.chkRemoveWall.Click += new System.EventHandler(this.chkRemoveWall_Click);
+            this.chkRemoveWall.Click += new System.EventHandler(this.uncheckAllOther);
             // 
             // chkHorizontalWall
             // 
@@ -586,7 +631,7 @@ namespace Evo.GUI.Winforms
             this.chkHorizontalWall.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.tipVerticalWall.SetToolTip(this.chkHorizontalWall, "Add a vertical wall");
             this.chkHorizontalWall.UseVisualStyleBackColor = true;
-            this.chkHorizontalWall.Click += new System.EventHandler(this.chkHorizontalWall_Click);
+            this.chkHorizontalWall.Click += new System.EventHandler(this.uncheckAllOther);
             // 
             // chkVerticalWall
             // 
@@ -602,7 +647,7 @@ namespace Evo.GUI.Winforms
             this.chkVerticalWall.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.tipVerticalWall.SetToolTip(this.chkVerticalWall, "Add a vertical wall");
             this.chkVerticalWall.UseVisualStyleBackColor = true;
-            this.chkVerticalWall.Click += new System.EventHandler(this.chkVerticalWall_Click);
+            this.chkVerticalWall.Click += new System.EventHandler(this.uncheckAllOther);
             // 
             // Map
             // 
@@ -611,7 +656,6 @@ namespace Evo.GUI.Winforms
             this.Map.Size = new System.Drawing.Size(1140, 802);
             this.Map.TabIndex = 0;
             this.Map.TabStop = false;
-            this.Map.Click += new System.EventHandler(this.Map_Click);
             this.Map.Paint += new System.Windows.Forms.PaintEventHandler(this.Map_Paint_1);
             this.Map.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Map_MouseClick);
             this.Map.MouseEnter += new System.EventHandler(this.Map_MouseEnter);
@@ -706,32 +750,6 @@ namespace Evo.GUI.Winforms
             this.openWorldDialog.Filter = "World files|*.wld";
             this.openWorldDialog.RestoreDirectory = true;
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.chkKillInArea);
-            this.groupBox4.Location = new System.Drawing.Point(9, 79);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(139, 67);
-            this.groupBox4.TabIndex = 3;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Actions";
-            // 
-            // chkKillInArea
-            // 
-            this.chkKillInArea.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkKillInArea.AutoSize = true;
-            this.chkKillInArea.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.chkKillInArea.Location = new System.Drawing.Point(6, 19);
-            this.chkKillInArea.MinimumSize = new System.Drawing.Size(35, 35);
-            this.chkKillInArea.Name = "chkKillInArea";
-            this.chkKillInArea.Size = new System.Drawing.Size(35, 35);
-            this.chkKillInArea.TabIndex = 0;
-            this.chkKillInArea.Text = "†";
-            this.chkKillInArea.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.tipVerticalWall.SetToolTip(this.chkKillInArea, "Kill all in an area");
-            this.chkKillInArea.UseVisualStyleBackColor = true;
-            this.chkKillInArea.Click += new System.EventHandler(this.chkKillInArea_Click);
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -771,13 +789,13 @@ namespace Evo.GUI.Winforms
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabEditWorld.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -839,6 +857,7 @@ namespace Evo.GUI.Winforms
         private System.Windows.Forms.ToolStripMenuItem newMenuItem;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.CheckBox chkKillInArea;
+        private System.Windows.Forms.CheckBox chkSpreadFood;
     }
 }
 

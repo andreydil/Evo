@@ -155,10 +155,15 @@ namespace Evo.Core.Universe
             {
                 return;
             }
-
-            const int tryCount = 100;
             var foodCount = Random.Next(Math.Min(MaxFoodItemsPerTick, MaxFoodItems - _food.Count));
+            SpreadFood(foodCount, new Coord(0, 0), new Coord(Size.X, Size.Y));
+        }
 
+        public void SpreadFood(int foodCount, Coord topLeft, Coord bottomRight)
+        {
+            topLeft = Navigator.EnsureBounds(topLeft);
+            bottomRight = Navigator.EnsureBounds(bottomRight);
+            const int tryCount = 100;
             for (int i = 0; i < foodCount; i++)
             {
                 var newFoodItem = new FoodItem(GenerateId())
@@ -167,7 +172,7 @@ namespace Evo.Core.Universe
                 };
                 for (int j = 0; j < tryCount; j++)
                 {
-                    newFoodItem.Point = new Coord(Random.Next(Size.X), Random.Next(Size.Y));
+                    newFoodItem.Point = new Coord(topLeft.X + Random.Next(bottomRight.X - topLeft.X), topLeft.Y + Random.Next(bottomRight.Y - topLeft.Y));
 
                     if (Navigator.IsWall(newFoodItem.Point))
                     {

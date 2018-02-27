@@ -103,6 +103,7 @@ namespace Evo.GUI.Winforms
 
         private void btnToggleTimer_Click(object sender, EventArgs e)
         {
+            uncheckAllOther(null, null);
             if (chkVisualize.Checked)
             {
                 if (timer1.Enabled)
@@ -366,23 +367,66 @@ namespace Evo.GUI.Winforms
         
         private void Map_MouseClick(object sender, MouseEventArgs e)
         {
-            var worldCoord = new Coord(e.X / MapMultiplier, e.Y / MapMultiplier);
-            var unit = _world.Navigator.FindUnit(worldCoord);
-            if (unit != null)
+            int x = _curMouseX / MapMultiplier;
+            int y = _curMouseY / MapMultiplier;
+            if (chkVerticalWall.Checked)
             {
-                var individual = unit as Individual;
-                if (individual != null)
+                _world.Navigator.AddWall(new Wall(WallType.Vertical, x));
+                chkVerticalWall.Checked = false;
+                Map.Invalidate();
+            }
+            else if (chkHorizontalWall.Checked)
+            {
+                _world.Navigator.AddWall(new Wall(WallType.Horizontal, y));
+                chkHorizontalWall.Checked = false;
+                Map.Invalidate();
+            }
+            else if (chkRemoveWall.Checked)
+            {
+                _world.Navigator.RemoveWall(x, y);
+                chkRemoveWall.Checked = false;
+                Map.Invalidate();
+            }
+            else if (chkKillInArea.Checked)
+            {
+                if (_killAllAreaStartingPoint.HasValue)
                 {
-                    txtUnit.Text = "Selected unit:\r\n" + GetIndividualInfo(individual)
-                                   + formatStatLine("Difference from average", _world.StatCounter.GetDifference(individual, _curAverageIndividual));
+                    _world.Navigator.KillAllInArea(_killAllAreaStartingPoint.Value, new Coord(x, y));
+                    _killAllAreaStartingPoint = null;
+                    chkKillInArea.Checked = false;
+                }
+                else
+                {
+                    _killAllAreaStartingPoint = new Coord(x, y);
+                }
+                Map.Invalidate();
+            }
+            else if (chkSpreadFood.Checked)
+            {
+                const int radius = 5;
+                _world.SpreadFood(8, new Coord(x - radius, y - radius), new Coord(x + radius, y + radius));
+            }
+            else
+            {
+                var worldCoord = new Coord(e.X / MapMultiplier, e.Y / MapMultiplier);
 
-                }
-                var food = unit as FoodItem;
-                if (food != null)
+                var unit = _world.Navigator.FindUnit(worldCoord);
+                if (unit != null)
                 {
-                    txtUnit.Text = $"{formatStatLine("Food", food.Id)}\r\n{formatStatLine("Energy", food.Energy)}";
+                    var individual = unit as Individual;
+                    if (individual != null)
+                    {
+                        txtUnit.Text = "Selected unit:\r\n" + GetIndividualInfo(individual)
+                                       + formatStatLine("Difference from average", _world.StatCounter.GetDifference(individual, _curAverageIndividual));
+
+                    }
+                    var food = unit as FoodItem;
+                    if (food != null)
+                    {
+                        txtUnit.Text = $"{formatStatLine("Food", food.Id)}\r\n{formatStatLine("Energy", food.Energy)}";
+                    }
+                    tabView.SelectedIndex = 2;
                 }
-                tabView.SelectedIndex = 2;
             }
         }
 
@@ -578,68 +622,25 @@ namespace Evo.GUI.Winforms
             Map.Invalidate();
         }
         
-        private void chkVerticalWall_Click(object sender, EventArgs e)
-        {
-            chkHorizontalWall.Checked = chkRemoveWall.Checked = chkKillInArea.Checked = false;
-            Map.Invalidate();
-        }
-
-        private void chkHorizontalWall_Click(object sender, EventArgs e)
-        {
-            chkVerticalWall.Checked = chkRemoveWall.Checked = chkKillInArea.Checked = false;
-            Map.Invalidate();
-        }
-
-        private void chkRemoveWall_Click(object sender, EventArgs e)
-        {
-            chkHorizontalWall.Checked = chkVerticalWall.Checked = chkKillInArea.Checked = false;
-            Map.Invalidate();
-        }
-
-        private void chkKillInArea_Click(object sender, EventArgs e)
-        {
-            chkHorizontalWall.Checked = chkRemoveWall.Checked = chkVerticalWall.Checked = false;
-            Map.Invalidate();
-        }
-
         private void chkRemoveWall_CheckedChanged(object sender, EventArgs e)
         {
             Map.Cursor = chkRemoveWall.Checked ? Cursors.Cross : DefaultCursor;
         }
 
-        private void Map_Click(object sender, EventArgs e)
+        private void chkSpreadFood_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkVerticalWall.Checked)
+            Map.Cursor = chkSpreadFood.Checked ? Cursors.Cross : DefaultCursor;
+        }
+
+        private void uncheckAllOther(object sender, EventArgs e)
+        {
+            var checkBoxes = new[] { chkHorizontalWall, chkVerticalWall , chkRemoveWall , chkKillInArea, chkSpreadFood };
+            foreach (var checkBox in checkBoxes)
             {
-                _world.Navigator.AddWall(new Wall(WallType.Vertical, _curMouseX / MapMultiplier));
-                chkVerticalWall.Checked = false;
-                Map.Invalidate();
-            }
-            else if (chkHorizontalWall.Checked)
-            {
-                _world.Navigator.AddWall(new Wall(WallType.Horizontal, _curMouseY / MapMultiplier));
-                chkHorizontalWall.Checked = false;
-                Map.Invalidate();
-            }
-            else if (chkRemoveWall.Checked)
-            {
-                _world.Navigator.RemoveWall(_curMouseX / MapMultiplier, _curMouseY / MapMultiplier);
-                chkRemoveWall.Checked = false;
-                Map.Invalidate();
-            }
-            else if (chkKillInArea.Checked)
-            {
-                if (_killAllAreaStartingPoint.HasValue)
+                if (checkBox != sender)
                 {
-                    _world.Navigator.KillAllInArea(_killAllAreaStartingPoint.Value, new Coord(_curMouseX / MapMultiplier, _curMouseY / MapMultiplier));
-                    _killAllAreaStartingPoint = null;
-                    chkKillInArea.Checked = false;
+                    checkBox.Checked = false;
                 }
-                else
-                {
-                    _killAllAreaStartingPoint = new Coord(_curMouseX / MapMultiplier, _curMouseY / MapMultiplier);
-                }
-                Map.Invalidate();
             }
         }
 
@@ -701,5 +702,6 @@ namespace Evo.GUI.Winforms
 
             this.Close();
         }
+
     }
 }
