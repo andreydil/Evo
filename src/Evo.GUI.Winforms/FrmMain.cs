@@ -322,7 +322,6 @@ namespace Evo.GUI.Winforms
         private void showChart()
         {
             chtPopulation.Series.Clear();
-            chtPopulation.AlignDataPointsByAxisLabel();
             
             var populationSeries = new Series
             {
@@ -634,6 +633,7 @@ namespace Evo.GUI.Winforms
                 {
                     _world.Navigator.KillAllInArea(_killAllAreaStartingPoint.Value, new Coord(_curMouseX / MapMultiplier, _curMouseY / MapMultiplier));
                     _killAllAreaStartingPoint = null;
+                    chkKillInArea.Checked = false;
                 }
                 else
                 {
@@ -669,7 +669,8 @@ namespace Evo.GUI.Winforms
 
             if (openWorldDialog.ShowDialog() == DialogResult.OK)
             {
-                _world = WorldSaver.Load(openWorldDialog.FileName);
+                var world = WorldSaver.Load(openWorldDialog.FileName);
+                InitWithNewWorld(world);
                 Map.Invalidate();
             }
         }
