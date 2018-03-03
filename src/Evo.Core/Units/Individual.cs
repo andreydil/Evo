@@ -65,7 +65,7 @@ namespace Evo.Core.Units
         public bool IsAlive => !IsKilled && Energy > 0 && Age <= LifeTime;
 
         public int EnergyDrainPerTick
-            => (int)Math.Round((Strength.NormalizedValue + Aggression.NormalizedValue) * _world.EnergyDrainModificator, MidpointRounding.AwayFromZero) + 1;
+            => (int)Math.Round((Strength.NormalizedValue + Aggression.NormalizedValue) * _world.EnergyDrainModificator / 2, MidpointRounding.AwayFromZero) + 1;
 
         public int MaxEnergy => 1000;
 

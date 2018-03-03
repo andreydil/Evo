@@ -19,7 +19,7 @@ namespace Evo.Core.Universe
             var world = new World(new Random(0), Size);
             world.MutationProbability.Value = 100;
             world.MutationMaxDelta.Value = 100;
-            world.EnergyDrainModificator.Value = 1;
+            world.EnergyDrainModificator.Value = 2;
             world.MaxFoodItemsPerTick.Value = 100;
             world.MaxEnergyPerFoodItem.Value = 150;
             world.MaxFoodItems.Value = 1500;
