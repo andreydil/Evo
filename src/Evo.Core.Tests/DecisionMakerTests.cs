@@ -17,9 +17,9 @@ namespace Evo.Core.Tests
         public void Init()
         {
             var world = new World(new Random(), new Coord(100, 100));
-            world.EatDecisionModificator.Value = 1;
-            world.SexDecisionModificator.Value = 1;
-            world.KillDecisionModificator.Value = 1;
+            world.EatDecisionModifier.Value = 1;
+            world.SexDecisionModifier.Value = 1;
+            world.KillDecisionModifier.Value = 1;
             _decisionMaker = new DecisionMaker(world);
         }
 

@@ -17,10 +17,10 @@ namespace Evo.Core.Universe
             _world = world;
         }
 
-        //TODO: add world's modificators to formulas?
+        //TODO: add world's modifiers to formulas?
         public double WantEat(int curEnergy, int maxEnergy, double distance)
         {
-            return _world.EatDecisionModificator * (maxEnergy - curEnergy) / (double)maxEnergy / distance;
+            return _world.EatDecisionModifier * (maxEnergy - curEnergy) / (double)maxEnergy / distance;
         }
 
         public double WantSex(double normalizedDesire, double distance, double difference)
@@ -29,7 +29,7 @@ namespace Evo.Core.Universe
             {
                 difference = 0.001;
             }
-            return _world.SexDecisionModificator * normalizedDesire / distance * (1.0 - difference);
+            return _world.SexDecisionModifier * normalizedDesire / distance * (1.0 - difference);
         }
 
         public double WantKill(double normalizedAggression, double distance, double difference, double strengthQuotient)
@@ -38,7 +38,7 @@ namespace Evo.Core.Universe
             {
                 difference = 0.001;
             }
-            return _world.KillDecisionModificator * normalizedAggression / distance * difference * strengthQuotient;
+            return _world.KillDecisionModifier * normalizedAggression / distance * difference * strengthQuotient;
         }
 
         public TargetType DecideTarget(double wantEat, double wantSex, double wantKill)

@@ -23,6 +23,7 @@ namespace Evo.Core.Stats
             long purpose = 0;
             long sightRange = 0;
             long minEnergyAcceptable = 0;
+            long poisonResistance = 0;
 
             long energy = 0;
             long age = 0;
@@ -43,8 +44,9 @@ namespace Evo.Core.Stats
                 purpose += individual.Purpose;
                 sightRange += individual.SightRange;
                 minEnergyAcceptable += individual.MinEnergyAcceptable;
+                poisonResistance += individual.PoisonResistance;
 
-                energy += individual.Energy;
+                energy += (long)individual.Energy;
                 age += individual.Age;
                 desire += individual.Desire;
 
@@ -71,6 +73,7 @@ namespace Evo.Core.Stats
             average.Energy.Value = (int)(energy / count);
             average.Age.Value = (int)(age / count);
             average.Desire.Value = (int)(desire / count);
+            average.PoisonResistance.Value = (int)(poisonResistance / count);
 
             return average;
         }

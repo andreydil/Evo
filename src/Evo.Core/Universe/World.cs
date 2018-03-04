@@ -36,11 +36,13 @@ namespace Evo.Core.Universe
                 { nameof(MaxEnergyPerFoodItem), MaxEnergyPerFoodItem },
                 { nameof(MutationProbability), MutationProbability },
                 { nameof(MutationMaxDelta), MutationMaxDelta },
-                { nameof(EnergyDrainModificator), EnergyDrainModificator },
+                { nameof(EnergyDrainModifier), EnergyDrainModifier },
                 { nameof(BirthEnergyShare), BirthEnergyShare },
-                { nameof(EatDecisionModificator), EatDecisionModificator },
-                { nameof(SexDecisionModificator), SexDecisionModificator },
-                { nameof(KillDecisionModificator), KillDecisionModificator },
+                { nameof(EatDecisionModifier), EatDecisionModifier },
+                { nameof(SexDecisionModifier), SexDecisionModifier },
+                { nameof(KillDecisionModifier), KillDecisionModifier },
+                { nameof(PoisonEffectiveness), PoisonEffectiveness },
+                { nameof(PoisonResistEnergyDrain), PoisonResistEnergyDrain },
             };
         }
 
@@ -49,18 +51,22 @@ namespace Evo.Core.Universe
         public LimitedInt MutationMaxDelta { get; set; } = new LimitedInt(1, 1000);
         public LimitedInt MaxFoodItemsPerTick { get; set; } = new LimitedInt(1, 1000);
         public LimitedInt MaxEnergyPerFoodItem { get; set; } = new LimitedInt(1, 1000);
-        public LimitedInt MaxFoodItems { get; set; } = new LimitedInt(1, 10000);
-        public LimitedInt EnergyDrainModificator { get; set; } = new LimitedInt(1, 20);
+        public LimitedInt MaxFoodItems { get; set; } = new LimitedInt(1, 50000);
+        public LimitedInt EnergyDrainModifier { get; set; } = new LimitedInt(1, 20);
         public LimitedInt BirthEnergyShare { get; set; } = new LimitedInt(1, 100);
-        public LimitedInt EatDecisionModificator { get; set; } = new LimitedInt(1, 10);
-        public LimitedInt SexDecisionModificator { get; set; } = new LimitedInt(1, 10);
-        public LimitedInt KillDecisionModificator { get; set; } = new LimitedInt(1, 10);
+        public LimitedInt EatDecisionModifier { get; set; } = new LimitedInt(1, 10);
+        public LimitedInt SexDecisionModifier { get; set; } = new LimitedInt(1, 10);
+        public LimitedInt KillDecisionModifier { get; set; } = new LimitedInt(1, 10);
+        public LimitedInt PoisonEffectiveness { get; set; } = new LimitedInt(1, 10);
+        public LimitedInt PoisonResistEnergyDrain { get; set; } = new LimitedInt(1, 10);
 
         public Individual AverageIndividual => StatCounter.GetAverage(_population);
 
         public ulong Tick { get; private set; } = 0;
         public IEnumerable<Individual> Population => _population.AsEnumerable();
         public IEnumerable<FoodItem> Food => _food.AsEnumerable();
+        public IEnumerable<PoisonArea> PoisonAreas => _poisonAreas;
+        private readonly List<PoisonArea> _poisonAreas = new List<PoisonArea>();
 
         public readonly IncStats MainStats = new IncStats();
         public readonly IncStats AdditionalStats = new IncStats();
@@ -83,7 +89,7 @@ namespace Evo.Core.Universe
             {
                 if (individual.IsAlive)
                 {
-                    individual.LiveOneTick();
+                    individual.LiveOneTick(GetExtInfluenceForCoord(individual.Point));
                 }
                 else
                 {
@@ -105,6 +111,14 @@ namespace Evo.Core.Universe
             PopulationSize.Add(Tick, _population.Count);
             FoodAmount.Add(Tick, _food.Count);
             ++Tick;
+        }
+
+        private ExtInfluence GetExtInfluenceForCoord(Coord point)
+        {
+            return new ExtInfluence
+            {
+                Poison = GetPoisonIntensityAtPoint(point),
+            };
         }
 
         public void AddIndividual(Individual individual)
@@ -137,6 +151,48 @@ namespace Evo.Core.Universe
         {
             Navigator.RemoveUnit(foodItem);
             _food.Remove(foodItem);
+        }
+
+        public void AddPoisonArea(Coord point1, Coord point2, int intensity)
+        {
+            var topLeft = new Coord(Math.Min(point1.X, point2.X), Math.Min(point1.Y, point2.Y));
+            var bottomRight = new Coord(Math.Max(point1.X, point2.X), Math.Max(point1.Y, point2.Y));
+            _poisonAreas.Add(new PoisonArea
+            {
+                TopLeft = topLeft,
+                BottomRight = bottomRight,
+                Intensity = intensity,
+            });
+        }
+
+        public void RemovePoisonAreas(Coord point)
+        {
+            for (int i = 0; i < _poisonAreas.Count;)
+            {
+                var curArea = _poisonAreas[i];
+                if (curArea.TopLeft.X <= point.X && curArea.BottomRight.X >= point.X
+                    && curArea.TopLeft.Y <= point.Y && curArea.BottomRight.Y >= point.Y)
+                {
+                    _poisonAreas.RemoveAt(i);
+                }
+                else
+                {
+                    ++i;
+                }
+            }
+        }
+
+        public int GetPoisonIntensityAtPoint(Coord point)
+        {
+            for (int i = _poisonAreas.Count - 1; i >= 0; --i)
+            {
+                var curArea = _poisonAreas[i];
+                if (curArea.TopLeft.X <= point.X && curArea.TopLeft.Y <= point.Y && curArea.BottomRight.X >= point.X && curArea.BottomRight.Y >= point.Y)
+                {
+                    return curArea.Intensity;
+                }
+            }
+            return 0;
         }
 
         public bool CheckRng(LimitedInt range)

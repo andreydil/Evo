@@ -10,5 +10,6 @@
         public const string Purpose = "Purpose";
         public const string SightRange = "SightRange";
         public const string MinEnergyAcceptable = "MinEnergyAcceptable";
+        public const string PoisonResistance = "PoisonResistance";
     }
 }

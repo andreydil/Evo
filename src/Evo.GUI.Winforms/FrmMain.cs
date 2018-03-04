@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,11 +37,22 @@ namespace Evo.GUI.Winforms
 
         private int _curMouseX = 0;
         private int _curMouseY = 0;
-        private Pen _wallPen = new Pen(Color.Coral, MapMultiplier);
+        private readonly Pen _wallPen = new Pen(Color.Coral, MapMultiplier);
 
         private Coord? _killAllAreaStartingPoint  = null;
-        private Brush _killAllBrush = new SolidBrush(Color.Red);
+        private readonly Brush _killAllBrush = new SolidBrush(Color.Red);
 
+        private Coord? _poisonAreaStartingPoint = null;
+
+        private readonly Brush[] _poisonAreaBrushes =
+        {
+            new HatchBrush(HatchStyle.BackwardDiagonal, Color.FromArgb(40, Color.Cyan)),
+            new HatchBrush(HatchStyle.ForwardDiagonal, Color.FromArgb(80, Color.Cyan)),
+            new HatchBrush(HatchStyle.BackwardDiagonal, Color.FromArgb(120, Color.Cyan)),
+            new HatchBrush(HatchStyle.ForwardDiagonal, Color.FromArgb(160, Color.Cyan)),
+            new HatchBrush(HatchStyle.BackwardDiagonal, Color.FromArgb(200, Color.Cyan))
+        };
+        
         public FrmMain()
         {
             InitializeComponent();
@@ -233,6 +245,22 @@ namespace Evo.GUI.Winforms
             {
                 return;
             }
+            foreach (var poisonArea in _world.PoisonAreas)
+            {
+                var minX = poisonArea.TopLeft.X * MapMultiplier;
+                var minY = poisonArea.TopLeft.Y * MapMultiplier;
+                var maxX = poisonArea.BottomRight.X * MapMultiplier;
+                var maxY = poisonArea.BottomRight.Y * MapMultiplier;
+                e.Graphics.FillRectangle(GetPoisonBrush(poisonArea.Intensity), minX, minY, maxX - minX, maxY - minY);
+            }
+            if (chkPoison.Checked && _poisonAreaStartingPoint.HasValue)
+            {
+                var minX = Math.Min(_poisonAreaStartingPoint.Value.X * MapMultiplier, _curMouseX / MapMultiplier * MapMultiplier);
+                var minY = Math.Min(_poisonAreaStartingPoint.Value.Y * MapMultiplier, _curMouseY / MapMultiplier * MapMultiplier);
+                var maxX = Math.Max(_poisonAreaStartingPoint.Value.X * MapMultiplier, _curMouseX / MapMultiplier * MapMultiplier);
+                var maxY = Math.Max(_poisonAreaStartingPoint.Value.Y * MapMultiplier, _curMouseY / MapMultiplier * MapMultiplier);
+                e.Graphics.FillRectangle(GetPoisonBrush((int)numPoisonIntensity.Value), minX, minY, maxX - minX, maxY - minY);
+            }
 
             var foodBrush = new HatchBrush(HatchStyle.Percent50, Color.ForestGreen);
             foreach (var foodItem in _world.Food)
@@ -277,6 +305,20 @@ namespace Evo.GUI.Winforms
                 var maxY = Math.Max(_killAllAreaStartingPoint.Value.Y * MapMultiplier, _curMouseY / MapMultiplier * MapMultiplier);
                 e.Graphics.FillRectangle(_killAllBrush, minX, minY, maxX - minX, maxY - minY);
             }
+            
+        }
+
+        private Brush GetPoisonBrush(int intensity)
+        {
+            if (intensity < 1)
+            {
+                intensity = 1;
+            }
+            if (intensity > _poisonAreaBrushes.Length)
+            {
+                intensity = _poisonAreaBrushes.Length;
+            }
+            return _poisonAreaBrushes[intensity - 1];
         }
 
         private void DoStep()
@@ -373,19 +415,16 @@ namespace Evo.GUI.Winforms
             {
                 _world.Navigator.AddWall(new Wall(WallType.Vertical, x));
                 chkVerticalWall.Checked = false;
-                Map.Invalidate();
             }
             else if (chkHorizontalWall.Checked)
             {
                 _world.Navigator.AddWall(new Wall(WallType.Horizontal, y));
                 chkHorizontalWall.Checked = false;
-                Map.Invalidate();
             }
             else if (chkRemoveWall.Checked)
             {
                 _world.Navigator.RemoveWall(x, y);
                 chkRemoveWall.Checked = false;
-                Map.Invalidate();
             }
             else if (chkKillInArea.Checked)
             {
@@ -399,12 +438,29 @@ namespace Evo.GUI.Winforms
                 {
                     _killAllAreaStartingPoint = new Coord(x, y);
                 }
-                Map.Invalidate();
+            }
+            else if (chkPoison.Checked)
+            {
+                if (_poisonAreaStartingPoint.HasValue)
+                {
+                    _world.AddPoisonArea(_poisonAreaStartingPoint.Value, new Coord(x, y), (int)numPoisonIntensity.Value);
+                    _poisonAreaStartingPoint = null;
+                    uncheckAllOther(null, null);
+                }
+                else
+                {
+                    _poisonAreaStartingPoint = new Coord(x, y);
+                }
             }
             else if (chkSpreadFood.Checked)
             {
                 const int radius = 5;
                 _world.SpreadFood(8, new Coord(x - radius, y - radius), new Coord(x + radius, y + radius));
+            }
+            else if (chkRemovePoison.Checked)
+            {
+                _world.RemovePoisonAreas(new Coord(x, y));
+                chkRemovePoison.Checked = false;
             }
             else
             {
@@ -428,6 +484,7 @@ namespace Evo.GUI.Winforms
                     tabView.SelectedIndex = 2;
                 }
             }
+            Map.Invalidate();
         }
 
         private string GetIndividualInfo(Individual individual, bool telemetryOnly = false)
@@ -439,7 +496,7 @@ namespace Evo.GUI.Winforms
             }
             sb.AppendLine("\r\nStatus:");
             sb.AppendLine(formatStatLine("Age", individual.Age.Value));
-            sb.AppendLine(formatStatLine("Energy", individual.Energy.Value));
+            sb.AppendLine(formatStatLine("Energy", (int)individual.Energy.Value));
             sb.AppendLine(formatStatLine("Desire", individual.Desire.Value));
             if (!telemetryOnly)
             {
@@ -499,6 +556,10 @@ namespace Evo.GUI.Winforms
             {
                 return GetColorFromValue(individual.Purpose);
             }
+            if (rbPoisonResist.Checked)
+            {
+                return GetColorFromValue(individual.PoisonResistance, false);
+            }
             if (rbSightRange.Checked)
             {
                 return GetColorFromValue(individual.SightRange, false);
@@ -517,9 +578,19 @@ namespace Evo.GUI.Winforms
 
         private Color GetColorFromValue(LimitedInt gene, bool biggerRed = true)
         {
+            return GetColorFromValue(gene.NormalizedValue, biggerRed);
+        }
+
+        private Color GetColorFromValue(LimitedDouble gene, bool biggerRed = true)
+        {
+            return GetColorFromValue(gene.NormalizedValue, biggerRed);
+        }
+
+        private Color GetColorFromValue(double normalizedValue, bool biggerRed = true)
+        {
             var percent = new LimitedInt(0, 100)
             {
-                Value = (int)Math.Round(100 * gene.NormalizedValue, MidpointRounding.AwayFromZero)
+                Value = (int)Math.Round(100 * normalizedValue, MidpointRounding.AwayFromZero)
             };
 
             if (!biggerRed)
@@ -632,9 +703,14 @@ namespace Evo.GUI.Winforms
             Map.Cursor = chkSpreadFood.Checked ? Cursors.Cross : DefaultCursor;
         }
 
+        private void chkRemovePoison_CheckedChanged(object sender, EventArgs e)
+        {
+            Map.Cursor = chkRemovePoison.Checked ? Cursors.Cross : DefaultCursor;
+        }
+
         private void uncheckAllOther(object sender, EventArgs e)
         {
-            var checkBoxes = new[] { chkHorizontalWall, chkVerticalWall , chkRemoveWall , chkKillInArea, chkSpreadFood };
+            var checkBoxes = new [] { chkHorizontalWall, chkVerticalWall , chkRemoveWall , chkKillInArea, chkSpreadFood, chkPoison };
             foreach (var checkBox in checkBoxes)
             {
                 if (checkBox != sender)
@@ -703,5 +779,12 @@ namespace Evo.GUI.Winforms
             this.Close();
         }
 
+        private void chkPoison_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!chkPoison.Checked)
+            {
+                _poisonAreaStartingPoint = null;
+            }
+        }
     }
 }

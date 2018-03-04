@@ -30,6 +30,7 @@ namespace Evo.Core.Units
                 { GeneNames.Purpose, Purpose },
                 { GeneNames.SightRange, SightRange },
                 { GeneNames.MinEnergyAcceptable, MinEnergyAcceptable },
+                { GeneNames.PoisonResistance, PoisonResistance },
             };
 
             Energy.Value = Energy.Max / 2;
@@ -49,12 +50,13 @@ namespace Evo.Core.Units
         public Gene Purpose { get; set; } = new Gene(1, Constants.Probability100Percent);
         public Gene SightRange { get; set; } = new Gene(2, 30);
         public Gene MinEnergyAcceptable { get; set; } = new Gene(10, 800);
+        public Gene PoisonResistance { get; set; } = new Gene(0, 1000);
 
         #endregion
 
         #region Current State
 
-        public LimitedInt Energy { get; set; } = new LimitedInt(0, 1000);
+        public LimitedDouble Energy { get; set; } = new LimitedDouble(0, 1000);
         public LimitedInt Age { get; set; } = new LimitedInt(0, 10000);
         public LimitedInt Desire { get; set; } = new LimitedInt(0, 1000);
         public Target Target { get; set; } = new Target();
@@ -64,8 +66,14 @@ namespace Evo.Core.Units
         public bool IsKilled { get; set; }
         public bool IsAlive => !IsKilled && Energy > 0 && Age <= LifeTime;
 
-        public int EnergyDrainPerTick
-            => (int)Math.Round((Strength.NormalizedValue + Aggression.NormalizedValue) * _world.EnergyDrainModificator / 2, MidpointRounding.AwayFromZero) + 1;
+        public double EnergyDrainPerTick
+        {
+            get
+            {
+                var poisonEffect = PoisonResistance.NormalizedValue / (_world.PoisonResistEnergyDrain.Max - _world.PoisonResistEnergyDrain + 1);
+                return (Strength.NormalizedValue + Aggression.NormalizedValue + poisonEffect) * _world.EnergyDrainModifier / 2 + 1;
+            }
+        }
 
         public int MaxEnergy => 1000;
 
@@ -88,13 +96,21 @@ namespace Evo.Core.Units
             return maxColor.GetDifferenceFrom(minColor);
         }
 
-        public void LiveOneTick()
+        public void LiveOneTick(ExtInfluence extInfluence)
         {
             ChangeTarget();
             Step();
             ++Age.Value;
             Energy.Value -= EnergyDrainPerTick;
+            Energy.Value -= Poisoning(extInfluence.Poison);
             Desire.Value += Fertility / 40 + 1;
+        }
+
+        private int Poisoning(int poisonIntensity)
+        {
+            var maxDamage = (double)MaxEnergy / 5 * poisonIntensity;
+            var resistanceModifier = ((double)PoisonResistance.Max - PoisonResistance) / PoisonResistance.Max;
+            return (int)(maxDamage * _world.PoisonEffectiveness.NormalizedValue * resistanceModifier);
         }
 
         private void ChangeTarget()
@@ -135,7 +151,7 @@ namespace Evo.Core.Units
             if (!(TargetStillValid() && _world.CheckRng(Purpose)))
             {
                 var distanceToFood = food == null ? double.MaxValue : Point.GetDistanceTo(food.Point);
-                var wantEat = _world.DecisionMaker.WantEat(Energy, MaxEnergy, distanceToFood);
+                var wantEat = _world.DecisionMaker.WantEat((int)Energy, MaxEnergy, distanceToFood);
                 var wantSex = _world.DecisionMaker.WantSex(Desire.NormalizedValue, distanceToIndividual, differenceFromIndividual);
                 var wantKill = _world.DecisionMaker.WantKill(Aggression.NormalizedValue, distanceToIndividual, differenceFromIndividual, strengthQuotient);
 
@@ -298,11 +314,11 @@ namespace Evo.Core.Units
             _world.RemoveIndividual(victim);
             var foodItem = new FoodItem(_world.GenerateId())
             {
-                Energy = victim.Energy / 2,
+                Energy = (int)(victim.Energy / 2),
                 Point = victim.Point,
             };
             _world.AddFood(foodItem);
-            killer.Energy.Value -= (int)(2 * EnergyDrainPerTick * ((double)victim.Strength / Strength));
+            killer.Energy.Value -= 2 * EnergyDrainPerTick * ((double)victim.Strength / Strength);
             killer.Target.TargetType = TargetType.Eat;
             killer.Target.Id = foodItem.Id;
 

@@ -19,11 +19,13 @@ namespace Evo.Core.Universe
             var world = new World(new Random(0), Size);
             world.MutationProbability.Value = 100;
             world.MutationMaxDelta.Value = 100;
-            world.EnergyDrainModificator.Value = 2;
-            world.MaxFoodItemsPerTick.Value = 100;
+            world.EnergyDrainModifier.Value = 2;
+            world.MaxFoodItemsPerTick.Value = 150;
             world.MaxEnergyPerFoodItem.Value = 150;
-            world.MaxFoodItems.Value = 1500;
+            world.MaxFoodItems.Value = 15000;
             world.BirthEnergyShare.Value = 30;
+            world.PoisonEffectiveness.Value = 2;
+            world.PoisonResistEnergyDrain.Value = 5;
 
             const int initPopulationCount = 100;
             var initPopulation = new List<Individual>(initPopulationCount);

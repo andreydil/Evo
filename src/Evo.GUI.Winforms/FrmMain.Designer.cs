@@ -67,6 +67,10 @@ namespace Evo.GUI.Winforms
             this.rbAge = new System.Windows.Forms.RadioButton();
             this.button1 = new System.Windows.Forms.Button();
             this.tabEditWorld = new System.Windows.Forms.TabPage();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.chkRemovePoison = new System.Windows.Forms.CheckBox();
+            this.numPoisonIntensity = new System.Windows.Forms.NumericUpDown();
+            this.chkPoison = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.chkSpreadFood = new System.Windows.Forms.CheckBox();
             this.chkKillInArea = new System.Windows.Forms.CheckBox();
@@ -80,6 +84,10 @@ namespace Evo.GUI.Winforms
             this.tipVerticalWall = new System.Windows.Forms.ToolTip(this.components);
             this.tipHorizontalWall = new System.Windows.Forms.ToolTip(this.components);
             this.tipRemoveWall = new System.Windows.Forms.ToolTip(this.components);
+            this.tipKillInArea = new System.Windows.Forms.ToolTip(this.components);
+            this.tipSpreadFood = new System.Windows.Forms.ToolTip(this.components);
+            this.tipAddPoisonArea = new System.Windows.Forms.ToolTip(this.components);
+            this.tipRemovePoisonArea = new System.Windows.Forms.ToolTip(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.worldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,6 +97,7 @@ namespace Evo.GUI.Winforms
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveWorldDialog = new System.Windows.Forms.SaveFileDialog();
             this.openWorldDialog = new System.Windows.Forms.OpenFileDialog();
+            this.rbPoisonResist = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -110,6 +119,8 @@ namespace Evo.GUI.Winforms
             this.tabPage4.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabEditWorld.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPoisonIntensity)).BeginInit();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Map)).BeginInit();
@@ -369,6 +380,7 @@ namespace Evo.GUI.Winforms
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rbPoisonResist);
             this.groupBox1.Controls.Add(this.rbDiffFromAverage);
             this.groupBox1.Controls.Add(this.rbSightRange);
             this.groupBox1.Controls.Add(this.rbMinEneryAcceptable);
@@ -383,7 +395,7 @@ namespace Evo.GUI.Winforms
             this.groupBox1.Controls.Add(this.rbAge);
             this.groupBox1.Location = new System.Drawing.Point(8, 35);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(164, 300);
+            this.groupBox1.Size = new System.Drawing.Size(164, 320);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Show";
@@ -391,7 +403,7 @@ namespace Evo.GUI.Winforms
             // rbDiffFromAverage
             // 
             this.rbDiffFromAverage.AutoSize = true;
-            this.rbDiffFromAverage.Location = new System.Drawing.Point(6, 272);
+            this.rbDiffFromAverage.Location = new System.Drawing.Point(6, 295);
             this.rbDiffFromAverage.Name = "rbDiffFromAverage";
             this.rbDiffFromAverage.Size = new System.Drawing.Size(143, 17);
             this.rbDiffFromAverage.TabIndex = 12;
@@ -401,7 +413,7 @@ namespace Evo.GUI.Winforms
             // rbSightRange
             // 
             this.rbSightRange.AutoSize = true;
-            this.rbSightRange.Location = new System.Drawing.Point(6, 226);
+            this.rbSightRange.Location = new System.Drawing.Point(6, 249);
             this.rbSightRange.Name = "rbSightRange";
             this.rbSightRange.Size = new System.Drawing.Size(84, 17);
             this.rbSightRange.TabIndex = 11;
@@ -412,7 +424,7 @@ namespace Evo.GUI.Winforms
             // rbMinEneryAcceptable
             // 
             this.rbMinEneryAcceptable.AutoSize = true;
-            this.rbMinEneryAcceptable.Location = new System.Drawing.Point(6, 249);
+            this.rbMinEneryAcceptable.Location = new System.Drawing.Point(6, 272);
             this.rbMinEneryAcceptable.Name = "rbMinEneryAcceptable";
             this.rbMinEneryAcceptable.Size = new System.Drawing.Size(135, 17);
             this.rbMinEneryAcceptable.TabIndex = 10;
@@ -533,6 +545,7 @@ namespace Evo.GUI.Winforms
             // 
             // tabEditWorld
             // 
+            this.tabEditWorld.Controls.Add(this.groupBox5);
             this.tabEditWorld.Controls.Add(this.groupBox4);
             this.tabEditWorld.Controls.Add(this.groupBox3);
             this.tabEditWorld.Location = new System.Drawing.Point(4, 22);
@@ -542,6 +555,75 @@ namespace Evo.GUI.Winforms
             this.tabEditWorld.TabIndex = 5;
             this.tabEditWorld.Text = "Edit world";
             this.tabEditWorld.UseVisualStyleBackColor = true;
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.chkRemovePoison);
+            this.groupBox5.Controls.Add(this.numPoisonIntensity);
+            this.groupBox5.Controls.Add(this.chkPoison);
+            this.groupBox5.Location = new System.Drawing.Point(9, 152);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(139, 67);
+            this.groupBox5.TabIndex = 4;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Poison";
+            // 
+            // chkRemovePoison
+            // 
+            this.chkRemovePoison.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkRemovePoison.AutoSize = true;
+            this.chkRemovePoison.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chkRemovePoison.ForeColor = System.Drawing.Color.DarkRed;
+            this.chkRemovePoison.Location = new System.Drawing.Point(93, 19);
+            this.chkRemovePoison.MinimumSize = new System.Drawing.Size(35, 35);
+            this.chkRemovePoison.Name = "chkRemovePoison";
+            this.chkRemovePoison.Size = new System.Drawing.Size(35, 35);
+            this.chkRemovePoison.TabIndex = 3;
+            this.chkRemovePoison.Text = "x";
+            this.chkRemovePoison.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tipRemoveWall.SetToolTip(this.chkRemovePoison, "Click on an existing poisonous area to remove it");
+            this.chkRemovePoison.UseVisualStyleBackColor = true;
+            this.chkRemovePoison.CheckedChanged += new System.EventHandler(this.chkRemovePoison_CheckedChanged);
+            this.chkRemovePoison.Click += new System.EventHandler(this.uncheckAllOther);
+            // 
+            // numPoisonIntensity
+            // 
+            this.numPoisonIntensity.Location = new System.Drawing.Point(47, 28);
+            this.numPoisonIntensity.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numPoisonIntensity.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numPoisonIntensity.Name = "numPoisonIntensity";
+            this.numPoisonIntensity.Size = new System.Drawing.Size(40, 20);
+            this.numPoisonIntensity.TabIndex = 5;
+            this.numPoisonIntensity.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // chkPoison
+            // 
+            this.chkPoison.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkPoison.AutoSize = true;
+            this.chkPoison.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.chkPoison.Location = new System.Drawing.Point(6, 19);
+            this.chkPoison.MinimumSize = new System.Drawing.Size(35, 35);
+            this.chkPoison.Name = "chkPoison";
+            this.chkPoison.Size = new System.Drawing.Size(35, 35);
+            this.chkPoison.TabIndex = 0;
+            this.chkPoison.Text = "Ɣ";
+            this.chkPoison.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tipAddPoisonArea.SetToolTip(this.chkPoison, "Poisonous area");
+            this.chkPoison.UseVisualStyleBackColor = true;
+            this.chkPoison.CheckedChanged += new System.EventHandler(this.chkPoison_CheckedChanged);
+            this.chkPoison.Click += new System.EventHandler(this.uncheckAllOther);
             // 
             // groupBox4
             // 
@@ -566,7 +648,7 @@ namespace Evo.GUI.Winforms
             this.chkSpreadFood.TabIndex = 1;
             this.chkSpreadFood.Text = "ȫ";
             this.chkSpreadFood.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.tipVerticalWall.SetToolTip(this.chkSpreadFood, "Spread food");
+            this.tipSpreadFood.SetToolTip(this.chkSpreadFood, "Spread food");
             this.chkSpreadFood.UseVisualStyleBackColor = true;
             this.chkSpreadFood.CheckedChanged += new System.EventHandler(this.chkSpreadFood_CheckedChanged);
             this.chkSpreadFood.Click += new System.EventHandler(this.uncheckAllOther);
@@ -583,7 +665,7 @@ namespace Evo.GUI.Winforms
             this.chkKillInArea.TabIndex = 0;
             this.chkKillInArea.Text = "†";
             this.chkKillInArea.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.tipVerticalWall.SetToolTip(this.chkKillInArea, "Kill all in an area");
+            this.tipKillInArea.SetToolTip(this.chkKillInArea, "Kill all in an area");
             this.chkKillInArea.UseVisualStyleBackColor = true;
             this.chkKillInArea.Click += new System.EventHandler(this.uncheckAllOther);
             // 
@@ -629,7 +711,7 @@ namespace Evo.GUI.Winforms
             this.chkHorizontalWall.TabIndex = 1;
             this.chkHorizontalWall.Text = "—";
             this.chkHorizontalWall.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.tipVerticalWall.SetToolTip(this.chkHorizontalWall, "Add a vertical wall");
+            this.tipHorizontalWall.SetToolTip(this.chkHorizontalWall, "Add a horizontal wall");
             this.chkHorizontalWall.UseVisualStyleBackColor = true;
             this.chkHorizontalWall.Click += new System.EventHandler(this.uncheckAllOther);
             // 
@@ -676,6 +758,22 @@ namespace Evo.GUI.Winforms
             // tipRemoveWall
             // 
             this.tipRemoveWall.ToolTipTitle = "Remove a wall";
+            // 
+            // tipKillInArea
+            // 
+            this.tipKillInArea.ToolTipTitle = "Kill in area";
+            // 
+            // tipSpreadFood
+            // 
+            this.tipSpreadFood.ToolTipTitle = "Spread food";
+            // 
+            // tipAddPoisonArea
+            // 
+            this.tipAddPoisonArea.ToolTipTitle = "Add poison";
+            // 
+            // tipRemovePoisonArea
+            // 
+            this.tipRemovePoisonArea.ToolTipTitle = "Remove poison";
             // 
             // menuStrip1
             // 
@@ -750,6 +848,16 @@ namespace Evo.GUI.Winforms
             this.openWorldDialog.Filter = "World files|*.wld";
             this.openWorldDialog.RestoreDirectory = true;
             // 
+            // rbPoisonResist
+            // 
+            this.rbPoisonResist.AutoSize = true;
+            this.rbPoisonResist.Location = new System.Drawing.Point(6, 226);
+            this.rbPoisonResist.Name = "rbPoisonResist";
+            this.rbPoisonResist.Size = new System.Drawing.Size(113, 17);
+            this.rbPoisonResist.TabIndex = 13;
+            this.rbPoisonResist.Text = "Poison Resistance";
+            this.rbPoisonResist.UseVisualStyleBackColor = true;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -789,6 +897,9 @@ namespace Evo.GUI.Winforms
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabEditWorld.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPoisonIntensity)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -846,6 +957,10 @@ namespace Evo.GUI.Winforms
         private System.Windows.Forms.ToolTip tipVerticalWall;
         private System.Windows.Forms.ToolTip tipHorizontalWall;
         private System.Windows.Forms.ToolTip tipRemoveWall;
+        private System.Windows.Forms.ToolTip tipKillInArea;
+        private System.Windows.Forms.ToolTip tipSpreadFood;
+        private System.Windows.Forms.ToolTip tipAddPoisonArea;
+        private System.Windows.Forms.ToolTip tipRemovePoisonArea;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem worldToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openMenuItem;
@@ -858,6 +973,11 @@ namespace Evo.GUI.Winforms
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.CheckBox chkKillInArea;
         private System.Windows.Forms.CheckBox chkSpreadFood;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.CheckBox chkPoison;
+        private System.Windows.Forms.CheckBox chkRemovePoison;
+        private System.Windows.Forms.NumericUpDown numPoisonIntensity;
+        private System.Windows.Forms.RadioButton rbPoisonResist;
     }
 }
 
