@@ -15,7 +15,7 @@ namespace Evo.Core.Units
         public readonly int MinGeneration;
         public readonly int MaxGeneration;
 
-        public Individual(ulong id, World world, int minGeneration = 1, int maxGeneration = 1) : base(id)
+        public Individual(ulong id, World world, int minGeneration = 1, int maxGeneration = 1) : base(id, UnitType.Individual)
         {
             _world = world;
             MinGeneration = minGeneration;
@@ -37,9 +37,7 @@ namespace Evo.Core.Units
             Age.Value = 0;
             Desire.Value = 1;
         }
-
-        public override UnitType Type => UnitType.Individual;
-
+        
         #region Genome
 
         public ColorGene Color { get; set; } = new ColorGene();
@@ -323,6 +321,11 @@ namespace Evo.Core.Units
             killer.Target.Id = foodItem.Id;
 
             _world.MainStats.AddStat("Kills");
+        }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}";
         }
     }
 }

@@ -12,6 +12,8 @@ namespace Evo.Core.Universe
     {
         private readonly World _world;
         private readonly Unit[,] _map;
+        private readonly FoodItem[,] _foodMap;
+        private readonly Individual[,] _individualsMap;
 
         private readonly List<int> _verticalWalls = new List<int>();
         private readonly List<int> _horizontalWalls = new List<int>();
@@ -20,7 +22,8 @@ namespace Evo.Core.Universe
         {
             _world = world;
             _map = new Unit[world.Size.X, world.Size.Y];
-
+            _foodMap = new FoodItem[world.Size.X, world.Size.Y];
+            _individualsMap = new Individual[world.Size.X, world.Size.Y];
         }
 
         public void PutUnit(Unit unit)
@@ -30,11 +33,26 @@ namespace Evo.Core.Universe
                 throw new ArgumentOutOfRangeException($"There is already a unit in coordinates {unit.Point}");
             }
             _map[unit.Point.X, unit.Point.Y] = unit;
+            if (unit.Type == UnitType.Food)
+            {
+                _foodMap[unit.Point.X, unit.Point.Y] = (FoodItem)unit;
+            }
+            else if (unit.Type == UnitType.Individual)
+            {
+                _individualsMap[unit.Point.X, unit.Point.Y] = (Individual)unit;
+            }
+        }
+
+        private void RemoveUnitFromPoint(Coord point)
+        {
+            _map[point.X, point.Y] = null;
+            _foodMap[point.X, point.Y] = null;
+            _individualsMap[point.X, point.Y] = null;
         }
 
         public void MoveUnit(Unit unit, Coord newPoint)
         {
-            _map[unit.Point.X, unit.Point.Y] = null;
+            RemoveUnitFromPoint(unit.Point);
             unit.Point = newPoint;
             PutUnit(unit);
         }
@@ -44,7 +62,7 @@ namespace Evo.Core.Universe
             var unitAtPoint = FindUnit(unit.Point);
             if (unitAtPoint != null && unitAtPoint.Id == unit.Id)
             {
-                _map[unit.Point.X, unit.Point.Y] = null;
+                RemoveUnitFromPoint(unit.Point);
             }
         }
         
@@ -56,6 +74,11 @@ namespace Evo.Core.Universe
         public Unit FindUnit(int x, int y)
         {
             return _map[x, y];
+        }
+
+        public T FindUnit<T>(int x, int y, T[,] map) where T : Unit
+        {
+            return map[x, y];
         }
 
         public T FindUnit<T>(Coord point) where T : Unit
@@ -92,22 +115,22 @@ namespace Evo.Core.Universe
 
         public Individual FindIndividual(Coord point)
         {
-            return FindUnit<Individual>(point);
+            return FindUnit(point.X, point.Y,_individualsMap);
         }
 
         public FoodItem FindFood(Coord point)
         {
-            return FindUnit<FoodItem>(point);
+            return FindUnit(point.X,point.Y, _foodMap);
         }
         
         public FoodItem FindClosestFood(Coord point, int sightRange)
         {
-            return FindClosestUnit<FoodItem>(point, sightRange);
+            return FindClosestUnit(point, sightRange, _foodMap);
         }
 
         public Individual FindClosestIndividual(Coord point, int sightRange)
         {
-            return FindClosestUnit<Individual>(point, sightRange);
+            return FindClosestUnit(point, sightRange, _individualsMap);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -125,7 +148,7 @@ namespace Evo.Core.Universe
             return false;
         }
 
-        private T FindClosestUnit<T>(Coord point, int sightRange) where T : Unit
+        private T FindClosestUnit<T>(Coord point, int sightRange, T[,] map) where T : Unit
         {
             int radius = 1;
 
@@ -146,7 +169,7 @@ namespace Evo.Core.Universe
                             --curX;
                             break;
                         }
-                        var unit = FindUnit<T>(curX, curY);
+                        var unit = FindUnit<T>(curX, curY, map);
                         if (unit != null)
                         {
                             return unit;
@@ -163,7 +186,7 @@ namespace Evo.Core.Universe
                             --curY;
                             break;
                         }
-                        var unit = FindUnit<T>(curX, curY);
+                        var unit = FindUnit<T>(curX, curY, map);
                         if (unit != null)
                         {
                             return unit;
@@ -180,7 +203,7 @@ namespace Evo.Core.Universe
                             ++curX;
                             break;
                         }
-                        var unit = FindUnit<T>(curX, curY);
+                        var unit = FindUnit<T>(curX, curY, map);
                         if (unit != null)
                         {
                             return unit;
@@ -197,7 +220,7 @@ namespace Evo.Core.Universe
                             ++curY;
                             break;
                         }
-                        var unit = FindUnit<T>(curX, curY);
+                        var unit = FindUnit<T>(curX, curY, map);
                         if (unit != null)
                         {
                             return unit;
