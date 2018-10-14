@@ -43,6 +43,7 @@ namespace Evo.Core.Universe
                 { nameof(KillDecisionModifier), KillDecisionModifier },
                 { nameof(PoisonEffectiveness), PoisonEffectiveness },
                 { nameof(PoisonResistEnergyDrain), PoisonResistEnergyDrain },
+                { nameof(AttackerDamageModifier), AttackerDamageModifier },
             };
         }
 
@@ -59,6 +60,7 @@ namespace Evo.Core.Universe
         public LimitedInt KillDecisionModifier { get; set; } = new LimitedInt(1, 10);
         public LimitedInt PoisonEffectiveness { get; set; } = new LimitedInt(1, 10);
         public LimitedInt PoisonResistEnergyDrain { get; set; } = new LimitedInt(1, 10);
+        public LimitedInt AttackerDamageModifier { get; set; } = new LimitedInt(1, 100);
 
         public Individual AverageIndividual => StatCounter.GetAverage(_population);
 

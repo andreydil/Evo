@@ -26,6 +26,7 @@ namespace Evo.Core.Universe
             world.BirthEnergyShare.Value = 30;
             world.PoisonEffectiveness.Value = 2;
             world.PoisonResistEnergyDrain.Value = 5;
+            world.AttackerDamageModifier.Value = 1;
 
             const int initPopulationCount = 100;
             var initPopulation = new List<Individual>(initPopulationCount);

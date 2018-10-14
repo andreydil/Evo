@@ -276,7 +276,8 @@ namespace Evo.Core.Units
                     {
                         if (partner.Id == Target.Id)
                         {
-                            if (_world.CheckRng(Strength, 0, Strength + partner.Strength))
+                            var attackerStrength = Strength * _world.AttackerDamageModifier;
+                            if (_world.CheckRng(attackerStrength, 0, Strength + partner.Strength))
                             {
                                 Kill(this, partner);
                                 Target.TargetType = TargetType.Walk;
